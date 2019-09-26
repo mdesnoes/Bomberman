@@ -1,4 +1,5 @@
-import java.awt.Component;
+package View;
+
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -11,6 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+
+import Model.Observer;
+import Model.SimpleGame;
 
 public class ViewCommand implements Observer {
 

@@ -1,7 +1,11 @@
+package View;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import javax.swing.JFrame;
+
+import Model.Observer;
+import Model.SimpleGame;
 
 
 public class ViewSimpleGame implements Observer {

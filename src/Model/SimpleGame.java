@@ -1,3 +1,4 @@
+package Model;
 import java.util.ArrayList;
 
 public class SimpleGame extends Game implements Observable {
