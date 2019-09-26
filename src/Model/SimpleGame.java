@@ -49,7 +49,7 @@ public class SimpleGame extends Game implements Observable {
 	@Override
 	public void notifyObserver() {
 		for(Observer obs : this._observers) {
-			obs.update();
+			obs.update(this);
 		}
 	}
 }
