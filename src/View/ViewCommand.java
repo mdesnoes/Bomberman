@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -12,16 +14,27 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import Controller.InterfaceController;
+import Model.Game;
 import Model.Observer;
-import Model.SimpleGame;
+
 
 public class ViewCommand implements Observer {
 
-	SimpleGame _game;
+	private final static int SPEEDMIN = 1;		// Vitesse minimum des tours
+	private final static int SPEEDMAX = 10;		// Vitesse maximum des tours
+	private JLabel _labelTurn;					// Le label qui affiche le tour courant
+	private JSlider _slider;					// Le slider qui affiche la vitesse des tours en seconde
+	private InterfaceController _controllerGame;
 	
-	public ViewCommand(SimpleGame game) {
-		this._game = game;
+	
+	public ViewCommand(InterfaceController controllerGame, Game game) {
+		this._controllerGame = controllerGame;
+		game.registerObserver(this);
+		this.createView();
 	}
 	
 	public void createView() {
@@ -36,60 +49,97 @@ public class ViewCommand implements Observer {
 		jFrame.setLocation(dx,dy);
 				
 		JPanel panelPrincipal = new JPanel();
-		GridLayout layoutPrincipal = new GridLayout(2,1);
-		panelPrincipal.setLayout(layoutPrincipal);
+		panelPrincipal.setLayout(new GridLayout(2,1));
 				
-		JPanel panelButton = new JPanel();
-		GridLayout layoutButton = new GridLayout(1,4);
-		
-		panelButton.setLayout(layoutButton);
+		JPanel panelButton = new JPanel();		
+		panelButton.setLayout(new GridLayout(1,4));
 		
 		Icon icon_restart = new ImageIcon("icones/icon_restart.png");
 		JButton buttonRestart = new JButton(icon_restart);
+		//Permet d'appeler le controleur afin d'initialiser le jeu
+		buttonRestart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evenement) {
+				_controllerGame.start();
+			}
+		});
+		
 		Icon icon_run = new ImageIcon("icones/icon_run.png");
 		JButton buttonRun = new JButton(icon_run);
+		//Permet d'appeler le controleur afin de demarrer le jeu
+		buttonRun.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evenement) {
+				_controllerGame.run();
+			}
+		});
 		Icon icon_step = new ImageIcon("icones/icon_step.png");
 		JButton buttonStep = new JButton(icon_step);
-		Icon icon_pause = new ImageIcon("icones/icon_pause.png");
-		JButton buttonPause = new JButton(icon_pause);
+		//Permet d'appeler le controleur afin de passer au tour suivant
+		buttonStep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evenement) {
+				_controllerGame.step();
+			}
+		});
+		//Permet d'appeler le controleur afin de faire une pause
+		Icon icon_stop = new ImageIcon("icones/icon_pause.png");
+		JButton buttonStop = new JButton(icon_stop);
+		buttonStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evenement) {
+				_controllerGame.stop();
+			}
+		});
 
 		panelButton.add(buttonRestart);
 		panelButton.add(buttonRun);
 		panelButton.add(buttonStep);
-		panelButton.add(buttonPause);
+		panelButton.add(buttonStop);
 
+				
+		JPanel panelSliderLabel = new JPanel();
+		panelSliderLabel.setLayout(new GridLayout(1,2));
+
+		
+		JPanel panelSlider = new JPanel();
+		panelSlider.setLayout(new GridLayout(2,1));
+		
+		JLabel labelSlider = new JLabel("Number of turns par second");
+		labelSlider.setHorizontalAlignment(JLabel.CENTER);
+		panelSlider.add(labelSlider);
+		
+		this._slider = new JSlider(JSlider.HORIZONTAL,SPEEDMIN,SPEEDMAX,SPEEDMIN);
+		this._slider.setPaintTicks(true);
+		this._slider.setPaintLabels(true);
+		this._slider.setMinorTickSpacing(SPEEDMIN);
+		this._slider.setMajorTickSpacing(SPEEDMIN);
+		//Permet d'appeler le constructeur afin de modifier le temps des tours
+		this._slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				_controllerGame.setTime(_slider.getValue()*1000);
+			}
+		});
+		
+		panelSlider.add(this._slider);
+				
+		
+		this._labelTurn = new JLabel("Turn : 0");
+		this._labelTurn.setHorizontalAlignment(JLabel.CENTER);
+		this._labelTurn.setVerticalAlignment(JLabel.CENTER);
+		
+		panelSliderLabel.add(panelSlider);
+		panelSliderLabel.add(this._labelTurn);
+		
 		
 		panelPrincipal.add(panelButton);
-		
-		JPanel panelSliderLabel = new JPanel();
-		GridLayout layoutSliderLabel = new GridLayout(1,2);
-		panelSliderLabel.setLayout(layoutSliderLabel);
-
-		int graduation[] = new int[this._game.getMaxTurn()];
-		
-		
-		JSlider sliderTurn = new JSlider(JSlider.HORIZONTAL,graduation[0],graduation[4],graduation[3]);
-		sliderTurn.setPaintLabels(true);
-		sliderTurn.setPaintTicks(true);
-		sliderTurn.setName("Number of turns par second");
-		
-		
-		
-		JLabel labelTurn = new JLabel("Turn : " + this._game.getTurn());
-		
-		panelSliderLabel.add(sliderTurn);
-		panelSliderLabel.add(labelTurn);
-		
 		panelPrincipal.add(panelSliderLabel);
 
 		jFrame.setContentPane(panelPrincipal);
 		jFrame.setVisible(true);
-		
 	}
-	
-	public void update() {
-		// TODO Auto-generated method stub
+
+	public void update(Model.Observable obs) {
+		Game game = (Game)obs;
+		this._labelTurn.setText("Turn : " + game.getTurn());
 		
+		//System.out.println("Time : " + game.getTime());
 	}
 
 }

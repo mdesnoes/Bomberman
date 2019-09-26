@@ -1,12 +1,12 @@
 package Model;
 
-public abstract class Game implements Runnable {
+public abstract class Game implements Runnable, Observable {
 
 	private int _turn;
 	private int _maxturn;
 	private boolean _isRunning;
 	private Thread _thread;
-	private final static double _time = 1000;
+	private long _time = 1000;
 	
 	public Game(int maxturn) {
 		this._maxturn = maxturn;
@@ -36,7 +36,7 @@ public abstract class Game implements Runnable {
 			step();
 			
 			try {
-				Thread.sleep((long)Game._time);
+				Thread.sleep(this._time);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -53,12 +53,21 @@ public abstract class Game implements Runnable {
 		this._thread.start();
 	}
 	
+	public void setTime(long time) {
+		this._time = time;
+	}
+	
+	
 	public int getTurn( ) {
 		return this._turn;
 	}
 	
 	public int getMaxTurn() {
 		return this._maxturn;
+	}
+	
+	public long getTime() {
+		return this._time;
 	}
 	
 	public abstract void initialize_game();
