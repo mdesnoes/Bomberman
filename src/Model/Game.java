@@ -1,3 +1,4 @@
+package Model;
 
 public abstract class Game implements Runnable {
 
