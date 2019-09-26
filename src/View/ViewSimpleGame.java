@@ -3,17 +3,24 @@ import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
+import Controller.InterfaceController;
+import Model.Game;
+import Model.Observable;
 import Model.Observer;
 import Model.SimpleGame;
 
 
 public class ViewSimpleGame implements Observer {
-
-	SimpleGame _game;
 	
-	public ViewSimpleGame(SimpleGame game) {
-		this._game = game;
+	private JLabel _labelTurn;
+	private InterfaceController _controllerGame;
+	
+	public ViewSimpleGame(InterfaceController controllerGame, Game game) {
+		this._controllerGame = controllerGame;
+		game.registerObserver(this);
+		this.createView();
 	}
 	
 	public void createView() {
@@ -27,12 +34,20 @@ public class ViewSimpleGame implements Observer {
 		int dx = centerPoint.x - windowSize.width / 2;
 		int dy = centerPoint.y - windowSize.height / 2 - 350;
 		jFrame.setLocation(dx,dy);
+
+		this._labelTurn = new JLabel("Current turn 0");
+		this._labelTurn.setHorizontalAlignment(JLabel.CENTER);
+		this._labelTurn.setVerticalAlignment(JLabel.NORTH);
+		
+		jFrame.setContentPane(this._labelTurn);
 		jFrame.setVisible(true);
 
-	}
+ 	}
 	
-	public void update() {
-
+	
+	public void update(Model.Observable obs) {
+		Game game = (Game)obs;
+		this._labelTurn.setText("Current turn " + game.getTurn());
 	}
 
 }
