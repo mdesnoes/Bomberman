@@ -6,7 +6,7 @@ public abstract class Game implements Runnable, Observable {
 	private int _maxturn;
 	private boolean _isRunning;
 	private Thread _thread;
-	private long _time = 1000;
+	private long _time = 5000;
 	
 	public Game(int maxturn) {
 		this._maxturn = maxturn;

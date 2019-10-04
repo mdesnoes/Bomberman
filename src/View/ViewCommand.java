@@ -113,7 +113,7 @@ public class ViewCommand implements Observer {
 		//Permet d'appeler le constructeur afin de modifier le temps des tours
 		this._slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				_controllerGame.setTime(_slider.getValue()*1000);
+				_controllerGame.setTime(_controllerGame.getTime()/_slider.getValue());
 			}
 		});
 		
