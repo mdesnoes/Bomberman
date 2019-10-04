@@ -8,7 +8,7 @@ public class Test {
 
 	public static void main(String[] args) {
 
-		Game game1 = new SimpleGame(30);
+		Game game1 = new SimpleGame(100);
 		ControllerSimpleGame controllerGame = new ControllerSimpleGame(game1);
 	}
 

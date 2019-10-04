@@ -7,5 +7,6 @@ public interface InterfaceController {
 	public void run();
 	public void stop();
 	public void setTime(long time);
+	public long getTime();
 	
 }

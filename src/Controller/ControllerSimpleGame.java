@@ -36,4 +36,8 @@ public class ControllerSimpleGame implements InterfaceController {
 	public void setTime(long time) {
 		this._game.setTime(time);
 	}
+	
+	public long getTime() {
+		return _game.getTime();
+	}
 }
