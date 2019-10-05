@@ -19,8 +19,8 @@ import javax.swing.event.ChangeListener;
 
 import Controller.InterfaceController;
 import Model.Game;
-import Model.Observer;
-
+import java.util.Observable;
+import java.util.Observer;
 
 public class ViewCommand implements Observer {
 
@@ -33,7 +33,7 @@ public class ViewCommand implements Observer {
 	
 	public ViewCommand(InterfaceController controllerGame, Game game) {
 		this._controllerGame = controllerGame;
-		game.registerObserver(this);
+		game.addObserver(this);
 		this.createView();
 	}
 	
@@ -110,10 +110,11 @@ public class ViewCommand implements Observer {
 		this._slider.setPaintLabels(true);
 		this._slider.setMinorTickSpacing(SPEEDMIN);
 		this._slider.setMajorTickSpacing(SPEEDMIN);
+		this._slider.setValue((int)this._controllerGame.getTime()/1000);
 		//Permet d'appeler le constructeur afin de modifier le temps des tours
 		this._slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				_controllerGame.setTime(_controllerGame.getTime()/_slider.getValue());
+				_controllerGame.setTime(_controllerGame.getInitTime()/_slider.getValue());
 			}
 		});
 		
@@ -135,11 +136,11 @@ public class ViewCommand implements Observer {
 		jFrame.setVisible(true);
 	}
 
-	public void update(Model.Observable obs) {
+	public void update(Observable obs, Object arg) {
 		Game game = (Game)obs;
 		this._labelTurn.setText("Turn : " + game.getTurn());
 		
-		//System.out.println("Time : " + game.getTime());
+		System.out.println("Time : " + game.getTime());
 	}
 
 }

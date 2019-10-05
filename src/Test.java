@@ -1,15 +1,20 @@
+import Controller.ControllerBombermanGame;
 import Controller.ControllerSimpleGame;
-import Model.Game;
+import Controller.InterfaceController;
+import Model.BombermanGame;
 import Model.SimpleGame;
-import View.ViewCommand;
-import View.ViewSimpleGame;
+
 
 public class Test {
 
 	public static void main(String[] args) {
-
-		Game game1 = new SimpleGame(100);
-		ControllerSimpleGame controllerGame = new ControllerSimpleGame(game1);
+		/*
+		SimpleGame game1 = new SimpleGame(100);
+		InterfaceController controllerGame = new ControllerSimpleGame(game1);
+		*/
+		
+		BombermanGame bombGame = new BombermanGame(100);
+		InterfaceController controllerGame = new ControllerBombermanGame(bombGame);
 	}
 
 }
