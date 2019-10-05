@@ -8,5 +8,6 @@ public interface InterfaceController {
 	public void stop();
 	public void setTime(long time);
 	public long getTime();
+	public int getInitTime();
 	
 }

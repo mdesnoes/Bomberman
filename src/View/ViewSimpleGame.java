@@ -7,8 +7,8 @@ import javax.swing.JLabel;
 
 import Controller.InterfaceController;
 import Model.Game;
-import Model.Observable;
-import Model.Observer;
+import java.util.Observable;
+import java.util.Observer;
 import Model.SimpleGame;
 
 
@@ -17,9 +17,9 @@ public class ViewSimpleGame implements Observer {
 	private JLabel _labelTurn;
 	private InterfaceController _controllerGame;
 	
-	public ViewSimpleGame(InterfaceController controllerGame, Game game) {
+	public ViewSimpleGame(InterfaceController controllerGame, SimpleGame simplegame) {
 		this._controllerGame = controllerGame;
-		game.registerObserver(this);
+		simplegame.addObserver(this);
 		this.createView();
 	}
 	
@@ -45,9 +45,9 @@ public class ViewSimpleGame implements Observer {
  	}
 	
 	
-	public void update(Model.Observable obs) {
-		Game game = (Game)obs;
-		this._labelTurn.setText("Current turn " + game.getTurn());
+	public void update(Observable obs, Object arg) {
+		SimpleGame simplegame = (SimpleGame)obs;
+		this._labelTurn.setText("Current turn " + simplegame.getTurn());
 	}
 
 }

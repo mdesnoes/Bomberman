@@ -8,3 +8,12 @@
 /View/
 /Model/
 /Controller/
+/InfoAgent.class
+/Map.class
+/AgentAction.class
+/ColorAgent.class
+/InfoBomb.class
+/InfoItem.class
+/ItemType.class
+/PanelBomberman.class
+/StateBomb.class
