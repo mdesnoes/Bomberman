@@ -56,38 +56,70 @@ public class ViewCommand implements Observer {
 		
 		Icon icon_restart = new ImageIcon("icones/icon_restart.png");
 		JButton buttonRestart = new JButton(icon_restart);
+	
+		
+		Icon icon_run = new ImageIcon("icones/icon_run.png");
+		JButton buttonRun = new JButton(icon_run);
+		
+		Icon icon_step = new ImageIcon("icones/icon_step.png");
+		JButton buttonStep = new JButton(icon_step);
+		
+		Icon icon_stop = new ImageIcon("icones/icon_pause.png");
+		JButton buttonStop = new JButton(icon_stop);
+		
 		//Permet d'appeler le controleur afin d'initialiser le jeu
 		buttonRestart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evenement) {
 				_controllerGame.start();
+				
+				buttonRestart.setEnabled(false);
+				buttonRun.setEnabled(true);
+				buttonStep.setEnabled(true);
+				buttonStop.setEnabled(true);
 			}
 		});
 		
-		Icon icon_run = new ImageIcon("icones/icon_run.png");
-		JButton buttonRun = new JButton(icon_run);
 		//Permet d'appeler le controleur afin de demarrer le jeu
 		buttonRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evenement) {
 				_controllerGame.run();
+				
+				buttonRestart.setEnabled(false);
+				buttonRun.setEnabled(false);
+				buttonStep.setEnabled(false);
+				buttonStop.setEnabled(true);
 			}
 		});
-		Icon icon_step = new ImageIcon("icones/icon_step.png");
-		JButton buttonStep = new JButton(icon_step);
+		
 		//Permet d'appeler le controleur afin de passer au tour suivant
 		buttonStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evenement) {
 				_controllerGame.step();
+				
+				buttonRestart.setEnabled(true);
+				buttonRun.setEnabled(true);
+				buttonStep.setEnabled(true);
+				buttonStop.setEnabled(false);
 			}
 		});
+		
 		//Permet d'appeler le controleur afin de faire une pause
-		Icon icon_stop = new ImageIcon("icones/icon_pause.png");
-		JButton buttonStop = new JButton(icon_stop);
 		buttonStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evenement) {
 				_controllerGame.stop();
+				
+				buttonRestart.setEnabled(true);
+				buttonRun.setEnabled(true);
+				buttonStep.setEnabled(true);
+				buttonStop.setEnabled(false);
 			}
 		});
-
+		
+		buttonRestart.setEnabled(true);
+		buttonRun.setEnabled(false);
+		buttonStep.setEnabled(false);
+		buttonStop.setEnabled(false);
+		
 		panelButton.add(buttonRestart);
 		panelButton.add(buttonRun);
 		panelButton.add(buttonStep);
@@ -140,7 +172,7 @@ public class ViewCommand implements Observer {
 		Game game = (Game)obs;
 		this._labelTurn.setText("Turn : " + game.getTurn());
 		
-		System.out.println("Time : " + game.getTime());
+		//System.out.println("Time : " + game.getTime());
 	}
 
 }

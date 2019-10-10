@@ -1,6 +1,4 @@
-package View;
-
-import Controller.StateBomb;
+package Model;
 
 public class InfoBomb {
 	
