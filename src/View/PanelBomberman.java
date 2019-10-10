@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import Model.AgentAction;
+import Model.InfoAgent;
+import Model.InfoBomb;
 import Model.ItemType;
 import Model.StateBomb;
 

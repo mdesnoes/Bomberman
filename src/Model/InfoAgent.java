@@ -1,7 +1,4 @@
-package View;
-
-import Model.AgentAction;
-import Model.ColorAgent;
+package Model;
 
 public class InfoAgent {
 	

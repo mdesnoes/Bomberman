@@ -15,6 +15,8 @@ import Model.BombermanGame;
 
 public class ViewBombermanGame implements Observer {
 
+	private Map _map;
+	private PanelBomberman _panel;
 	private InterfaceController _controllerGame;
 	
 	public ViewBombermanGame(InterfaceController controllerGame, BombermanGame bombermanGame) {
@@ -28,27 +30,26 @@ public class ViewBombermanGame implements Observer {
 		jFrame.setTitle("Bomberman Game");
 		jFrame.setSize(new Dimension(1200,800));		
 
-		Map m = null;
 		try {
-			m = new Map("layout/alone.lay");
+			this._map = new Map("layout/niveau2.lay");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		PanelBomberman p = new PanelBomberman(m);
-		
-		//p.repaint();
+		this._panel = new PanelBomberman(this._map);
 		
 		
-		
-		jFrame.setContentPane(p);
+		jFrame.setContentPane(this._panel);
 		jFrame.setVisible(true);
 	}
 	
+	public Map getMap() {
+		return this._map;
+	}
 	
-	@Override
+	
 	public void update(Observable o, Object arg) {
-		
+		this._panel.repaint();
 	}
 
 }

@@ -1,4 +1,5 @@
 package Model;
+import java.util.ArrayList;
 import java.util.Observable;
 
 
@@ -10,6 +11,8 @@ public abstract class Game extends Observable implements Runnable {
 	private boolean _isRunning;
 	private Thread _thread;
 	private long _time;
+	
+    private ArrayList<Agent> _agentList = new ArrayList<Agent>();
 	
 	public Game(int maxturn) {
 		this._maxturn = maxturn;
@@ -60,6 +63,27 @@ public abstract class Game extends Observable implements Runnable {
 		this._thread = new Thread(this);
 		this._thread.start();
 	}
+	
+	
+	
+	public void addBombermanAgent(int pos_x, int pos_y, char type) {
+    	AgentFactory agentFactory = new BombermanFactory();
+    	this._agentList.add(agentFactory.createAgent(pos_x, pos_y, type));
+    }
+	
+	
+	public void addPNJAgent(int pos_x, int pos_y, char type) {
+    	AgentFactory agentFactory = new PNJFactory();
+    	this._agentList.add(agentFactory.createAgent(pos_x, pos_y, type));
+    }
+
+	
+    public void executeOneTurn() {
+        for (Agent agent: this._agentList) {
+        	agent.executeAction();
+        }
+    }
+	
 	
 	public void setTime(long time) {
 		this._time = time;
