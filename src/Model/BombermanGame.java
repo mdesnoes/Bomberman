@@ -8,26 +8,23 @@ public class BombermanGame extends Game {
 
 	@Override
 	public void initialize_game() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Le jeu est initialisé");		
 	}
 
 	@Override
 	public void takeTurn() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Tour " + this.getTurn() + " du jeu en cours");		
 	}
 
 	@Override
 	public boolean gameContinue() {
-		// TODO Auto-generated method stub
-		return false;
+		System.out.println("Le jeu continue");
+		return true;
 	}
 
 	@Override
 	public void gameOver() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Fin du jeu");		
 	}
 
 }

@@ -10,50 +10,47 @@ public class ControllerBombermanGame implements InterfaceController {
 	
 	public ControllerBombermanGame(BombermanGame bombGame) {
 		this._bombGame = bombGame;
+		ViewCommand viewCommand = new ViewCommand(this, bombGame);
 		ViewBombermanGame viewBombGame = new ViewBombermanGame(this, bombGame);
-		
 	}
 	
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
+		this._bombGame.init();
 	}
 
 	@Override
 	public void step() {
-		// TODO Auto-generated method stub
+		this._bombGame.step();
 		
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		this._bombGame.launch();		
 		
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
+		this._bombGame.stop();
 		
 	}
 
 	@Override
 	public void setTime(long time) {
-		// TODO Auto-generated method stub
+		this._bombGame.setTime(time);
 		
 	}
 
 	@Override
 	public long getTime() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _bombGame.getTime();
 	}
 
 	@Override
 	public int getInitTime() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _bombGame.INIT_TIME;
 	}
 
 }
