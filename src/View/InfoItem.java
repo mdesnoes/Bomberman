@@ -1,6 +1,6 @@
 package View;
 
-import Controller.ItemType;
+import Model.ItemType;
 
 public class InfoItem {
 	

@@ -13,9 +13,9 @@ import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
-import Controller.AgentAction;
-import Controller.ItemType;
-import Controller.StateBomb;
+import Model.AgentAction;
+import Model.ItemType;
+import Model.StateBomb;
 
 /** 
  * Classe qui permet de charger d'afficher le panneau du jeu à partir d'une carte et de listes d'agents avec leurs positions.
