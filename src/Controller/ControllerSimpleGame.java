@@ -44,4 +44,5 @@ public class ControllerSimpleGame implements InterfaceController {
 	public int getInitTime() {
 		return _simpleGame.INIT_TIME;
 	}
+
 }

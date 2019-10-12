@@ -1,7 +1,6 @@
 package View;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.util.Observable;
@@ -9,29 +8,36 @@ import java.util.Observer;
 
 import javax.swing.JFrame;
 
-import Controller.InterfaceController;
+import Controller.ControllerBombermanGame;
 import Model.BombermanGame;
 
 
 public class ViewBombermanGame implements Observer {
 
+	private JFrame _jFrame;
 	private Map _map;
 	private PanelBomberman _panel;
-	private InterfaceController _controllerGame;
+	private ControllerBombermanGame _controllerGame;
 	
-	public ViewBombermanGame(InterfaceController controllerGame, BombermanGame bombermanGame) {
+	public ViewBombermanGame(ControllerBombermanGame controllerGame, BombermanGame bombermanGame) {
 		this._controllerGame = controllerGame;
 		bombermanGame.addObserver(this);
 		this.createView();
 	}
 	
 	private void createView() {
-		JFrame jFrame = new JFrame();
-		jFrame.setTitle("Bomberman Game");
-		jFrame.setSize(new Dimension(1200,800));		
+		_jFrame = new JFrame();
+		_jFrame.setTitle("Bomberman Game");
+		_jFrame.setSize(new Dimension(1100,700));
+		Dimension windowSize = _jFrame.getSize();
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		Point centerPoint = ge.getCenterPoint();
+		int dx = centerPoint.x - windowSize.width / 2 - 600;
+		int dy = centerPoint.y - windowSize.height / 2 - 600;
+		_jFrame.setLocation(dx,dy);
 
 		try {
-			this._map = new Map("layout/niveau2.lay");
+			this._map = new Map("layout/" + this._controllerGame.getLayout());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -39,8 +45,8 @@ public class ViewBombermanGame implements Observer {
 		this._panel = new PanelBomberman(this._map);
 		
 		
-		jFrame.setContentPane(this._panel);
-		jFrame.setVisible(true);
+		_jFrame.setContentPane(this._panel);
+		_jFrame.setVisible(true);
 	}
 	
 	public Map getMap() {
@@ -48,8 +54,10 @@ public class ViewBombermanGame implements Observer {
 	}
 	
 	
-	public void update(Observable o, Object arg) {
-		this._panel.repaint();
+	public void update(Observable obs, Object arg) {
+		//this._panel.repaint();
+
+
 	}
 
 }

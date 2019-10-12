@@ -8,12 +8,13 @@ import View.ViewCommand;
 
 public class ControllerBombermanGame implements InterfaceController {
 
+	private ViewCommand _viewCommand;
 	private ViewBombermanGame _viewBombGame;
 	private BombermanGame _bombGame;
 	
 	public ControllerBombermanGame(BombermanGame bombGame) {
 		this._bombGame = bombGame;
-		ViewCommand viewCommand = new ViewCommand(this, bombGame);
+		this._viewCommand = new ViewCommand(this, bombGame);
 		this._viewBombGame = new ViewBombermanGame(this, bombGame);
 	}
 	
@@ -44,20 +45,21 @@ public class ControllerBombermanGame implements InterfaceController {
 		
 	}
 
-	@Override
 	public void setTime(long time) {
 		this._bombGame.setTime(time);
 		
 	}
 
-	@Override
 	public long getTime() {
 		return _bombGame.getTime();
 	}
 
-	@Override
 	public int getInitTime() {
 		return _bombGame.INIT_TIME;
+	}
+
+	public String getLayout() {
+		return this._viewCommand.getLayout();
 	}
 
 }

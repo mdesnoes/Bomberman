@@ -1,15 +1,20 @@
 package View;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FilenameFilter;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +24,8 @@ import javax.swing.event.ChangeListener;
 
 import Controller.InterfaceController;
 import Model.Game;
+
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -29,7 +36,7 @@ public class ViewCommand implements Observer {
 	private JLabel _labelTurn;					// Le label qui affiche le tour courant
 	private JSlider _slider;					// Le slider qui affiche la vitesse des tours en seconde
 	private InterfaceController _controllerGame;
-	
+	private String _layoutGame;
 	
 	public ViewCommand(InterfaceController controllerGame, Game game) {
 		this._controllerGame = controllerGame;
@@ -40,17 +47,43 @@ public class ViewCommand implements Observer {
 	public void createView() {
 		JFrame jFrame = new JFrame();
 		jFrame.setTitle("Commande");
-		jFrame.setSize(new Dimension(1400,400));
+		jFrame.setSize(new Dimension(1100,300));
 		Dimension windowSize = jFrame.getSize();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		Point centerPoint = ge.getCenterPoint();
-		int dx = centerPoint.x - windowSize.width / 2;
-		int dy = centerPoint.y - windowSize.height / 2 - 350;
+		int dx = centerPoint.x - windowSize.width / 2 - 600;
+		int dy = centerPoint.y - windowSize.height / 2 + 500;
 		jFrame.setLocation(dx,dy);
+		
 				
 		JPanel panelPrincipal = new JPanel();
-		panelPrincipal.setLayout(new GridLayout(2,1));
-				
+		panelPrincipal.setLayout(new GridLayout(3,1));
+		
+		
+		JPanel panelChoixLayout = new JPanel();
+		panelChoixLayout.setLayout(new GridLayout(1,2));
+		
+		JLabel labelChoixLayout = new JLabel("Choix de la map ===>");
+		Font font = new Font("Arial",Font.BOLD, 24);
+		labelChoixLayout.setFont(font);
+		labelChoixLayout.setHorizontalAlignment(JLabel.CENTER);
+		
+		
+		JComboBox comboBoxChoixLayout = new JComboBox(getLayouts());
+		this._layoutGame = (String) comboBoxChoixLayout.getSelectedItem();
+		comboBoxChoixLayout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_layoutGame = (String) comboBoxChoixLayout.getSelectedItem();
+				_controllerGame.start();
+			}
+		});
+		
+		
+		panelChoixLayout.add(labelChoixLayout);
+		panelChoixLayout.add(comboBoxChoixLayout);
+		
+		
+		
 		JPanel panelButton = new JPanel();		
 		panelButton.setLayout(new GridLayout(1,4));
 		
@@ -124,6 +157,7 @@ public class ViewCommand implements Observer {
 		panelButton.add(buttonRun);
 		panelButton.add(buttonStep);
 		panelButton.add(buttonStop);
+		
 
 				
 		JPanel panelSliderLabel = new JPanel();
@@ -131,7 +165,7 @@ public class ViewCommand implements Observer {
 
 		
 		JPanel panelSlider = new JPanel();
-		panelSlider.setLayout(new GridLayout(2,1));
+		panelSlider.setLayout(new GridLayout(2,2));
 		
 		JLabel labelSlider = new JLabel("Number of turns par second");
 		labelSlider.setHorizontalAlignment(JLabel.CENTER);
@@ -160,12 +194,38 @@ public class ViewCommand implements Observer {
 		panelSliderLabel.add(panelSlider);
 		panelSliderLabel.add(this._labelTurn);
 		
-		
+		panelPrincipal.add(panelChoixLayout);
 		panelPrincipal.add(panelButton);
 		panelPrincipal.add(panelSliderLabel);
 
+		
+		
+		
 		jFrame.setContentPane(panelPrincipal);
 		jFrame.setVisible(true);
+	}
+	
+	
+	public String[] getLayouts() {
+		File repertoire = new File(System.getProperty("user.dir") + "/layout");
+		
+		FilenameFilter layoutFilter = new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".lay");
+			}
+		};
+		
+		File[] files = repertoire.listFiles(layoutFilter);
+		String[] layouts = new String[files.length];
+		for(int i=0; i<files.length; ++i) {
+			layouts[i] = files[i].getName();
+		}
+		
+		return layouts;
+	}
+	
+	public String getLayout() {
+		return this._layoutGame;
 	}
 
 	public void update(Observable obs, Object arg) {
