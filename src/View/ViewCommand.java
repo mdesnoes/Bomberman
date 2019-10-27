@@ -55,34 +55,16 @@ public class ViewCommand implements Observer {
 		int dy = centerPoint.y - windowSize.height / 2 + 500;
 		jFrame.setLocation(dx,dy);
 		
-				
+		JFileChooser fc = new JFileChooser();
+		fc.setCurrentDirectory(new java.io.File(System.getProperty("user.dir") + "/layout"));
+		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			this._layoutGame = fc.getSelectedFile().getName();
+		}
+		
 		JPanel panelPrincipal = new JPanel();
-		panelPrincipal.setLayout(new GridLayout(3,1));
-		
-		
-		JPanel panelChoixLayout = new JPanel();
-		panelChoixLayout.setLayout(new GridLayout(1,2));
-		
-		JLabel labelChoixLayout = new JLabel("Choix de la map ===>");
-		Font font = new Font("Arial",Font.BOLD, 24);
-		labelChoixLayout.setFont(font);
-		labelChoixLayout.setHorizontalAlignment(JLabel.CENTER);
-		
-		
-		JComboBox comboBoxChoixLayout = new JComboBox(getLayouts());
-		this._layoutGame = (String) comboBoxChoixLayout.getSelectedItem();
-		comboBoxChoixLayout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				_layoutGame = (String) comboBoxChoixLayout.getSelectedItem();
-				_controllerGame.start();
-			}
-		});
-		
-		
-		panelChoixLayout.add(labelChoixLayout);
-		panelChoixLayout.add(comboBoxChoixLayout);
-		
-		
+		panelPrincipal.setLayout(new GridLayout(2,1));
+				
 		
 		JPanel panelButton = new JPanel();		
 		panelButton.setLayout(new GridLayout(1,4));
@@ -194,7 +176,6 @@ public class ViewCommand implements Observer {
 		panelSliderLabel.add(panelSlider);
 		panelSliderLabel.add(this._labelTurn);
 		
-		panelPrincipal.add(panelChoixLayout);
 		panelPrincipal.add(panelButton);
 		panelPrincipal.add(panelSliderLabel);
 
@@ -231,8 +212,6 @@ public class ViewCommand implements Observer {
 	public void update(Observable obs, Object arg) {
 		Game game = (Game)obs;
 		this._labelTurn.setText("Turn : " + game.getTurn());
-		
-		//System.out.println("Time : " + game.getTime());
 	}
 
 }

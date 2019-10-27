@@ -56,8 +56,8 @@ public class PanelBomberman extends JPanel {
 	public PanelBomberman(Map map) {
 
 		this.map = map;
-
-		this.breakable_walls = map.getStart_brokable_walls();
+		
+		this.breakable_walls = map.getStart_breakable_walls();
 		
 		listInfoAgents = map.getStart_agents();	
 		listInfoItems = new ArrayList<InfoItem>();
@@ -430,7 +430,6 @@ public class PanelBomberman extends JPanel {
 		}
 
 	}
-
 
 
 	public void setInfoGame(boolean[][] breakable_walls, ArrayList<InfoAgent> listInfoAgents, ArrayList<InfoItem> listInfoItems, ArrayList<InfoBomb> listInfoBombs) {

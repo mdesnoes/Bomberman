@@ -7,7 +7,7 @@ public class AgentEnnemyBasique extends AgentPNJ {
 	}
 
 	@Override
-	public void executeAction() {
+	public void moveAgent(AgentAction action) {
 		
 	}
 

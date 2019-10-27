@@ -32,7 +32,7 @@ public class Map implements Serializable {
 	private int size_y;
 	
 	private boolean walls[][];
-	private boolean start_brokable_walls[][];
+	private boolean start_breakable_walls[][];
 
 	private ArrayList<InfoAgent> start_agents;
 	
@@ -65,7 +65,7 @@ public class Map implements Serializable {
 		size_y = nbY;
 		
 		walls = new boolean [size_x][size_y];
-		start_brokable_walls  = new boolean [size_x][size_y];
+		start_breakable_walls  = new boolean [size_x][size_y];
 			
 		flux = new FileInputStream(filename); 
 		lecture = new InputStreamReader(flux);
@@ -90,8 +90,8 @@ public class Map implements Serializable {
 				else walls[x][y]=false;
 				
 				if (ligne.charAt(x)=='$') 
-					start_brokable_walls[x][y]=true; 
-				else start_brokable_walls[x][y]=false;
+					start_breakable_walls[x][y]=true; 
+				else start_breakable_walls[x][y]=false;
 				
 				if (ligne.charAt(x)=='E' || ligne.charAt(x)=='V' || ligne.charAt(x)=='R') {
 					start_agents.add(new InfoAgent(x,y,AgentAction.STOP,ligne.charAt(x),ColorAgent.DEFAULT,false,false));	
@@ -135,8 +135,8 @@ public class Map implements Serializable {
 		return filename;
 	}
 
-	public boolean[][] getStart_brokable_walls() {
-		return start_brokable_walls;
+	public boolean[][] getStart_breakable_walls() {
+		return start_breakable_walls;
 	}
 
 	public boolean[][] get_walls() {
@@ -147,8 +147,46 @@ public class Map implements Serializable {
 	public ArrayList<InfoAgent> getStart_agents() {
 		return start_agents;
 	}
+	
 
-
-
+	//Verifie si un mur est present sur la case (x;y)
+	public boolean isWall(int x, int y) {
+		int taille = this.get_walls().length;
+		for(int i=0; i< taille; ++i) {
+			if(i == x) {
+				for(int j=0; j<taille; ++j) {
+					if(j == y) {
+						return this.get_walls()[i][j];
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	//Verifie si un mur cassable est present sur la case (x;y)
+	public boolean isBrokableWall(int x, int y) {
+		int taille = this.getStart_breakable_walls().length;
+		for(int i=0; i< taille; ++i) {
+			if(i == x) {
+				for(int j=0; j<taille; ++j) {
+					if(j == y) {
+						return this.getStart_breakable_walls()[i][j];
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	//Verifie si un agent est present sur la case (x;y)
+	public boolean isAgent(int x, int y) {
+		for(InfoAgent agent : this.getStart_agents()) {
+			if(agent.getX() == x && agent.getY() == y) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }

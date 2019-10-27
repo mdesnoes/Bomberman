@@ -30,8 +30,6 @@ public abstract class Game extends Observable implements Runnable {
 	
 	public void step() {
 
-		this.setChanged();
-		this.notifyObservers();
 		if(gameContinue() && this._turn <= this._maxturn) {
 			this._turn++;
 			takeTurn();
@@ -40,6 +38,9 @@ public abstract class Game extends Observable implements Runnable {
 			this._isRunning = false;
 			gameOver();
 		}
+		
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
 	public void run() {
@@ -78,13 +79,6 @@ public abstract class Game extends Observable implements Runnable {
     }
 
 	
-    public void executeOneTurn() {
-        for (Agent agent: this._agentList) {
-        	agent.executeAction();
-        }
-    }
-	
-	
 	public void setTime(long time) {
 		this._time = time;
 	}
@@ -101,6 +95,10 @@ public abstract class Game extends Observable implements Runnable {
 	
 	public long getTime() {
 		return this._time;
+	}
+	
+	public ArrayList<Agent> getAgentList() {
+		return this._agentList;
 	}
 	
 	public abstract void initialize_game();
