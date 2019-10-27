@@ -3,7 +3,6 @@ package Model;
 import java.util.ArrayList;
 
 import Controller.ControllerBombermanGame;
-import View.InfoItem;
 import View.Map;
 
 public class BombermanGame extends Game {
@@ -12,9 +11,9 @@ public class BombermanGame extends Game {
 	
 	
 	private boolean[][] _listBreakableWall;
-	private ArrayList<InfoItem> _listInfoItems;
-	private ArrayList<InfoBomb> _listInfoBombs;
-	
+	private ArrayList<Bombe> _listBombs;
+	private ArrayList<Item> _listItems;
+
 	
 	public BombermanGame(int maxturn) {
 		super(maxturn);
@@ -22,8 +21,9 @@ public class BombermanGame extends Game {
 		
 
 		this._listBreakableWall = this._controllerBombGame.getMap().getStart_breakable_walls();
-		this._listInfoItems = new ArrayList<InfoItem>();
-		this._listInfoBombs = new ArrayList<InfoBomb>();
+		this._listBombs = new ArrayList<Bombe>();
+		this._listItems = new ArrayList<Item>();
+
 	}
 
 	@Override
@@ -64,6 +64,7 @@ public class BombermanGame extends Game {
     	}
     	
     	//On verifie s'il y a un mur, un mur cassable ou un agent sur la nouvelle case
+    	
     	if(this._controllerBombGame.getMap().isWall(newX,newY) || this._controllerBombGame.getMap().isBrokableWall(newX,newY)
     			|| this._controllerBombGame.getMap().isAgent(newX, newY)) {
     		return false;
@@ -75,22 +76,66 @@ public class BombermanGame extends Game {
     
 	@Override
 	public void takeTurn() {
+		
+		ArrayList<Bombe> bombeASupprimer = new ArrayList<Bombe>();
+				
+		for(Bombe bomb : this.getListBomb()) {
+			if(bomb.getStateBomb() == StateBomb.Boom) {
+				explosionBombe(bomb);
+				bombeASupprimer.add(bomb);
+			}
+			else {
+				bomb.changeStateBomb();
+			}
+		}
+		
+		//On supprime les bombes qui ont explosé
+		for(Bombe bomb : bombeASupprimer) {
+			this._listBombs.remove(bomb);
+		}
+		
 		for (Agent agent: this.getAgentList()) {
 			
-			AgentAction[] tabAction = {AgentAction.MOVE_UP, AgentAction.MOVE_DOWN, AgentAction.MOVE_LEFT, AgentAction.MOVE_RIGHT};
-			int nbRandom = (int) (Math.random() * 4); // nombre entre 0 et 3
+			AgentAction[] tabAction = {AgentAction.MOVE_UP, AgentAction.MOVE_DOWN, AgentAction.MOVE_LEFT, AgentAction.MOVE_RIGHT, AgentAction.STOP, AgentAction.PUT_BOMB};
+			int nbRandom = (int) (Math.random() * tabAction.length);
 			AgentAction action = tabAction[nbRandom];
 			
 			System.out.println(action);
-				   
-			if(isLegalMove(agent, action)) {
-				System.out.println("Deplacement possible");
-				agent.moveAgent(action);
+			
+			if(action == AgentAction.PUT_BOMB) {
+				this._listBombs.add(new Bombe(agent.getX(), agent.getY(), 1, StateBomb.Step1));
+			}
+			else if (action == AgentAction.STOP) {
+				
+			}
+			else {
+				if(isLegalMove(agent, action)) {
+					System.out.println("Deplacement possible");
+					agent.moveAgent(action);
+				}
 			}
 			
 			System.out.println(agent.getX() + " - " + agent.getY());
 		}
    	}
+	
+	public void explosionBombe(Bombe bomb) {
+
+		for(int i=bomb.getX() - bomb.getRange(); i<bomb.getX() + bomb.getRange(); ++i) {
+			
+			for(int j=bomb.getY() - bomb.getRange(); j<bomb.getY() + bomb.getRange(); ++j) {
+				
+				if(this._controllerBombGame.getMap().isBrokableWall(i, j)) {
+					//removeBreakableWall(i,j);
+				}
+				
+				if(this._controllerBombGame.getMap().isAgent(i, j)) {
+					//this.removeAgent(getAgentByCoord(i,j));
+				}
+			}
+		}
+		
+	}
 
 	@Override
 	public boolean gameContinue() {
@@ -108,12 +153,12 @@ public class BombermanGame extends Game {
 		return this._listBreakableWall;
 	}
 	
-	public ArrayList<InfoItem> getListInfoItem() {
-		return this._listInfoItems;
+	public ArrayList<Item> getListItem() {
+		return this._listItems;
 	}
 	
-	public ArrayList<InfoBomb> getListInfoBomb() {
-		return this._listInfoBombs;
+	public ArrayList<Bombe> getListBomb() {
+		return this._listBombs;
 	}
 
 }

@@ -3,10 +3,12 @@ package Controller;
 
 import java.util.ArrayList;
 
+import Model.Bombe;
 import Model.BombermanGame;
 import Model.InfoAgent;
 import Model.InfoBomb;
-import View.InfoItem;
+import Model.InfoItem;
+import Model.Item;
 import View.Map;
 import View.ViewBombermanGame;
 import View.ViewCommand;
@@ -69,12 +71,13 @@ public class ControllerBombermanGame implements InterfaceController {
 	
 	
 	//Permet de renseigner les nouvelles coordonnées des agents à la liste d'InfoAgent et retourner cette liste
-	public ArrayList<InfoAgent> getInfoAgentList() {
+	public ArrayList<InfoAgent> getListInfoAgent() {
 		ArrayList<InfoAgent> infoAgentList = this._viewBombGame.getMap().getStart_agents();
 		
 		if(this._bombGame.getAgentList().size() == infoAgentList.size()) {
 			for(int i=0; i<infoAgentList.size(); ++i) {
 				infoAgentList.get(i).setX(this._bombGame.getAgentList().get(i).getX());
+				infoAgentList.get(i).setY(this._bombGame.getAgentList().get(i).getY());
 			}
 		}
 		
@@ -86,11 +89,19 @@ public class ControllerBombermanGame implements InterfaceController {
 	}
 	
 	public ArrayList<InfoItem> getListInfoItems() {
-		return this._bombGame.getListInfoItem();
+		ArrayList<InfoItem> infoItemList = new ArrayList<InfoItem>();
+		for(Item item : this._bombGame.getListItem()) {
+			infoItemList.add(new InfoItem(item.getX(), item.getY(), item.getType()));
+		}
+		return infoItemList;
 	}
 	
 	public ArrayList<InfoBomb> getListInfoBombs() {
-		return this._bombGame.getListInfoBomb();
+		ArrayList<InfoBomb> infoBombList = new ArrayList<InfoBomb>();
+		for(Bombe bomb : this._bombGame.getListBomb()) {
+			infoBombList.add(new InfoBomb(bomb.getX(), bomb.getY(), bomb.getRange(), bomb.getStateBomb()));
+		}
+		return infoBombList;
 	}
 	
 }

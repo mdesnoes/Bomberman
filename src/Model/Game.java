@@ -30,7 +30,7 @@ public abstract class Game extends Observable implements Runnable {
 	
 	public void step() {
 
-		if(gameContinue() && this._turn <= this._maxturn) {
+		if(gameContinue() && this._turn < this._maxturn) {
 			this._turn++;
 			takeTurn();
 		}
@@ -99,6 +99,10 @@ public abstract class Game extends Observable implements Runnable {
 	
 	public ArrayList<Agent> getAgentList() {
 		return this._agentList;
+	}
+	
+	public void removeAgent(Agent agent) {
+		this._agentList.remove(agent);
 	}
 	
 	public abstract void initialize_game();

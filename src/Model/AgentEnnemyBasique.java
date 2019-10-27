@@ -6,9 +6,5 @@ public class AgentEnnemyBasique extends AgentPNJ {
 		super(pos_x, pos_y);
 	}
 
-	@Override
-	public void moveAgent(AgentAction action) {
-		
-	}
 
 }
