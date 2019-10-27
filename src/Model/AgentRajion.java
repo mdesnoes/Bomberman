@@ -6,8 +6,4 @@ public class AgentRajion extends AgentPNJ {
 		super(pos_x, pos_y);
 	}
 
-	public void executeAction() {
-		
-	}
-
 }

@@ -14,7 +14,23 @@ public abstract class Agent {
 		this._id = Agent._compteur;
 		Agent._compteur++;
 	}
+	
+	public void setX(int x) {
+		this._pos_x = x;
+	}
+	
+	public void setY(int y) {
+		this._pos_y = y;
+	}
+	
+	public int getX() {
+		return this._pos_x;
+	}
+	
+	public int getY() {
+		return this._pos_y;
+	}
 
 	
-	public abstract void executeAction();
+	public abstract void moveAgent(AgentAction action);
 }

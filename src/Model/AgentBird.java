@@ -6,7 +6,7 @@ public class AgentBird extends AgentPNJ {
 		super(pos_x, pos_y);
 	}
 
-	public void executeAction() {
+	public void moveAgent(AgentAction action) {
 		
 	}
 

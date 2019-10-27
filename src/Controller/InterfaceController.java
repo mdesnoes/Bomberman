@@ -9,5 +9,4 @@ public interface InterfaceController {
 	public void setTime(long time);
 	public long getTime();
 	public int getInitTime();
-	
 }

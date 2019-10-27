@@ -3,6 +3,7 @@ package View;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -10,6 +11,7 @@ import javax.swing.JFrame;
 
 import Controller.ControllerBombermanGame;
 import Model.BombermanGame;
+import Model.InfoBomb;
 
 
 public class ViewBombermanGame implements Observer {
@@ -53,11 +55,16 @@ public class ViewBombermanGame implements Observer {
 		return this._map;
 	}
 	
+	public void setMap(Map map) {
+		this._map = map;
+	}
 	
 	public void update(Observable obs, Object arg) {
-		//this._panel.repaint();
-
-
+		
+		this._panel.setInfoGame(this._controllerGame.getListBreakableWall(), this._controllerGame.getInfoAgentList(),
+				this._controllerGame.getListInfoItems(), this._controllerGame.getListInfoBombs());
+		
+		this._panel.repaint();
 	}
 
 }
