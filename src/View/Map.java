@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import Model.AgentAction;
 import Model.ColorAgent;
-import Model.InfoAgent;
 
 
 
@@ -151,10 +150,9 @@ public class Map implements Serializable {
 
 	//Verifie si un mur est present sur la case (x;y)
 	public boolean isWall(int x, int y) {
-		int taille = this.get_walls().length;
-		for(int i=0; i< taille; ++i) {
+		for(int i=0; i< this.getSizeX(); ++i) {
 			if(i == x) {
-				for(int j=0; j<taille; ++j) {
+				for(int j=0; j<this.getSizeY(); ++j) {
 					if(j == y) {
 						return this.get_walls()[i][j];
 					}
@@ -163,30 +161,4 @@ public class Map implements Serializable {
 		}
 		return false;
 	}
-	
-	//Verifie si un mur cassable est present sur la case (x;y)
-	public boolean isBrokableWall(int x, int y) {
-		int taille = this.getStart_breakable_walls().length;
-		for(int i=0; i< taille; ++i) {
-			if(i == x) {
-				for(int j=0; j<taille; ++j) {
-					if(j == y) {
-						return this.getStart_breakable_walls()[i][j];
-					}
-				}
-			}
-		}
-		return false;
-	}
-	
-	//Verifie si un agent est present sur la case (x;y)
-	public boolean isAgent(int x, int y) {
-		for(InfoAgent agent : this.getStart_agents()) {
-			if(agent.getX() == x && agent.getY() == y) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 }

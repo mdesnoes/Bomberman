@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 
 import Controller.ControllerBombermanGame;
 import Model.BombermanGame;
-import Model.InfoBomb;
 
 
 public class ViewBombermanGame implements Observer {

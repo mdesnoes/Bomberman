@@ -1,4 +1,6 @@
-package Model;
+package View;
+
+import Model.ItemType;
 
 public class InfoItem {
 	

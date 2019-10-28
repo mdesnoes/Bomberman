@@ -2,8 +2,8 @@ package Model;
 
 public abstract class AgentPNJ extends Agent {
 
-	public AgentPNJ(int pos_x, int pos_y) {
-		super(pos_x, pos_y);
+	public AgentPNJ(int pos_x, int pos_y, char type, ColorAgent color) {
+		super(pos_x, pos_y, type, color);
 	}
 	
 

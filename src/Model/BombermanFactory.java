@@ -14,7 +14,7 @@ public class BombermanFactory implements AgentFactory {
 			COMPTEUR = 0;
 		}
 		
-		return new AgentBomberman(pos_x, pos_y, this._tabColor[COMPTEUR]);
+		return new AgentBomberman(pos_x, pos_y, type, this._tabColor[COMPTEUR]);
 	}
 
 }

@@ -3,12 +3,13 @@ package Controller;
 
 import java.util.ArrayList;
 
+import Model.Agent;
 import Model.Bombe;
 import Model.BombermanGame;
-import Model.InfoAgent;
-import Model.InfoBomb;
-import Model.InfoItem;
 import Model.Item;
+import View.InfoAgent;
+import View.InfoBomb;
+import View.InfoItem;
 import View.Map;
 import View.ViewBombermanGame;
 import View.ViewCommand;
@@ -72,16 +73,11 @@ public class ControllerBombermanGame implements InterfaceController {
 	
 	//Permet de renseigner les nouvelles coordonnées des agents à la liste d'InfoAgent et retourner cette liste
 	public ArrayList<InfoAgent> getListInfoAgent() {
-		ArrayList<InfoAgent> infoAgentList = this._viewBombGame.getMap().getStart_agents();
-		
-		if(this._bombGame.getAgentList().size() == infoAgentList.size()) {
-			for(int i=0; i<infoAgentList.size(); ++i) {
-				infoAgentList.get(i).setX(this._bombGame.getAgentList().get(i).getX());
-				infoAgentList.get(i).setY(this._bombGame.getAgentList().get(i).getY());
-			}
+		ArrayList<InfoAgent> infoListAgent = new ArrayList<InfoAgent>();
+		for(Agent agent : this._bombGame.getListAgent()) {
+			infoListAgent.add(new InfoAgent(agent.getX(), agent.getY(), agent.getAction(), agent.getType(), agent.getColor(),false,false));
 		}
-		
-		return infoAgentList;
+		return infoListAgent;
 	}
 
 	public boolean[][] getListBreakableWall() {

@@ -12,7 +12,6 @@ public abstract class Game extends Observable implements Runnable {
 	private Thread _thread;
 	private long _time;
 	
-    private ArrayList<Agent> _agentList = new ArrayList<Agent>();
 	
 	public Game(int maxturn) {
 		this._maxturn = maxturn;
@@ -23,9 +22,9 @@ public abstract class Game extends Observable implements Runnable {
 		this._turn = 0;
 		this._isRunning = true;
 		
+		initialize_game();
 		this.setChanged();
 		this.notifyObservers();
-		initialize_game();
 	}
 	
 	public void step() {
@@ -65,20 +64,6 @@ public abstract class Game extends Observable implements Runnable {
 		this._thread.start();
 	}
 	
-	
-	
-	public void addBombermanAgent(int pos_x, int pos_y, char type) {
-    	AgentFactory agentFactory = new BombermanFactory();
-    	this._agentList.add(agentFactory.createAgent(pos_x, pos_y, type));
-    }
-	
-	
-	public void addPNJAgent(int pos_x, int pos_y, char type) {
-    	AgentFactory agentFactory = new PNJFactory();
-    	this._agentList.add(agentFactory.createAgent(pos_x, pos_y, type));
-    }
-
-	
 	public void setTime(long time) {
 		this._time = time;
 	}
@@ -97,13 +82,6 @@ public abstract class Game extends Observable implements Runnable {
 		return this._time;
 	}
 	
-	public ArrayList<Agent> getAgentList() {
-		return this._agentList;
-	}
-	
-	public void removeAgent(Agent agent) {
-		this._agentList.remove(agent);
-	}
 	
 	public abstract void initialize_game();
 	public abstract void takeTurn();
