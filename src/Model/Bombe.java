@@ -25,6 +25,12 @@ public class Bombe {
 	public int getRange() {
 		return this._range;
 	}
+	
+	public void setRange(int range) {
+		if(range > 1) {
+			this._range = range;
+		}
+	}
 
 	public StateBomb getStateBomb() {
 		return this._stateBomb;
