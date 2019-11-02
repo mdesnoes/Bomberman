@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.ArrayList;
+
 public abstract class Agent {
 
 	private static int _compteur = 0;
@@ -11,13 +13,16 @@ public abstract class Agent {
 	private AgentAction _action;
 	private char _type;
 	
-	private Bombe _bombe;
+	private ArrayList<Bombe> _listBombes = new ArrayList<Bombe>();
+	private int _nbBombe = 1;
 	
 	private boolean _isInvincible = false;
 	private boolean _isSick = false;
 	
 	private int _nbTurnBonusInvincible = 0;
 	private int _nbTurnMalusSick = 0;
+	
+	private int _rangeBomb = 2;
 	
 	public Agent(int pos_x, int pos_y, char type, ColorAgent color) {
 		this._pos_x = pos_x;
@@ -26,7 +31,6 @@ public abstract class Agent {
 		this._color = color;
 		this._id = Agent._compteur;
 		Agent._compteur++;
-		this._bombe = null;
 	}
 	
 	public void setX(int x) {
@@ -77,12 +81,12 @@ public abstract class Agent {
 		this._action = action;
 	}
 
-	public void setBombe(Bombe bombe) {
-		this._bombe = bombe;
+	public void setListBombe(ArrayList<Bombe> bombes) {
+		this._listBombes = bombes;
 	}
 	
-	public Bombe getBombe() {
-		return this._bombe;
+	public ArrayList<Bombe> getListBombe() {
+		return this._listBombes;
 	}
 	
 	public int getNbTurnBonusInvincible() {
@@ -101,6 +105,41 @@ public abstract class Agent {
 		this._nbTurnMalusSick = i;
 	}
 	
+	public int getNbBombe() {
+		return this._nbBombe;
+
+	}
+	public void setNbBombe(int nb) {
+		if(nb >= 1) {
+			this._nbBombe = nb;
+		}
+	}
+	
+	public int getRangeBomb() {
+		return this._rangeBomb;
+	}
+	
+	public void setRangeBomb(int range) {
+		if(range >= 1) {
+			this._rangeBomb = range;
+		}
+	}
+	
+	
+	public void addBombe(Bombe bomb) {
+		this._listBombes.add(bomb);
+	}
+	
+	public void removeBombe(Bombe bomb) {
+		this._listBombes.remove(bomb);
+	}
+	
+	public boolean canPutBomb() {
+		if(this._isSick) {
+			return false;
+		}
+		return this._listBombes.size() < this._nbBombe;
+	}
 	
 	public abstract void moveAgent(AgentAction action);
 }
