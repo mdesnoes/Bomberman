@@ -13,17 +13,6 @@ public abstract class Agent {
 	private AgentAction _action;
 	private char _type;
 	
-	private ArrayList<Bombe> _listBombes = new ArrayList<Bombe>();
-	private int _nbBombe = 1;
-	
-	private boolean _isInvincible = false;
-	private boolean _isSick = false;
-	
-	private int _nbTurnBonusInvincible = 0;
-	private int _nbTurnMalusSick = 0;
-	
-	private int _rangeBomb = 2;
-	
 	public Agent(int pos_x, int pos_y, char type, ColorAgent color) {
 		this._pos_x = pos_x;
 		this._pos_y = pos_y;
@@ -49,24 +38,12 @@ public abstract class Agent {
 		return this._pos_y;
 	}
 
+	public int getId() {
+		return this._id;
+	}
+	
 	public ColorAgent getColor() {
 		return this._color;
-	}
-	
-	public boolean getIsInvincible() {
-		return this._isInvincible;
-	}
-	
-	public void setIsInvincible(boolean b) {
-		this._isInvincible = b;
-	}
-	
-	public boolean getIsSick() {
-		return this._isSick;
-	}
-	
-	public void setIsSick(boolean b) {
-		this._isSick = b;
 	}
 	
 	public char getType() {
@@ -81,65 +58,6 @@ public abstract class Agent {
 		this._action = action;
 	}
 
-	public void setListBombe(ArrayList<Bombe> bombes) {
-		this._listBombes = bombes;
-	}
-	
-	public ArrayList<Bombe> getListBombe() {
-		return this._listBombes;
-	}
-	
-	public int getNbTurnBonusInvincible() {
-		return this._nbTurnBonusInvincible;
-	}
-	
-	public void setNbTurnBonusInvincible(int i) {
-		this._nbTurnBonusInvincible = i;
-	}
-	
-	public int getNbTurnMalusSick() {
-		return this._nbTurnMalusSick;
-	}
-	
-	public void setNbTurnMalusSick(int i) {
-		this._nbTurnMalusSick = i;
-	}
-	
-	public int getNbBombe() {
-		return this._nbBombe;
-
-	}
-	public void setNbBombe(int nb) {
-		if(nb >= 1) {
-			this._nbBombe = nb;
-		}
-	}
-	
-	public int getRangeBomb() {
-		return this._rangeBomb;
-	}
-	
-	public void setRangeBomb(int range) {
-		if(range >= 1) {
-			this._rangeBomb = range;
-		}
-	}
-	
-	
-	public void addBombe(Bombe bomb) {
-		this._listBombes.add(bomb);
-	}
-	
-	public void removeBombe(Bombe bomb) {
-		this._listBombes.remove(bomb);
-	}
-	
-	public boolean canPutBomb() {
-		if(this._isSick) {
-			return false;
-		}
-		return this._listBombes.size() < this._nbBombe;
-	}
 	
 	public abstract void moveAgent(AgentAction action);
 }

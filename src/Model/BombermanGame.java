@@ -10,7 +10,8 @@ public class BombermanGame extends Game {
 
 	private ControllerBombermanGame _controllerBombGame;
 	
-    private ArrayList<Agent> _listAgents;
+    private ArrayList<AgentBomberman> _listAgentsBomberman;
+    private ArrayList<AgentPNJ> _listAgentsPNJ;
 	private boolean[][] _listBreakableWalls;
 	private ArrayList<Bombe> _listBombs;
 	private ArrayList<Item> _listItems;
@@ -32,7 +33,8 @@ public class BombermanGame extends Game {
 	public void initialize_game() {
 		System.out.println("Le jeu est initialisé");		
 
-		this._listAgents = new ArrayList<Agent>();
+		this._listAgentsBomberman = new ArrayList<AgentBomberman>();
+		this._listAgentsPNJ = new ArrayList<AgentPNJ>();
 		this._listBreakableWalls = this._controllerBombGame.getMap().getStart_breakable_walls(); // bug quand on réinit
 		this._listBombs = new ArrayList<Bombe>();
 		this._listItems = new ArrayList<Item>();
@@ -50,10 +52,10 @@ public class BombermanGame extends Game {
 		}
 	}
 
-    public boolean isLegalMove(Agent agent, AgentAction action) {
+    public boolean isLegalMove(Agent agent) {
     	int newX = agent.getX();
     	int newY = agent.getY();
-    	switch(action) {
+    	switch(agent.getAction()) {
 			case MOVE_UP: newY--; break;
 			case MOVE_DOWN: newY++; break;
 			case MOVE_LEFT: newX--; break;
@@ -68,11 +70,23 @@ public class BombermanGame extends Game {
     	
     	//On verifie s'il y a un mur, un mur cassable ou un agent sur la nouvelle case
     	
-    	if(this._controllerBombGame.getMap().isWall(newX,newY) || isBreakableWall(newX,newY)
-    			|| isAgent(newX, newY) || isBomb(newX, newY)) {
+    	if(this._controllerBombGame.getMap().isWall(newX,newY) || isBreakableWall(newX,newY) || isBomb(newX, newY)) {
     		return false;
     	}
     	
+    	 //Un agent bomberman ne peut pas se deplacer sur un autre agent
+    	if(agent instanceof AgentBomberman) {
+			if(this.getAgentByCoord(newX, newY) != null) {
+				return false;
+			} 
+		}
+    	
+    	//Un agent PNJ peut se deplacer sur un agent bomberman mais pas sur un autres agent PNJ
+    	if(agent instanceof AgentPNJ) {
+    		if(this.getAgentPNJByCoord(newX, newY) != null) {
+    			return false;
+    		}
+    	}
     	
     	return true;
     }
@@ -86,24 +100,24 @@ public class BombermanGame extends Game {
 		
 		//Explosion des bombes
 		for(Bombe bomb : this._listBombs) {
-			Agent agent = this.getAgentByBomb(bomb);
+			AgentBomberman agentBomberman = this.getAgentBombermanByBomb(bomb);
 			
 			//Si la bombe appartient a un agent (l'agent n'est pas detruit)
-			if(agent != null) {
+			if(agentBomberman != null) {
 				if(bomb.getStateBomb() == StateBomb.Boom) {					
 					this.destroyBreakableWall(bomb); // On detruit les murs cassables
 					this.destroyOtherAgent(bomb); // On detruit les autres agents
 					this._listBombesDetruite.add(bomb); //Bombe à supprimer de la liste
-					agent.removeBombe(bomb); //L'agent peut reposer une nouvelle bombe
+					agentBomberman.removeBombe(bomb); //L'agent peut reposer une nouvelle bombe
 				}
 				else {
 					//Nouvelle etat des bombes de l'agent
 					ArrayList<Bombe> listBombNewState = new ArrayList<Bombe>();
-					for(Bombe bombAgent : agent.getListBombe()) {
+					for(Bombe bombAgent : agentBomberman.getListBombe()) {
 						bombAgent.changeStateBomb();
 						listBombNewState.add(bombAgent);
 					}
-					agent.setListBombe(listBombNewState);
+					agentBomberman.setListBombe(listBombNewState);
 				}
 			}
 			else {
@@ -121,7 +135,12 @@ public class BombermanGame extends Game {
 		
 		//On supprime les agents qui ont été detruit suite à l'explosion des bombes
 		for(Agent agent: this._listAgentsDetruit) {
-			this._listAgents.remove(agent);
+			if(agent instanceof AgentBomberman) {
+				this._listAgentsBomberman.remove(agent);
+			}
+			else if(agent instanceof AgentPNJ){
+				this._listAgentsPNJ.remove(agent);
+			}
 		}
 		
 		//On supprime les bombes qui ont été explosé
@@ -130,23 +149,23 @@ public class BombermanGame extends Game {
 		}
 		
 			
-		//Action des agents restants
-		for (Agent agent: this._listAgents) {			
-			//Verification des malus/bonus
-			if(agent.getIsInvincible()) {
-				if(agent.getNbTurnBonusInvincible() >= TURN_MAX_ITEM) {
-					agent.setIsInvincible(false);
-					agent.setNbTurnBonusInvincible(0);
+		//Action des agents bomberman
+		for (AgentBomberman agentBomberman: this._listAgentsBomberman) {			
+			//Verification des malus/bonus des bomberman
+			if(agentBomberman.getIsInvincible()) {
+				if(agentBomberman.getNbTurnBonusInvincible() >= TURN_MAX_ITEM) {
+					agentBomberman.setIsInvincible(false);
+					agentBomberman.setNbTurnBonusInvincible(0);
 				}
-				else agent.setNbTurnBonusInvincible(agent.getNbTurnBonusInvincible() + 1);
+				else agentBomberman.setNbTurnBonusInvincible(agentBomberman.getNbTurnBonusInvincible() + 1);
 			}
 			
-			if(agent.getIsSick()) {
-				if(agent.getNbTurnMalusSick() >= TURN_MAX_ITEM) {
-					agent.setIsSick(false);
-					agent.setNbTurnMalusSick(0);
+			if(agentBomberman.getIsSick()) {
+				if(agentBomberman.getNbTurnMalusSick() >= TURN_MAX_ITEM) {
+					agentBomberman.setIsSick(false);
+					agentBomberman.setNbTurnMalusSick(0);
 				}
-				else agent.setNbTurnMalusSick(agent.getNbTurnMalusSick() + 1);
+				else agentBomberman.setNbTurnMalusSick(agentBomberman.getNbTurnMalusSick() + 1);
 			}
 			
 			
@@ -156,26 +175,26 @@ public class BombermanGame extends Game {
 						
 			
 			System.out.println(action);
-			agent.setAction(action);
+			agentBomberman.setAction(action);
 			
-			if(agent.getAction() == AgentAction.PUT_BOMB) {
-				if(agent.canPutBomb()) {
-					Bombe bombe = new Bombe(agent.getX(), agent.getY(), agent.getRangeBomb(), StateBomb.Step1);
+			if(agentBomberman.getAction() == AgentAction.PUT_BOMB) {
+				if(agentBomberman.canPutBomb()) {
+					Bombe bombe = new Bombe(agentBomberman.getX(), agentBomberman.getY(), agentBomberman.getRangeBomb(), StateBomb.Step1);
 					this._listBombs.add(bombe);
-					agent.addBombe(bombe);
+					agentBomberman.addBombe(bombe);
 				}
 			}
-			else if (agent.getAction() == AgentAction.STOP) {
+			else if (agentBomberman.getAction() == AgentAction.STOP) {
 				// ??
 			}
 			else {
-				if(isLegalMove(agent, agent.getAction())) {
-					agent.moveAgent(action);
+				if(isLegalMove(agentBomberman)) {
+					agentBomberman.moveAgent(action);
 					
 					for(Item item : this._listItems) {
-						if(agent.getX() == item.getX() && agent.getY() == item.getY()) {
-							takeItem(agent, item);
-							_listItemsUtilise.add(item);
+						if(agentBomberman.getX() == item.getX() && agentBomberman.getY() == item.getY()) {
+							takeItem(agentBomberman, item);
+							this._listItemsUtilise.add(item);
 						}
 					}
 				}
@@ -188,10 +207,34 @@ public class BombermanGame extends Game {
 			this._listItems.remove(item);
 		}
 		
+		
+		//Actions des PNJ
+		for(AgentPNJ agentPNJ : this._listAgentsPNJ) {
+			AgentAction[] tabAction = {AgentAction.MOVE_UP, AgentAction.MOVE_DOWN, AgentAction.MOVE_LEFT, AgentAction.MOVE_RIGHT, AgentAction.STOP};
+			int nbRandom = (int) (Math.random() * tabAction.length);
+			AgentAction action = tabAction[nbRandom];
+			
+			agentPNJ.setAction(action);
+			
+			if (agentPNJ.getAction() == AgentAction.STOP) {
+				// ??
+			}
+			else {
+				if(isLegalMove(agentPNJ)) {
+					agentPNJ.moveAgent(action);
+					
+					AgentBomberman agentBomberman = this.getAgentBombermanByCoord(agentPNJ.getX(), agentPNJ.getY());
+					if(agentBomberman != null) {
+						this._listAgentsBomberman.remove(agentBomberman);
+					}
+				}
+			}
+		}
+		
    	}
 	
 	
-	public void takeItem(Agent agent, Item item) {
+	public void takeItem(AgentBomberman agent, Item item) {
 		switch(item.getType()) {
 			case FIRE_UP:
 				agent.setRangeBomb(agent.getRangeBomb() + 1);
@@ -263,14 +306,21 @@ public class BombermanGame extends Game {
 
 	
 	public void destroyOtherAgent(Bombe bomb) {
-		Agent agent = this.getAgentByBomb(bomb);//On recupere l'agent qui a posé la bombe pour ne pas le detruire avec sa propre bombe
+		AgentBomberman agentBomberman = this.getAgentBombermanByBomb(bomb);//On recupere l'agent qui a posé la bombe pour ne pas le detruire avec sa propre bombe
 
 		//Sur la ligne 
 		for(int i=bomb.getX() - bomb.getRange(); i<=bomb.getX() + bomb.getRange(); ++i) {
-			if(i != agent.getX()) {
-				if(isAgent(i, bomb.getY())) {
-					if(!getAgentByCoord(i, bomb.getY()).getIsInvincible()) {
-						this._listAgentsDetruit.add(getAgentByCoord(i, bomb.getY()));
+			if(i != agentBomberman.getX()) {
+				Agent agent = getAgentByCoord(i, bomb.getY());
+
+				if(agent != null) { // Si on trouve un agent
+					if(agent instanceof AgentBomberman) {
+						if(!((AgentBomberman) agent).getIsInvincible()) {
+							this._listAgentsDetruit.add(agent);
+						}
+					}
+					else {
+						this._listAgentsDetruit.add(agent);
 					}
 				}
 			}
@@ -278,47 +328,57 @@ public class BombermanGame extends Game {
 		
 		//Sur la colonne
 		for(int i=bomb.getY() - bomb.getRange(); i<=bomb.getY() + bomb.getRange(); ++i) {
-			if(i != agent.getY()) {
-				if(isAgent(bomb.getX(), i)) {
-					if(!getAgentByCoord(bomb.getX(), i).getIsInvincible()) {
-						this._listAgentsDetruit.add(getAgentByCoord(bomb.getX(), i));
+			if(i != agentBomberman.getY()) {
+				Agent agent = getAgentByCoord(bomb.getX(), i);
+
+				if(agent != null) {
+					if(agent instanceof AgentBomberman) {
+						if(!((AgentBomberman) agent).getIsInvincible()) {
+							this._listAgentsDetruit.add(agent);
+						}
+					}
+					else {
+						this._listAgentsDetruit.add(agent);
 					}
 				}
 			}
 		}	
 	}
+
 	
 	public void destroyAgent(Bombe bomb) {
 		//Sur la ligne 
 		for(int i=bomb.getX() - bomb.getRange(); i<=bomb.getX() + bomb.getRange(); ++i) {
-			if(isAgent(i, bomb.getY())) {
-				if(!getAgentByCoord(i, bomb.getY()).getIsInvincible()) {
-					this._listAgentsDetruit.add(getAgentByCoord(i, bomb.getY()));
+			Agent agent = getAgentByCoord(i, bomb.getY()); //On recupere l'agent trouvé
+
+			if(agent != null) {
+				if(agent instanceof AgentBomberman) {
+					if(!((AgentBomberman) agent).getIsInvincible()) {
+						this._listAgentsDetruit.add(agent);
+					}
+				}
+				else {
+					this._listAgentsDetruit.add(agent);
 				}
 			}
 		}
 		
 		//Sur la colonne
 		for(int i=bomb.getY() - bomb.getRange(); i<=bomb.getY() + bomb.getRange(); ++i) {
-			if(isAgent(bomb.getX(), i)) {
-				if(!getAgentByCoord(bomb.getX(), i).getIsInvincible()) {
-					this._listAgentsDetruit.add(getAgentByCoord(bomb.getX(), i));
+			Agent agent = getAgentByCoord(bomb.getX(), i); //On recupere l'agent trouvé
+
+			if(agent != null) {
+				if(agent instanceof AgentBomberman) {
+					if(!((AgentBomberman) agent).getIsInvincible()) {
+						this._listAgentsDetruit.add(agent);
+					}
+				}
+				else {
+					this._listAgentsDetruit.add(agent);
 				}
 			}
 		}	
 	}
-
-	
-	
-	public boolean isAgent(int x, int y) {
-		for(Agent agent : this._listAgents) {
-			if(agent.getX() == x && agent.getY() == y) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	
 	//Verifie si un mur cassable est present sur la case (x;y)
 	public boolean isBreakableWall(int x, int y) {
@@ -347,28 +407,22 @@ public class BombermanGame extends Game {
 	
 	public void addBombermanAgent(int pos_x, int pos_y, char type) {
     	AgentFactory agentFactory = new BombermanFactory();
-    	this._listAgents.add(agentFactory.createAgent(pos_x, pos_y, type));
+    	this._listAgentsBomberman.add((AgentBomberman) agentFactory.createAgent(pos_x, pos_y, type));
     }
 	
 	
 	public void addPNJAgent(int pos_x, int pos_y, char type) {
     	AgentFactory agentFactory = new PNJFactory();
-    	this._listAgents.add(agentFactory.createAgent(pos_x, pos_y, type));
+    	this._listAgentsPNJ.add((AgentPNJ) agentFactory.createAgent(pos_x, pos_y, type));
     }
 
-	@Override
-	public boolean gameContinue() {
-		System.out.println("Le jeu continue");
-		return true;
-	}
-
-	@Override
-	public void gameOver() {
-		System.out.println("Fin du jeu");		
-	}
 	
-    public ArrayList<Agent> getListAgent() {
-    	return this._listAgents;
+    public ArrayList<AgentBomberman> getListAgentBomberman() {
+    	return this._listAgentsBomberman;
+    }
+    
+    public ArrayList<AgentPNJ> getListAgentPNJ() {
+    	return this._listAgentsPNJ;
     }
 	
 	public boolean[][] getListBreakableWall() {
@@ -382,9 +436,9 @@ public class BombermanGame extends Game {
 	public ArrayList<Bombe> getListBomb() {
 		return this._listBombs;
 	}
-
-	public Agent getAgentByCoord(int x, int y) {
-		for(Agent agent : this._listAgents) {
+	
+	public AgentPNJ getAgentPNJByCoord(int x, int y) {
+		for(AgentPNJ agent : this._listAgentsPNJ) {
 			if(agent.getX() == x && agent.getY() == y) {
 				return agent;
 			}
@@ -392,8 +446,33 @@ public class BombermanGame extends Game {
 		return null;
 	}
 	
-	public Agent getAgentByBomb(Bombe bomb) {
-		for(Agent agent : this._listAgents) {
+
+	public AgentBomberman getAgentBombermanByCoord(int x, int y) {
+		for(AgentBomberman agent : this._listAgentsBomberman) {
+			if(agent.getX() == x && agent.getY() == y) {
+				return agent;
+			}
+		}
+		return null;
+	}
+	
+	public Agent getAgentByCoord(int x, int y) {
+		AgentBomberman agentBomberman = this.getAgentBombermanByCoord(x, y);
+		AgentPNJ agentPNJ = this.getAgentPNJByCoord(x, y);
+		
+		if(agentBomberman != null) {
+			return agentBomberman;
+		}
+		else if(agentPNJ != null) {
+			return agentPNJ;
+		}
+		return null;
+	}
+
+	
+	
+	public AgentBomberman getAgentBombermanByBomb(Bombe bomb) {
+		for(AgentBomberman agent : this._listAgentsBomberman) {
 			for(Bombe bombAgent : agent.getListBombe()) {
 				if(bombAgent == bomb) {
 					return agent;
@@ -401,5 +480,23 @@ public class BombermanGame extends Game {
 			}
 		}
 		return null;
+	}
+	
+	
+	@Override
+	public boolean gameContinue() {
+		return this._listAgentsBomberman.size() > 1;
+	}
+
+	@Override
+	public void gameOver() {
+		System.out.println("Fin du jeu");
+		
+		if(this._listAgentsBomberman.size() <= 0) {
+			System.out.println("Victoire des agents PNJ !");
+		}
+		else if(this._listAgentsBomberman.size() == 1) {
+			System.out.println("Victoire de l'agent '" + this._listAgentsBomberman.get(0).getColor() + "'");
+		}
 	}
 }

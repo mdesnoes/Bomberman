@@ -4,6 +4,8 @@ package Controller;
 import java.util.ArrayList;
 
 import Model.Agent;
+import Model.AgentBomberman;
+import Model.AgentPNJ;
 import Model.Bombe;
 import Model.BombermanGame;
 import Model.Item;
@@ -74,8 +76,11 @@ public class ControllerBombermanGame implements InterfaceController {
 	//Permet de renseigner les nouvelles coordonnées des agents à la liste d'InfoAgent et retourner cette liste
 	public ArrayList<InfoAgent> getListInfoAgent() {
 		ArrayList<InfoAgent> infoListAgent = new ArrayList<InfoAgent>();
-		for(Agent agent : this._bombGame.getListAgent()) {
+		for(AgentBomberman agent : this._bombGame.getListAgentBomberman()) {
 			infoListAgent.add(new InfoAgent(agent.getX(), agent.getY(), agent.getAction(), agent.getType(), agent.getColor(),agent.getIsInvincible(),agent.getIsSick()));
+		}
+		for(AgentPNJ agent : this._bombGame.getListAgentPNJ()) {
+			infoListAgent.add(new InfoAgent(agent.getX(), agent.getY(), agent.getAction(), agent.getType(), agent.getColor(), false, false));
 		}
 		return infoListAgent;
 	}
