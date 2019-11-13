@@ -41,11 +41,13 @@ public class BombermanGame extends Game {
 		
 		ArrayList<InfoAgent> listAgentInit = this._controllerBombGame.getMap().getStart_agents();
 		for(InfoAgent agent : listAgentInit) {
+			AgentFactory agentFactory = FactoryProvider.getFactory(agent.getType());
+			
 			if(agent.getType() == 'B') {
-		    	addBombermanAgent(agent.getX(), agent.getY(), agent.getType());
+			    this._listAgentsBomberman.add((AgentBomberman) agentFactory.createAgent(agent.getX(), agent.getY(), agent.getType()));
 			}
 			else {
-				addPNJAgent(agent.getX(), agent.getY(), agent.getType());
+		    	this._listAgentsPNJ.add((AgentPNJ) agentFactory.createAgent(agent.getX(), agent.getY(), agent.getType()));
 			}
 			
 			System.out.println(agent.getX() + " - " + agent.getY() + " type : " + agent.getType());
@@ -403,18 +405,6 @@ public class BombermanGame extends Game {
 		}
 		return false;
 	}
-
-	
-	public void addBombermanAgent(int pos_x, int pos_y, char type) {
-    	AgentFactory agentFactory = new BombermanFactory();
-    	this._listAgentsBomberman.add((AgentBomberman) agentFactory.createAgent(pos_x, pos_y, type));
-    }
-	
-	
-	public void addPNJAgent(int pos_x, int pos_y, char type) {
-    	AgentFactory agentFactory = new PNJFactory();
-    	this._listAgentsPNJ.add((AgentPNJ) agentFactory.createAgent(pos_x, pos_y, type));
-    }
 
 	
     public ArrayList<AgentBomberman> getListAgentBomberman() {
