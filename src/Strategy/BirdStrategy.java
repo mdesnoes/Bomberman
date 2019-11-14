@@ -14,6 +14,7 @@ public class BirdStrategy implements Strategy {
     
     public AgentAction chooseAction(BombermanGame b, Agent a) {
         
+    	agentRayon.clear();
         for (AgentBomberman i : b.getListAgentBomberman()) {
             if ((Math.abs(a.getX() - i.getX()) < rayonAction) && (Math.abs(a.getY() - i.getY()) < rayonAction)) {
                 agentRayon.add(i);
@@ -31,7 +32,7 @@ public class BirdStrategy implements Strategy {
                     procheBomb = i;
                 }
             }
-            if (Math.abs(a.getX() - procheBomb.getX()) <= Math.abs(a.getY() - procheBomb.getY())) {
+            if (Math.abs(a.getX() - procheBomb.getX()) >= Math.abs(a.getY() - procheBomb.getY())) {
                 if (a.getX() < procheBomb.getX()) {
                     return AgentAction.MOVE_RIGHT;
                 } else {

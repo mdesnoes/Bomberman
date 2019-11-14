@@ -52,6 +52,7 @@ public class BombermanGame extends Game {
 			
 			System.out.println(agent.getX() + " - " + agent.getY() + " type : " + agent.getType());
 		}
+		
 	}
 
     public boolean isLegalMove(Agent agent) {
@@ -221,7 +222,6 @@ public class BombermanGame extends Game {
 				}
 			}
 		}
-		
    	}
 	
 	

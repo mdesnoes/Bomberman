@@ -20,6 +20,7 @@ public abstract class AgentPNJ extends Agent {
 			case PUT_BOMB: break;
 		}
 		
+		
 	}
 
 }
