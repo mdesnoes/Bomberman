@@ -3,6 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 import Controller.ControllerBombermanGame;
+import Strategy.RandomStrategy;
 import View.InfoAgent;
 import View.Map;
 
@@ -21,7 +22,6 @@ public class BombermanGame extends Game {
 	private ArrayList<Bombe> _listBombesDetruite = new ArrayList<Bombe>();
 	private ArrayList<Item> _listItemsUtilise = new ArrayList<Item>();
 
-	
 	private final static int TURN_MAX_ITEM = 5;
 	
 	public BombermanGame(int maxturn) {
@@ -65,14 +65,17 @@ public class BombermanGame extends Game {
     	}
     	
     	//On verifie si le personnage sort de la map ou non
-    	if(newX <= 0 || newX >= this._controllerBombGame.getMap().getSizeX()-1 
-    		|| newY <= 0 || newY >= this._controllerBombGame.getMap().getSizeY()-1) {
+    	if(!appartientMap(newX,newY)) {
     		return false;
     	}
     	
-    	//On verifie s'il y a un mur, un mur cassable ou un agent sur la nouvelle case
+    	//L'agent bird peut se deplacer par dessus les mur
+    	if(agent instanceof AgentBird) {
+    		return true;
+    	}
     	
-    	if(this._controllerBombGame.getMap().isWall(newX,newY) || isBreakableWall(newX,newY) || isBomb(newX, newY)) {
+    	//On verifie s'il y a un mur, un mur cassable ou une bombe sur la nouvelle case
+    	if(this._controllerBombGame.getMap().get_walls()[newX][newY] || this._listBreakableWalls[newX][newY] || isBomb(newX, newY)) {
     		return false;
     	}
     	
@@ -171,13 +174,7 @@ public class BombermanGame extends Game {
 			}
 			
 			
-			AgentAction[] tabAction = {AgentAction.MOVE_UP, AgentAction.MOVE_DOWN, AgentAction.MOVE_LEFT, AgentAction.MOVE_RIGHT, AgentAction.STOP, AgentAction.PUT_BOMB};
-			int nbRandom = (int) (Math.random() * tabAction.length);
-			AgentAction action = tabAction[nbRandom];
-						
-			
-			System.out.println(action);
-			agentBomberman.setAction(action);
+			agentBomberman.executer(this); // Choix de l'action en fonction de la strategie
 			
 			if(agentBomberman.getAction() == AgentAction.PUT_BOMB) {
 				if(agentBomberman.canPutBomb()) {
@@ -186,12 +183,10 @@ public class BombermanGame extends Game {
 					agentBomberman.addBombe(bombe);
 				}
 			}
-			else if (agentBomberman.getAction() == AgentAction.STOP) {
-				// ??
-			}
-			else {
+			else if(agentBomberman.getAction() == AgentAction.MOVE_UP || agentBomberman.getAction() == AgentAction.MOVE_DOWN 
+					|| agentBomberman.getAction() == AgentAction.MOVE_LEFT || agentBomberman.getAction() == AgentAction.MOVE_RIGHT) {
 				if(isLegalMove(agentBomberman)) {
-					agentBomberman.moveAgent(action);
+					agentBomberman.moveAgent(agentBomberman.getAction());
 					
 					for(Item item : this._listItems) {
 						if(agentBomberman.getX() == item.getX() && agentBomberman.getY() == item.getY()) {
@@ -204,7 +199,7 @@ public class BombermanGame extends Game {
 
 		}
 		
-		//On supprime les items ramassé par les agents
+		//On supprime les items ramassés par les agents
 		for(Item item : this._listItemsUtilise) {
 			this._listItems.remove(item);
 		}
@@ -212,18 +207,12 @@ public class BombermanGame extends Game {
 		
 		//Actions des PNJ
 		for(AgentPNJ agentPNJ : this._listAgentsPNJ) {
-			AgentAction[] tabAction = {AgentAction.MOVE_UP, AgentAction.MOVE_DOWN, AgentAction.MOVE_LEFT, AgentAction.MOVE_RIGHT, AgentAction.STOP};
-			int nbRandom = (int) (Math.random() * tabAction.length);
-			AgentAction action = tabAction[nbRandom];
+			agentPNJ.executer(this);
 			
-			agentPNJ.setAction(action);
-			
-			if (agentPNJ.getAction() == AgentAction.STOP) {
-				// ??
-			}
-			else {
+			if(agentPNJ.getAction() == AgentAction.MOVE_UP || agentPNJ.getAction() == AgentAction.MOVE_DOWN 
+					|| agentPNJ.getAction() == AgentAction.MOVE_LEFT || agentPNJ.getAction() == AgentAction.MOVE_RIGHT) {
 				if(isLegalMove(agentPNJ)) {
-					agentPNJ.moveAgent(action);
+					agentPNJ.moveAgent(agentPNJ.getAction());
 					
 					AgentBomberman agentBomberman = this.getAgentBombermanByCoord(agentPNJ.getX(), agentPNJ.getY());
 					if(agentBomberman != null) {
@@ -273,33 +262,37 @@ public class BombermanGame extends Game {
 		
 		//Sur la ligne 
 		for(int i=bomb.getX() - bomb.getRange(); i<=bomb.getX() + bomb.getRange(); ++i) {
-			if(isBreakableWall(i, bomb.getY())) {
-				this._listBreakableWalls[i][bomb.getY()] = false;
-				
-				//Probabilité qu'un item apparaisse (1 chance sur 10), tout les items on la meme probabilite
-				int nb = (int) (Math.random() * probabilite);
-				if(nb == 1) {
-					ItemType[] tabItem = {ItemType.FIRE_UP,ItemType.FIRE_DOWN,ItemType.BOMB_UP,ItemType.BOMB_DOWN,ItemType.FIRE_SUIT,ItemType.SKULL}; 
-					int nbRandom = (int) (Math.random() * tabItem.length);
-					Item item = new Item(i, bomb.getY(), tabItem[nbRandom]);
-					this._listItems.add(item);
+			if(appartientMap(bomb.getX(), i)) { // On verifie que les coordonnées appartiennent à la map
+				if(this._listBreakableWalls[i][bomb.getY()]) { // On regarde si il y a un mur au coordonnées courante
+					this._listBreakableWalls[i][bomb.getY()] = false;
+					
+					//Probabilité qu'un item apparaisse (1 chance sur 10), tout les items on la meme probabilite
+					int nb = (int) (Math.random() * probabilite);
+					if(nb == 1) {
+						ItemType[] tabItem = {ItemType.FIRE_UP,ItemType.FIRE_DOWN,ItemType.BOMB_UP,ItemType.BOMB_DOWN,ItemType.FIRE_SUIT,ItemType.SKULL}; 
+						int nbRandom = (int) (Math.random() * tabItem.length);
+						Item item = new Item(i, bomb.getY(), tabItem[nbRandom]);
+						this._listItems.add(item);
+					}
+					
 				}
-				
 			}
 		}
 		
 		//Sur la colonne
-		for(int i=bomb.getY() - bomb.getRange(); i<=bomb.getY() + bomb.getRange(); ++i) {		
-			if(isBreakableWall(bomb.getX(), i)) {
-				this._listBreakableWalls[bomb.getX()][i] = false;
-				
-				//Probabilité qu'un item apparaisse (1 chance sur 10)
-				int nb = (int) (Math.random() * probabilite);
-				if(nb == 1) {
-					ItemType[] tabItem = {ItemType.FIRE_UP,ItemType.FIRE_DOWN,ItemType.BOMB_UP,ItemType.BOMB_DOWN,ItemType.FIRE_SUIT,ItemType.SKULL}; 
-					int nbRandom = (int) (Math.random() * tabItem.length);
-					Item item = new Item(bomb.getX(), i, tabItem[nbRandom]);
-					this._listItems.add(item);
+		for(int i=bomb.getY() - bomb.getRange(); i<=bomb.getY() + bomb.getRange(); ++i) {
+			if(appartientMap(bomb.getX(), i)) {
+				if(this._listBreakableWalls[bomb.getX()][i]) {
+					this._listBreakableWalls[bomb.getX()][i] = false;
+					
+					//Probabilité qu'un item apparaisse (1 chance sur 10)
+					int nb = (int) (Math.random() * probabilite);
+					if(nb == 1) {
+						ItemType[] tabItem = {ItemType.FIRE_UP,ItemType.FIRE_DOWN,ItemType.BOMB_UP,ItemType.BOMB_DOWN,ItemType.FIRE_SUIT,ItemType.SKULL}; 
+						int nbRandom = (int) (Math.random() * tabItem.length);
+						Item item = new Item(bomb.getX(), i, tabItem[nbRandom]);
+						this._listItems.add(item);
+					}
 				}
 			}
 
@@ -382,19 +375,6 @@ public class BombermanGame extends Game {
 		}	
 	}
 	
-	//Verifie si un mur cassable est present sur la case (x;y)
-	public boolean isBreakableWall(int x, int y) {
-		for(int i=0; i < this._controllerBombGame.getMap().getSizeX(); ++i) {
-			if(i == x) {
-				for(int j=0; j < this._controllerBombGame.getMap().getSizeY(); ++j) {
-					if(j == y) {
-						return this._listBreakableWalls[i][j];
-					}
-				}
-			}
-		}
-		return false;
-	}
 	
 	
 	public boolean isBomb(int x, int y) {
@@ -406,6 +386,15 @@ public class BombermanGame extends Game {
 		return false;
 	}
 
+	
+	// retourne vrai si les coordonnées appartient à la map
+	public boolean appartientMap(int x, int y) {
+		if(x <= 0 || x >= this._controllerBombGame.getMap().getSizeX()-1 
+	    	|| y <= 0 || y >= this._controllerBombGame.getMap().getSizeY()-1) {
+	    	return false;
+	    }
+		return true;
+	}
 	
     public ArrayList<AgentBomberman> getListAgentBomberman() {
     	return this._listAgentsBomberman;

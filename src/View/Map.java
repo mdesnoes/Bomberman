@@ -146,19 +146,4 @@ public class Map implements Serializable {
 	public ArrayList<InfoAgent> getStart_agents() {
 		return start_agents;
 	}
-	
-
-	//Verifie si un mur est present sur la case (x;y)
-	public boolean isWall(int x, int y) {
-		for(int i=0; i< this.getSizeX(); ++i) {
-			if(i == x) {
-				for(int j=0; j<this.getSizeY(); ++j) {
-					if(j == y) {
-						return this.get_walls()[i][j];
-					}
-				}
-			}
-		}
-		return false;
-	}
 }

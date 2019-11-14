@@ -1,5 +1,7 @@
 package Model;
 
+import Strategy.Strategy;
+
 public abstract class AgentPNJ extends Agent {
 
 	public AgentPNJ(int pos_x, int pos_y, char type, ColorAgent color) {

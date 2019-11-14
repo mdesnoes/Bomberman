@@ -1,5 +1,7 @@
 package Model;
 
+import Strategy.Strategy;
+
 public class BombermanFactory implements AgentFactory {
 
 	private ColorAgent[] _tabColor = { ColorAgent.BLEU, ColorAgent.ROUGE, ColorAgent.VERT, ColorAgent.JAUNE, ColorAgent.BLANC};

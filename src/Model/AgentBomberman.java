@@ -2,6 +2,9 @@ package Model;
 
 import java.util.ArrayList;
 
+import Strategy.RandomStrategy;
+import Strategy.Strategy;
+
 public class AgentBomberman extends Agent {
 
 	private ArrayList<Bombe> _listBombes = new ArrayList<Bombe>();
@@ -18,6 +21,8 @@ public class AgentBomberman extends Agent {
 	
 	public AgentBomberman(int pos_x, int pos_y, char type, ColorAgent color) {
 		super(pos_x,pos_y, type, color);
+		
+		this.setStrategy(new RandomStrategy());
 	}
 
 

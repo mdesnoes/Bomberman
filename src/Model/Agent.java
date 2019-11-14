@@ -2,6 +2,8 @@ package Model;
 
 import java.util.ArrayList;
 
+import Strategy.Strategy;
+
 public abstract class Agent {
 
 	private static int _compteur = 0;
@@ -12,6 +14,8 @@ public abstract class Agent {
 	private ColorAgent _color;
 	private AgentAction _action;
 	private char _type;
+	
+	private Strategy _strategy;
 	
 	public Agent(int pos_x, int pos_y, char type, ColorAgent color) {
 		this._pos_x = pos_x;
@@ -57,7 +61,14 @@ public abstract class Agent {
 	public void setAction(AgentAction action) {
 		this._action = action;
 	}
+	
+	public void setStrategy(Strategy strategy) {
+		this._strategy = strategy;
+	}
 
+	public void executer(BombermanGame bombermanGame) {
+		this._action = this._strategy.chooseAction(bombermanGame, this);
+	}
 	
 	public abstract void moveAgent(AgentAction action);
 }
