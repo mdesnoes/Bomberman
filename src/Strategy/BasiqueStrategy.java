@@ -22,12 +22,10 @@ public class BasiqueStrategy implements Strategy {
 			
 			int nbRandom = (int) (Math.random() * tabAction.length);
 			action = tabAction[nbRandom];
-			
-			agent.setAction(action);
 		}
 		
 		//Mais on verifie si c'est possible, si ce n'est pas le cas, il tourne a droite ou à gauche
-		if(!bombermanGame.isLegalMove(agent)) {
+		if(!agent.isLegalMove(bombermanGame, action)) {
 			AgentAction tabAction[] = new AgentAction[2];
 			
 			if(agent.getAction() == AgentAction.MOVE_UP || agent.getAction() == AgentAction.MOVE_DOWN) {

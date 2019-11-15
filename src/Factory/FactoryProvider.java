@@ -1,4 +1,4 @@
-package Model;
+package Factory;
 
 public abstract class FactoryProvider {
 	

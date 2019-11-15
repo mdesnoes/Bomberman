@@ -3,6 +3,8 @@ package Model;
 import java.util.ArrayList;
 
 import Controller.ControllerBombermanGame;
+import Factory.AgentFactory;
+import Factory.FactoryProvider;
 import Strategy.RandomStrategy;
 import View.InfoAgent;
 import View.Map;
@@ -55,50 +57,43 @@ public class BombermanGame extends Game {
 		
 	}
 
-    public boolean isLegalMove(Agent agent) {
-    	int newX = agent.getX();
-    	int newY = agent.getY();
-    	switch(agent.getAction()) {
-			case MOVE_UP: newY--; break;
-			case MOVE_DOWN: newY++; break;
-			case MOVE_LEFT: newX--; break;
-			case MOVE_RIGHT: newX++; break;
-    	}
-    	
-    	//On verifie si le personnage sort de la map ou non
-    	if(!appartientMap(newX,newY)) {
-    		return false;
-    	}
-    	
-    	//L'agent bird peut se deplacer par dessus les mur
-    	if(agent instanceof AgentBird) {
-    		return true;
-    	}
-    	
-    	//On verifie s'il y a un mur, un mur cassable ou une bombe sur la nouvelle case
-    	if(this._controllerBombGame.getMap().get_walls()[newX][newY] || this._listBreakableWalls[newX][newY] || isBomb(newX, newY)) {
-    		return false;
-    	}
-    	
-    	 //Un agent bomberman ne peut pas se deplacer sur un autre agent
-    	if(agent instanceof AgentBomberman) {
-			if(this.getAgentByCoord(newX, newY) != null) {
-				return false;
-			} 
-		}
-    	
-    	//Un agent PNJ peut se deplacer sur un agent bomberman mais pas sur un autres agent PNJ
-    	if(agent instanceof AgentPNJ) {
-    		if(this.getAgentPNJByCoord(newX, newY) != null) {
-    			return false;
-    		}
-    	}
-    	
-    	return true;
-    }
+
     
 	@Override
-	public void takeTurn() {
+	public void takeTurn() {	
+		//Action des agents bomberman
+		for (AgentBomberman agentBomberman: this._listAgentsBomberman) {			
+			//Verification des malus/bonus des bomberman
+			if(agentBomberman.getIsInvincible()) {
+				if(agentBomberman.getNbTurnBonusInvincible() >= TURN_MAX_ITEM) {
+					agentBomberman.setIsInvincible(false);
+					agentBomberman.setNbTurnBonusInvincible(0);
+				}
+				else agentBomberman.setNbTurnBonusInvincible(agentBomberman.getNbTurnBonusInvincible() + 1);
+			}
+			
+			if(agentBomberman.getIsSick()) {
+				if(agentBomberman.getNbTurnMalusSick() >= TURN_MAX_ITEM) {
+					agentBomberman.setIsSick(false);
+					agentBomberman.setNbTurnMalusSick(0);
+				}
+				else agentBomberman.setNbTurnMalusSick(agentBomberman.getNbTurnMalusSick() + 1);
+			}
+			
+			
+			agentBomberman.executer(this); // Choix de l'action en fonction de la strategie
+		}
+		
+		//On supprime les items ramassés par les agents
+		for(Item item : this._listItemsUtilise) {
+			this._listItems.remove(item);
+		}
+		
+		
+		//Actions des PNJ
+		for(AgentPNJ agentPNJ : this._listAgentsPNJ) {
+			agentPNJ.executer(this);
+		}
 		
 		this._listAgentsDetruit = new ArrayList<Agent>();
 		this._listBombesDetruite = new ArrayList<Bombe>();
@@ -152,75 +147,6 @@ public class BombermanGame extends Game {
 		//On supprime les bombes qui ont été explosé
 		for(Bombe bomb : this._listBombesDetruite) {
 			this._listBombs.remove(bomb);
-		}
-		
-			
-		//Action des agents bomberman
-		for (AgentBomberman agentBomberman: this._listAgentsBomberman) {			
-			//Verification des malus/bonus des bomberman
-			if(agentBomberman.getIsInvincible()) {
-				if(agentBomberman.getNbTurnBonusInvincible() >= TURN_MAX_ITEM) {
-					agentBomberman.setIsInvincible(false);
-					agentBomberman.setNbTurnBonusInvincible(0);
-				}
-				else agentBomberman.setNbTurnBonusInvincible(agentBomberman.getNbTurnBonusInvincible() + 1);
-			}
-			
-			if(agentBomberman.getIsSick()) {
-				if(agentBomberman.getNbTurnMalusSick() >= TURN_MAX_ITEM) {
-					agentBomberman.setIsSick(false);
-					agentBomberman.setNbTurnMalusSick(0);
-				}
-				else agentBomberman.setNbTurnMalusSick(agentBomberman.getNbTurnMalusSick() + 1);
-			}
-			
-			
-			agentBomberman.executer(this); // Choix de l'action en fonction de la strategie
-			
-			if(agentBomberman.getAction() == AgentAction.PUT_BOMB) {
-				if(agentBomberman.canPutBomb()) {
-					Bombe bombe = new Bombe(agentBomberman.getX(), agentBomberman.getY(), agentBomberman.getRangeBomb(), StateBomb.Step1);
-					this._listBombs.add(bombe);
-					agentBomberman.addBombe(bombe);
-				}
-			}
-			else if(agentBomberman.getAction() == AgentAction.MOVE_UP || agentBomberman.getAction() == AgentAction.MOVE_DOWN 
-					|| agentBomberman.getAction() == AgentAction.MOVE_LEFT || agentBomberman.getAction() == AgentAction.MOVE_RIGHT) {
-				if(isLegalMove(agentBomberman)) {
-					agentBomberman.moveAgent(agentBomberman.getAction());
-					
-					for(Item item : this._listItems) {
-						if(agentBomberman.getX() == item.getX() && agentBomberman.getY() == item.getY()) {
-							takeItem(agentBomberman, item);
-							this._listItemsUtilise.add(item);
-						}
-					}
-				}
-			}
-
-		}
-		
-		//On supprime les items ramassés par les agents
-		for(Item item : this._listItemsUtilise) {
-			this._listItems.remove(item);
-		}
-		
-		
-		//Actions des PNJ
-		for(AgentPNJ agentPNJ : this._listAgentsPNJ) {
-			agentPNJ.executer(this);
-			
-			if(agentPNJ.getAction() == AgentAction.MOVE_UP || agentPNJ.getAction() == AgentAction.MOVE_DOWN 
-					|| agentPNJ.getAction() == AgentAction.MOVE_LEFT || agentPNJ.getAction() == AgentAction.MOVE_RIGHT) {
-				if(isLegalMove(agentPNJ)) {
-					agentPNJ.moveAgent(agentPNJ.getAction());
-					
-					AgentBomberman agentBomberman = this.getAgentBombermanByCoord(agentPNJ.getX(), agentPNJ.getY());
-					if(agentBomberman != null) {
-						this._listAgentsBomberman.remove(agentBomberman);
-					}
-				}
-			}
 		}
    	}
 	
@@ -378,14 +304,17 @@ public class BombermanGame extends Game {
 	
 	
 	public boolean isBomb(int x, int y) {
+		return this.getBombByCoord(x, y) != null;
+	}
+	
+	public Bombe getBombByCoord(int x, int y) {
 		for(Bombe bomb : this._listBombs) {
 			if(bomb.getX() == x && bomb.getY() == y) {
-				return true;
+				return bomb;
 			}
 		}
-		return false;
+		return null;
 	}
-
 	
 	// retourne vrai si les coordonnées appartient à la map
 	public boolean appartientMap(int x, int y) {
@@ -414,6 +343,23 @@ public class BombermanGame extends Game {
 	
 	public ArrayList<Bombe> getListBomb() {
 		return this._listBombs;
+	}
+	
+	public void addListBombs(Bombe bomb) {
+		this._listBombs.add(bomb);
+	}
+	
+	public void addListItemUtilise(Item item) {
+		this._listItemsUtilise.add(item);
+	}
+	
+	public void removeAgentBomberman(AgentBomberman bomberman) {
+	    this._listAgentsBomberman.remove(bomberman);
+
+	}
+	
+	public ControllerBombermanGame getControllerBombGame() {
+		return this._controllerBombGame;
 	}
 	
 	public AgentPNJ getAgentPNJByCoord(int x, int y) {

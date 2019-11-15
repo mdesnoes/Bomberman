@@ -9,5 +9,29 @@ public class AgentBird extends AgentPNJ {
 		
 		this.setStrategy(new BirdStrategy());
 	}
+	
+	public boolean isLegalMove(BombermanGame bombGame, AgentAction action) {
+		int newX = this.getX();
+    	int newY = this.getY();
+    	switch(action) {
+			case MOVE_UP: newY--; break;
+			case MOVE_DOWN: newY++; break;
+			case MOVE_LEFT: newX--; break;
+			case MOVE_RIGHT: newX++; break;
+			default: break;
+    	}
+    	
+    	//On verifie si l'agent sort de la map ou non
+    	if(!bombGame.appartientMap(newX,newY)) {
+    		return false;
+    	}
+    	
+    	//Un agent Bird ne peut pas se deplacer sur un autre agent PNJ
+    	if(bombGame.getAgentPNJByCoord(newX, newY) != null) {
+    		return false;
+    	}
+    	
+    	return true;
+	}
 
 }

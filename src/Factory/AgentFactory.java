@@ -1,5 +1,6 @@
-package Model;
+package Factory;
 
+import Model.Agent;
 import Strategy.Strategy;
 
 public interface AgentFactory {

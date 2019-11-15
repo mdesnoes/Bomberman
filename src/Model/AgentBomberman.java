@@ -2,8 +2,9 @@ package Model;
 
 import java.util.ArrayList;
 
+import Strategy.EsquiveStrategy;
+import Strategy.PutBombStrategy;
 import Strategy.RandomStrategy;
-import Strategy.Strategy;
 
 public class AgentBomberman extends Agent {
 
@@ -22,7 +23,66 @@ public class AgentBomberman extends Agent {
 	public AgentBomberman(int pos_x, int pos_y, char type, ColorAgent color) {
 		super(pos_x,pos_y, type, color);
 		
-		this.setStrategy(new RandomStrategy());
+		this.setStrategy(new PutBombStrategy());
+	}
+	
+	public void executer(BombermanGame bombermanGame) {
+		
+		AgentAction action = this.getStrategy().chooseAction(bombermanGame, this);
+		
+		if(action == AgentAction.PUT_BOMB) {
+			if(this.canPutBomb()) {
+				Bombe bombe = new Bombe(this.getX(), this.getY(), this.getRangeBomb(), StateBomb.Step1);
+				bombermanGame.addListBombs(bombe);
+				this.addBombe(bombe);
+			}
+		}
+		else if(action == AgentAction.MOVE_UP || action == AgentAction.MOVE_DOWN 
+				|| action == AgentAction.MOVE_LEFT || action == AgentAction.MOVE_RIGHT) {
+			if(this.isLegalMove(bombermanGame, action)) {
+				this.moveAgent(action);
+				
+				for(Item item : bombermanGame.getListItem()) {
+					if(this.getX() == item.getX() && this.getY() == item.getY()) {
+						bombermanGame.takeItem(this, item);
+						bombermanGame.addListItemUtilise(item);
+					}
+				}
+			}
+		}
+		
+		//this.setAction(action);
+	}
+	
+	
+	@Override
+	public boolean isLegalMove(BombermanGame bombGame, AgentAction action) {
+		int newX = this.getX();
+    	int newY = this.getY();
+    	switch(action) {
+			case MOVE_UP: newY--; break;
+			case MOVE_DOWN: newY++; break;
+			case MOVE_LEFT: newX--; break;
+			case MOVE_RIGHT: newX++; break;
+			default: break;
+    	}
+    	
+    	//On verifie si l'agent sort de la map ou non
+    	if(!bombGame.appartientMap(newX,  newY)) {
+    		return false;
+    	}
+    	
+    	//On verifie s'il y a un mur, un mur cassable ou une bombe sur la nouvelle case
+    	if(bombGame.getControllerBombGame().getMap().get_walls()[newX][newY] || bombGame.getListBreakableWall()[newX][newY] || bombGame.isBomb(newX, newY)) {
+    		return false;
+    	}
+    	
+    	 //Un agent bomberman ne peut pas se deplacer sur un autre agent
+		if(bombGame.getAgentByCoord(newX, newY) != null) {
+			return false;
+		}
+    	
+    	return true;
 	}
 
 
@@ -33,6 +93,7 @@ public class AgentBomberman extends Agent {
 			case MOVE_DOWN: this.setY(this.getY() + 1); break;
 			case MOVE_LEFT: this.setX(this.getX() - 1); break;
 			case MOVE_RIGHT: this.setX(this.getX() + 1); break;
+			default: break;
 		}
 		
 	}

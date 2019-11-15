@@ -1,5 +1,8 @@
-package Model;
+package Factory;
 
+import Model.Agent;
+import Model.AgentBomberman;
+import Model.ColorAgent;
 import Strategy.Strategy;
 
 public class BombermanFactory implements AgentFactory {

@@ -1,5 +1,10 @@
-package Model;
+package Factory;
 
+import Model.Agent;
+import Model.AgentBird;
+import Model.AgentEnnemyBasique;
+import Model.AgentRajion;
+import Model.ColorAgent;
 
 public class PNJFactory implements AgentFactory {
 
