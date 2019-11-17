@@ -1,7 +1,5 @@
 package Model;
 
-import java.util.ArrayList;
-
 import Strategy.Strategy;
 
 public abstract class Agent {
@@ -24,8 +22,6 @@ public abstract class Agent {
 		this._color = color;
 		this._id = Agent._compteur;
 		Agent._compteur++;
-		
-		this._action = AgentAction.STOP;
 	}
 	
 	public void setX(int x) {
@@ -72,7 +68,7 @@ public abstract class Agent {
 		this._strategy = strategy;
 	}
 
-	
+	public abstract boolean canPutBomb();
 	public abstract void executer(BombermanGame bombermanGame);
 	public abstract boolean isLegalMove(BombermanGame bombGame, AgentAction action);
 	public abstract void moveAgent(AgentAction action);

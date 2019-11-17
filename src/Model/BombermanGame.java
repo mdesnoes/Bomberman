@@ -25,6 +25,7 @@ public class BombermanGame extends Game {
 	private ArrayList<Item> _listItemsUtilise = new ArrayList<Item>();
 
 	private final static int TURN_MAX_ITEM = 5;
+	private final static int PROBABILITE_OBJET = 6;
 	
 	public BombermanGame(int maxturn) {
 		super(maxturn);
@@ -60,41 +61,7 @@ public class BombermanGame extends Game {
 
     
 	@Override
-	public void takeTurn() {	
-		//Action des agents bomberman
-		for (AgentBomberman agentBomberman: this._listAgentsBomberman) {			
-			//Verification des malus/bonus des bomberman
-			if(agentBomberman.getIsInvincible()) {
-				if(agentBomberman.getNbTurnBonusInvincible() >= TURN_MAX_ITEM) {
-					agentBomberman.setIsInvincible(false);
-					agentBomberman.setNbTurnBonusInvincible(0);
-				}
-				else agentBomberman.setNbTurnBonusInvincible(agentBomberman.getNbTurnBonusInvincible() + 1);
-			}
-			
-			if(agentBomberman.getIsSick()) {
-				if(agentBomberman.getNbTurnMalusSick() >= TURN_MAX_ITEM) {
-					agentBomberman.setIsSick(false);
-					agentBomberman.setNbTurnMalusSick(0);
-				}
-				else agentBomberman.setNbTurnMalusSick(agentBomberman.getNbTurnMalusSick() + 1);
-			}
-			
-			
-			agentBomberman.executer(this); // Choix de l'action en fonction de la strategie
-		}
-		
-		//On supprime les items ramassés par les agents
-		for(Item item : this._listItemsUtilise) {
-			this._listItems.remove(item);
-		}
-		
-		
-		//Actions des PNJ
-		for(AgentPNJ agentPNJ : this._listAgentsPNJ) {
-			agentPNJ.executer(this);
-		}
-		
+	public void takeTurn() {
 		this._listAgentsDetruit = new ArrayList<Agent>();
 		this._listBombesDetruite = new ArrayList<Bombe>();
 		this._listItemsUtilise = new ArrayList<Item>();
@@ -148,6 +115,40 @@ public class BombermanGame extends Game {
 		for(Bombe bomb : this._listBombesDetruite) {
 			this._listBombs.remove(bomb);
 		}
+		
+		//Action des agents bomberman
+		for (AgentBomberman agentBomberman: this._listAgentsBomberman) {			
+			//Verification des malus/bonus des bomberman
+			if(agentBomberman.getIsInvincible()) {
+				if(agentBomberman.getNbTurnBonusInvincible() >= TURN_MAX_ITEM) {
+					agentBomberman.setIsInvincible(false);
+					agentBomberman.setNbTurnBonusInvincible(0);
+				}
+				else agentBomberman.setNbTurnBonusInvincible(agentBomberman.getNbTurnBonusInvincible() + 1);
+			}
+			
+			if(agentBomberman.getIsSick()) {
+				if(agentBomberman.getNbTurnMalusSick() >= TURN_MAX_ITEM) {
+					agentBomberman.setIsSick(false);
+					agentBomberman.setNbTurnMalusSick(0);
+				}
+				else agentBomberman.setNbTurnMalusSick(agentBomberman.getNbTurnMalusSick() + 1);
+			}
+			
+			
+			agentBomberman.executer(this); // Choix de l'action en fonction de la strategie
+		}
+		
+		//On supprime les items ramassés par les agents
+		for(Item item : this._listItemsUtilise) {
+			this._listItems.remove(item);
+		}
+		
+		
+		//Actions des PNJ
+		for(AgentPNJ agentPNJ : this._listAgentsPNJ) {
+			agentPNJ.executer(this);
+		}
    	}
 	
 	
@@ -184,16 +185,15 @@ public class BombermanGame extends Game {
 	
 	
 	public void destroyBreakableWall(Bombe bomb) {
-		int probabilite = 6;
 		
 		//Sur la ligne 
 		for(int i=bomb.getX() - bomb.getRange(); i<=bomb.getX() + bomb.getRange(); ++i) {
-			if(appartientMap(bomb.getX(), i)) { // On verifie que les coordonnées appartiennent à la map
+			if(appartientMap(i, bomb.getY())) { // On verifie que les coordonnées appartiennent à la map
 				if(this._listBreakableWalls[i][bomb.getY()]) { // On regarde si il y a un mur au coordonnées courante
 					this._listBreakableWalls[i][bomb.getY()] = false;
 					
 					//Probabilité qu'un item apparaisse (1 chance sur 10), tout les items on la meme probabilite
-					int nb = (int) (Math.random() * probabilite);
+					int nb = (int) (Math.random() * PROBABILITE_OBJET);
 					if(nb == 1) {
 						ItemType[] tabItem = {ItemType.FIRE_UP,ItemType.FIRE_DOWN,ItemType.BOMB_UP,ItemType.BOMB_DOWN,ItemType.FIRE_SUIT,ItemType.SKULL}; 
 						int nbRandom = (int) (Math.random() * tabItem.length);
@@ -212,7 +212,7 @@ public class BombermanGame extends Game {
 					this._listBreakableWalls[bomb.getX()][i] = false;
 					
 					//Probabilité qu'un item apparaisse (1 chance sur 10)
-					int nb = (int) (Math.random() * probabilite);
+					int nb = (int) (Math.random() * PROBABILITE_OBJET);
 					if(nb == 1) {
 						ItemType[] tabItem = {ItemType.FIRE_UP,ItemType.FIRE_DOWN,ItemType.BOMB_UP,ItemType.BOMB_DOWN,ItemType.FIRE_SUIT,ItemType.SKULL}; 
 						int nbRandom = (int) (Math.random() * tabItem.length);
@@ -317,12 +317,9 @@ public class BombermanGame extends Game {
 	}
 	
 	// retourne vrai si les coordonnées appartient à la map
-	public boolean appartientMap(int x, int y) {
-		if(x <= 0 || x >= this._controllerBombGame.getMap().getSizeX()-1 
-	    	|| y <= 0 || y >= this._controllerBombGame.getMap().getSizeY()-1) {
-	    	return false;
-	    }
-		return true;
+	public boolean appartientMap(int x, int y) {		
+		return x >=0 && x <= this._controllerBombGame.getMap().getSizeX()-1
+				&& y>=0 && y <= this._controllerBombGame.getMap().getSizeY()-1;
 	}
 	
     public ArrayList<AgentBomberman> getListAgentBomberman() {

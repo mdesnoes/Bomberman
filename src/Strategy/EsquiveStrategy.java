@@ -7,14 +7,13 @@ import Model.Bombe;
 import Model.BombermanGame;
 import Model.StateBomb;
 
-// Stratégie pour les Bomberman
+// Stratégie pour les Bombermans :
 // Quand un bomberman voit qu'il est aligné avec une bombe au stade 3, il se déplace sur un des cotés pour esquiver si c'est possible
-// Si l'agent ne peut pas esquivé ou n'a pas besoin d'esquiver, il fait une action random
+// Si l'agent ne peut pas esquivé ou n'a pas besoin d'esquiver, il renvoie l'action STOP
 
 public class EsquiveStrategy implements Strategy {
 
 	private static int RANGE_BOMBE_DEFAULT = 2;
-	private RandomStrategy randomStrategy = new RandomStrategy();
 	
 	@Override
 	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {		
@@ -54,7 +53,7 @@ public class EsquiveStrategy implements Strategy {
 			}
 		}
 
-		return this.randomStrategy.chooseAction(bombermanGame, agent);
+		return AgentAction.STOP;
 	}
 
 }

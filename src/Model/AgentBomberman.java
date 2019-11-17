@@ -29,13 +29,11 @@ public class AgentBomberman extends Agent {
 	public void executer(BombermanGame bombermanGame) {
 		
 		AgentAction action = this.getStrategy().chooseAction(bombermanGame, this);
-		
+
 		if(action == AgentAction.PUT_BOMB) {
-			if(this.canPutBomb()) {
-				Bombe bombe = new Bombe(this.getX(), this.getY(), this.getRangeBomb(), StateBomb.Step1);
-				bombermanGame.addListBombs(bombe);
-				this.addBombe(bombe);
-			}
+			Bombe bombe = new Bombe(this.getX(), this.getY(), this.getRangeBomb(), StateBomb.Step1);
+			bombermanGame.addListBombs(bombe);
+			this.addBombe(bombe);
 		}
 		else if(action == AgentAction.MOVE_UP || action == AgentAction.MOVE_DOWN 
 				|| action == AgentAction.MOVE_LEFT || action == AgentAction.MOVE_RIGHT) {
@@ -51,7 +49,7 @@ public class AgentBomberman extends Agent {
 			}
 		}
 		
-		//this.setAction(action);
+		this.setAction(action);
 	}
 	
 	

@@ -23,7 +23,7 @@ public abstract class AgentPNJ extends Agent {
 			}
 		}
 		
-		//this.setAction(action);
+		this.setAction(action);
 	}
 	
 
@@ -66,6 +66,10 @@ public abstract class AgentPNJ extends Agent {
     	}
     	
     	return true;
+	}
+	
+	public boolean canPutBomb() {
+		return false;
 	}
 
 }
