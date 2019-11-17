@@ -77,7 +77,7 @@ public class ControllerBombermanGame implements InterfaceController {
 	public ArrayList<InfoAgent> getListInfoAgent() {
 		ArrayList<InfoAgent> infoListAgent = new ArrayList<InfoAgent>();
 		for(AgentBomberman agent : this._bombGame.getListAgentBomberman()) {
-			infoListAgent.add(new InfoAgent(agent.getX(), agent.getY(), agent.getAction(), agent.getType(), agent.getColor(),agent.getIsInvincible(),agent.getIsSick()));
+			infoListAgent.add(new InfoAgent(agent.getX(), agent.getY(), agent.getAction(), agent.getType(), agent.getColor(),agent.isInvincible(),agent.getIsSick()));
 		}
 		for(AgentPNJ agent : this._bombGame.getListAgentPNJ()) {
 			infoListAgent.add(new InfoAgent(agent.getX(), agent.getY(), agent.getAction(), agent.getType(), agent.getColor(), false, false));

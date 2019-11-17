@@ -19,10 +19,10 @@ public class EsquiveStrategy implements Strategy {
 	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {		
 
 		for(int i = agent.getX() - RANGE_BOMBE_DEFAULT; i < agent.getX() + RANGE_BOMBE_DEFAULT; ++i) {
-			if(bombermanGame.isBomb(i, agent.getY())) { // On regarde s'il y a une bombe
-				Bombe bombe = bombermanGame.getBombByCoord(i, agent.getY());
-				if(!((AgentBomberman) agent).getListBombe().contains(bombe)) // On verifie que c'est pas la bombe du bomberman
-					if(bombe.getStateBomb() == StateBomb.Step3) {
+			Bombe bombe = bombermanGame.getBombByCoord(i, agent.getY());
+			if(bombe != null) { // On regarde s'il y a une bombe
+				if(bombermanGame.getAgentBombermanByBomb(bombe) != agent) { // On verifie que cette bombe n'appartient pas au bomberman
+					if(bombe.getStateBomb() == StateBomb.Step3) {	// On regarde si c'est une bombe à l'etat 3
 						System.out.println("Agent " + agent.getColor() + " - Esquive en haut ou en bas");
 					
 						if(agent.isLegalMove(bombermanGame, AgentAction.MOVE_UP)) {
@@ -32,13 +32,14 @@ public class EsquiveStrategy implements Strategy {
 							return  AgentAction.MOVE_DOWN;
 						}
 					}
+				}
 			}
 		}
 		
 		for(int i = agent.getY() - RANGE_BOMBE_DEFAULT; i < agent.getY() + RANGE_BOMBE_DEFAULT; ++i) {
-			if(bombermanGame.isBomb(agent.getX(),i)) {
-				Bombe bombe = bombermanGame.getBombByCoord(agent.getX(),i);
-				if(!((AgentBomberman) agent).getListBombe().contains(bombe)) {
+			Bombe bombe = bombermanGame.getBombByCoord(agent.getX(),i);
+			if(bombe != null) {
+				if(bombermanGame.getAgentBombermanByBomb(bombe) != agent) {
 					if(bombe.getStateBomb() == StateBomb.Step3) {
 						System.out.println("Agent " + agent.getColor() + " - Esquive a droite ou à gauche");
 			

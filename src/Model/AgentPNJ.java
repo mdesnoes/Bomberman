@@ -10,6 +10,7 @@ public abstract class AgentPNJ extends Agent {
 	public void executer(BombermanGame bombermanGame) {
 		
 		AgentAction action = this.getStrategy().chooseAction(bombermanGame, this);
+		this.setAction(action);
 		
 		if(action == AgentAction.MOVE_UP || action == AgentAction.MOVE_DOWN 
 				|| action == AgentAction.MOVE_LEFT || action == AgentAction.MOVE_RIGHT) {
@@ -22,8 +23,6 @@ public abstract class AgentPNJ extends Agent {
 				}
 			}
 		}
-		
-		this.setAction(action);
 	}
 	
 
@@ -56,7 +55,8 @@ public abstract class AgentPNJ extends Agent {
     	}
     	
     	//On verifie s'il y a un mur, un mur cassable ou une bombe sur la nouvelle case
-    	if(bombGame.getControllerBombGame().getMap().get_walls()[newX][newY] || bombGame.getListBreakableWall()[newX][newY] || bombGame.isBomb(newX, newY)) {
+    	if(bombGame.getControllerBombGame().getMap().get_walls()[newX][newY] || bombGame.getListBreakableWall()[newX][newY]
+    			|| bombGame.getBombByCoord(newX, newY) != null) {
     		return false;
     	}
     	
@@ -69,6 +69,10 @@ public abstract class AgentPNJ extends Agent {
 	}
 	
 	public boolean canPutBomb() {
+		return false;
+	}
+	
+	public boolean isInvincible() {
 		return false;
 	}
 

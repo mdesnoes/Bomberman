@@ -29,11 +29,11 @@ public class PutBombStrategy implements Strategy {
 		}
 
 		// Il pose une bombe si il detecte un agent ennemie
-		for(int i=agent.getX() - ((AgentBomberman) agent).getRangeBomb(); i<agent.getX() + ((AgentBomberman) agent).getRangeBomb(); ++i) {
-			for(int j=agent.getY() - ((AgentBomberman) agent).getRangeBomb(); j<agent.getY() + ((AgentBomberman) agent).getRangeBomb(); ++j) {
+		for(int i=agent.getX() - ((AgentBomberman) agent).getRangeBomb(); i<=agent.getX() + ((AgentBomberman) agent).getRangeBomb(); ++i) {
+			for(int j=agent.getY() - ((AgentBomberman) agent).getRangeBomb(); j<=agent.getY() + ((AgentBomberman) agent).getRangeBomb(); ++j) {
 				Agent agentDetecte = bombermanGame.getAgentBombermanByCoord(i, j);
 				if(agentDetecte != agent && agentDetecte != null) {
-					System.out.println("L'agent " +agent.getColor() + " a detecté l'agent " +  bombermanGame.getAgentBombermanByCoord(i, j).getColor());
+					//System.out.println("L'agent " +agent.getColor() + " a detecté l'agent " +  bombermanGame.getAgentBombermanByCoord(i, j).getColor());
 					if(agent.canPutBomb()) {
 						return AgentAction.PUT_BOMB;
 					} 
@@ -46,16 +46,16 @@ public class PutBombStrategy implements Strategy {
 		if(!agent.isLegalMove(bombermanGame, actionRaijonStrat)) {
 			breakWallStrategy.setAction(actionRaijonStrat);
 			if(breakWallStrategy.chooseAction(bombermanGame, agent) != AgentAction.STOP) {
-				System.out.println("L'agent " +agent.getColor() + " est bloqué par un mur cassable, il pose une bombe");
+				//System.out.println("L'agent " +agent.getColor() + " est bloqué par un mur cassable, il pose une bombe");
 				return AgentAction.PUT_BOMB;
 			}
 			else {
-				System.out.println("L'agent " +agent.getColor() + " est bloqué, il fait une action random");
+				//System.out.println("L'agent " +agent.getColor() + " est bloqué, il fait une action random");
 				return randomStrategy.chooseAction(bombermanGame, agent);
 			}
 		}
 		
-		System.out.println("L'agent " +agent.getColor() + " avance vers un agent");
+		//System.out.println("L'agent " +agent.getColor() + " avance vers un agent");
 		return actionRaijonStrat;
 	}
 

@@ -29,6 +29,7 @@ public class AgentBomberman extends Agent {
 	public void executer(BombermanGame bombermanGame) {
 		
 		AgentAction action = this.getStrategy().chooseAction(bombermanGame, this);
+		this.setAction(action);
 
 		if(action == AgentAction.PUT_BOMB) {
 			Bombe bombe = new Bombe(this.getX(), this.getY(), this.getRangeBomb(), StateBomb.Step1);
@@ -42,14 +43,12 @@ public class AgentBomberman extends Agent {
 				
 				for(Item item : bombermanGame.getListItem()) {
 					if(this.getX() == item.getX() && this.getY() == item.getY()) {
-						bombermanGame.takeItem(this, item);
+						this.takeItem(item);
 						bombermanGame.addListItemUtilise(item);
 					}
 				}
 			}
 		}
-		
-		this.setAction(action);
 	}
 	
 	
@@ -71,7 +70,8 @@ public class AgentBomberman extends Agent {
     	}
     	
     	//On verifie s'il y a un mur, un mur cassable ou une bombe sur la nouvelle case
-    	if(bombGame.getControllerBombGame().getMap().get_walls()[newX][newY] || bombGame.getListBreakableWall()[newX][newY] || bombGame.isBomb(newX, newY)) {
+    	if(bombGame.getControllerBombGame().getMap().get_walls()[newX][newY] || bombGame.getListBreakableWall()[newX][newY] 
+    		|| bombGame.getBombByCoord(newX, newY) != null) {
     		return false;
     	}
     	
@@ -95,6 +95,37 @@ public class AgentBomberman extends Agent {
 		}
 		
 	}
+	
+	
+	public void takeItem(Item item) {
+		switch(item.getType()) {
+		case FIRE_UP:
+			this._rangeBomb++;
+			
+			//On met a jour les bombes déjà poser sur le terrain
+			for(Bombe bombAgent : this._listBombes) {
+				bombAgent.setRange(this._rangeBomb);
+			}
+			break;
+		case FIRE_DOWN:
+			this._rangeBomb--;
+
+			//On met a jour les bombes déjà poser sur le terrain
+			for(Bombe bombAgent : this._listBombes) {
+				bombAgent.setRange(this._rangeBomb);
+			}
+			break;	
+		case BOMB_UP: this._nbBombe++; break;
+		case BOMB_DOWN: this._nbBombe --; break;
+		case FIRE_SUIT: this._isInvincible = true; break;
+		case SKULL: this._isSick = true; break;
+		}
+	}
+	
+	public boolean isInvincible() {
+		return this._isInvincible;
+	}
+	
 	
 	public void addBombe(Bombe bomb) {
 		this._listBombes.add(bomb);
@@ -154,10 +185,6 @@ public class AgentBomberman extends Agent {
 		if(range >= 1) {
 			this._rangeBomb = range;
 		}
-	}
-	
-	public boolean getIsInvincible() {
-		return this._isInvincible;
 	}
 	
 	public void setIsInvincible(boolean b) {

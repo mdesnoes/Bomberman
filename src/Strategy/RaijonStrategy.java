@@ -7,8 +7,12 @@ import Model.BombermanGame;
 
 public class RaijonStrategy implements Strategy {
 		
+	private RandomStrategy randomStrategy = new RandomStrategy();
+	
 	@Override
 	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
+		
+		AgentAction action = AgentAction.STOP;
 		
 		int procheDist = 1000;
 		AgentBomberman procheBomb = null;
@@ -21,18 +25,28 @@ public class RaijonStrategy implements Strategy {
 				}
 			}
 		}
-		if (Math.abs(agent.getX() - procheBomb.getX()) >= Math.abs(agent.getY() - procheBomb.getY())) {
-			if (agent.getX() < procheBomb.getX()) {
-				return AgentAction.MOVE_RIGHT;
+		
+		
+		if(procheBomb != null) { // condition pour verifier s'il y a bien un autre bomberman sur la map
+			if (Math.abs(agent.getX() - procheBomb.getX()) >= Math.abs(agent.getY() - procheBomb.getY())) {
+				if (agent.getX() < procheBomb.getX()) {
+					action = AgentAction.MOVE_RIGHT;
+				} else {
+					action = AgentAction.MOVE_LEFT;
+				}
 			} else {
-				return AgentAction.MOVE_LEFT;
-			}
-		} else {
-			if (agent.getY() < procheBomb.getY()) {
-				return AgentAction.MOVE_DOWN;
-			} else {
-				return AgentAction.MOVE_UP;
+				if (agent.getY() < procheBomb.getY()) {
+					action = AgentAction.MOVE_DOWN;
+				} else {
+					action = AgentAction.MOVE_UP;
+				}
 			}
 		}
+		
+		// Si l'agent est bloqué par un mur, il faut une action random pour se debloquer
+		if(!agent.isLegalMove(bombermanGame, action)) {
+			return randomStrategy.chooseAction(bombermanGame, agent);
+		}
+		return action;
 	}
 }

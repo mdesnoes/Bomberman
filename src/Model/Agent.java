@@ -68,6 +68,7 @@ public abstract class Agent {
 		this._strategy = strategy;
 	}
 
+	public abstract boolean isInvincible();
 	public abstract boolean canPutBomb();
 	public abstract void executer(BombermanGame bombermanGame);
 	public abstract boolean isLegalMove(BombermanGame bombGame, AgentAction action);
