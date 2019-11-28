@@ -97,5 +97,4 @@ public class ControllerBombermanGame implements InterfaceController {
 
 		return infoBombList;
 	}
-
 }

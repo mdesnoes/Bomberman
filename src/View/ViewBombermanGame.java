@@ -1,6 +1,7 @@
 package View;
 
 import Controller.ControllerBombermanGame;
+import Model.AgentAction;
 import Model.BombermanGame;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +15,7 @@ public class ViewBombermanGame extends JFrame implements Observer {
 	private Map _map;
 	private PanelBomberman _panel;
 	private ControllerBombermanGame _controllerGame;
+
 	
 	public ViewBombermanGame(ControllerBombermanGame controllerGame, @NotNull BombermanGame bombermanGame) {
 		this._controllerGame = controllerGame;
