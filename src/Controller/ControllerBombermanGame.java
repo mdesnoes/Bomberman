@@ -4,6 +4,7 @@ package Controller;
 import java.util.ArrayList;
 
 import Model.Agent;
+import Model.AgentAction;
 import Model.AgentBomberman;
 import Model.AgentPNJ;
 import Model.Bombe;
@@ -104,5 +105,4 @@ public class ControllerBombermanGame implements InterfaceController {
 		}
 		return infoBombList;
 	}
-	
 }

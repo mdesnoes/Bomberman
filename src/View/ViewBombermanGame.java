@@ -3,6 +3,8 @@ package View;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -10,6 +12,7 @@ import java.util.Observer;
 import javax.swing.JFrame;
 
 import Controller.ControllerBombermanGame;
+import Model.AgentAction;
 import Model.BombermanGame;
 
 
@@ -19,6 +22,7 @@ public class ViewBombermanGame implements Observer {
 	private Map _map;
 	private PanelBomberman _panel;
 	private ControllerBombermanGame _controllerGame;
+
 	
 	public ViewBombermanGame(ControllerBombermanGame controllerGame, BombermanGame bombermanGame) {
 		this._controllerGame = controllerGame;

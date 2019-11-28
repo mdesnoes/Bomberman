@@ -3,6 +3,7 @@ package Model;
 import java.util.ArrayList;
 
 import Strategy.EsquiveStrategy;
+import Strategy.InteractifStrategy;
 import Strategy.PutBombStrategy;
 import Strategy.RandomStrategy;
 
@@ -23,7 +24,7 @@ public class AgentBomberman extends Agent {
 	public AgentBomberman(int pos_x, int pos_y, char type, ColorAgent color) {
 		super(pos_x,pos_y, type, color);
 		
-		this.setStrategy(new PutBombStrategy());
+		this.setStrategy(new InteractifStrategy());
 	}
 	
 	public void executer(BombermanGame bombermanGame) {
