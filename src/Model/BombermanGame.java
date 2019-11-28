@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class BombermanGame extends Game {
 
+	private ModeJeu mode;
 	private ControllerBombermanGame _controllerBombGame;
     private ArrayList<AgentBomberman> _listAgentsBomberman;
     private ArrayList<AgentPNJ> _listAgentsPNJ;
@@ -22,8 +23,9 @@ public class BombermanGame extends Game {
 	private final static int TURN_MAX_ITEM = 5;
 	private final static int PROBABILITE_OBJET = 6;
 
-	public BombermanGame(int maxturn) {
+	public BombermanGame(ModeJeu mode, int maxturn) {
 		super(maxturn);
+		this.mode = mode;
 		this._controllerBombGame = new ControllerBombermanGame(this);
 	}
 
@@ -48,6 +50,15 @@ public class BombermanGame extends Game {
 
 			System.out.println(agent.getX() + " - " + agent.getY() + " type : " + agent.getType());
 		}
+		
+		if(this.mode == ModeJeu.SOLO) {
+			this._listAgentsBomberman.get(0).setStrategy(new InteractifStrategyCommande1());
+		}
+		else if(this.mode == ModeJeu.DUO || this.mode == ModeJeu.DUEL) {
+			this._listAgentsBomberman.get(0).setStrategy(new InteractifStrategyCommande1());
+			this._listAgentsBomberman.get(1).setStrategy(new InteractifStrategyCommande2());
+		}
+		
 	}
 
 	public void takeTurn() {

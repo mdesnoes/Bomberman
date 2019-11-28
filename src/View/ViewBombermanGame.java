@@ -1,6 +1,7 @@
 package View;
 
 import Controller.ControllerBombermanGame;
+import Model.AgentAction;
 import Model.BombermanGame;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ public class ViewBombermanGame extends JFrame implements Observer {
 	private Map _map;
 	private PanelBomberman _panel;
 	private ControllerBombermanGame _controllerGame;
+
 	
 	public ViewBombermanGame(ControllerBombermanGame controllerGame, BombermanGame bombermanGame) {
 		this._controllerGame = controllerGame;
