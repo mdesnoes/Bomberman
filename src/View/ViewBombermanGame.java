@@ -1,41 +1,35 @@
 package View;
 
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.util.ArrayList;
+import Controller.ControllerBombermanGame;
+import Model.BombermanGame;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.JFrame;
+public class ViewBombermanGame extends JFrame implements Observer {
 
-import Controller.ControllerBombermanGame;
-import Model.BombermanGame;
-
-
-public class ViewBombermanGame implements Observer {
-
-	private JFrame _jFrame;
 	private Map _map;
 	private PanelBomberman _panel;
 	private ControllerBombermanGame _controllerGame;
 	
-	public ViewBombermanGame(ControllerBombermanGame controllerGame, BombermanGame bombermanGame) {
+	public ViewBombermanGame(ControllerBombermanGame controllerGame, @NotNull BombermanGame bombermanGame) {
 		this._controllerGame = controllerGame;
 		bombermanGame.addObserver(this);
 		this.createView();
 	}
 	
 	private void createView() {
-		_jFrame = new JFrame();
-		_jFrame.setTitle("Bomberman Game");
-		_jFrame.setSize(new Dimension(1100,700));
-		Dimension windowSize = _jFrame.getSize();
+		this.setTitle("Bomberman Game");
+		this.setSize(new Dimension(1100,700));
+		Dimension windowSize = this.getSize();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		Point centerPoint = ge.getCenterPoint();
 		int dx = centerPoint.x - windowSize.width / 2 - 600;
 		int dy = centerPoint.y - windowSize.height / 2 - 600;
-		_jFrame.setLocation(dx,dy);
+		this.setLocation(dx,dy);
 
 		try {
 			this._map = new Map("layout/" + this._controllerGame.getLayout());
@@ -44,10 +38,8 @@ public class ViewBombermanGame implements Observer {
 		}
 		
 		this._panel = new PanelBomberman(this._map);
-		
-		
-		_jFrame.setContentPane(this._panel);
-		_jFrame.setVisible(true);
+		this.setContentPane(this._panel);
+		this.setVisible(true);
 	}
 	
 	public Map getMap() {
@@ -59,10 +51,8 @@ public class ViewBombermanGame implements Observer {
 	}
 	
 	public void update(Observable obs, Object arg) {
-		
 		this._panel.setInfoGame(this._controllerGame.getListBreakableWall(), this._controllerGame.getListInfoAgent(),
 			this._controllerGame.getListInfoItems(), this._controllerGame.getListInfoBombs());
-		
 		this._panel.repaint();
 	}
 

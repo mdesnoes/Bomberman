@@ -1,21 +1,21 @@
 package View;
 
 import Model.StateBomb;
+import org.jetbrains.annotations.Contract;
 
 public class InfoBomb {
 	
 	private int x;
 	private int y;
 	private int range;
-		
-	StateBomb stateBomb;
+	private StateBomb stateBomb;
 
+	@Contract(pure = true)
 	public InfoBomb(int x, int y, int range, StateBomb stateBomb) {
 		this.x=x;
 		this.y=y;
 		this.range=range;
 		this.stateBomb = stateBomb;
-
 	}
 	
 	public int getX() {
@@ -34,7 +34,7 @@ public class InfoBomb {
 		this.y = y;
 	}
 
-	public StateBomb getStateBomb() {
+	StateBomb getStateBomb() {
 		return stateBomb;
 	}
 
@@ -42,7 +42,7 @@ public class InfoBomb {
 		this.stateBomb = stateBomb;
 	}
 
-	public int getRange() {
+	int getRange() {
 		return range;
 	}
 

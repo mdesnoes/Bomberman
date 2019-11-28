@@ -14,16 +14,16 @@ import Model.BombermanGame;
 
 public class PutBombStrategy implements Strategy {
 	
-	EsquiveStrategy esquiveStrategy = new EsquiveStrategy();
-	RaijonStrategy raijonStrategy = new RaijonStrategy();
-	BreakWallStrategy breakWallStrategy = new BreakWallStrategy();
-	RandomStrategy randomStrategy = new RandomStrategy();
+	private EsquiveStrategy esquiveStrategy = new EsquiveStrategy();
+	private RaijonStrategy raijonStrategy = new RaijonStrategy();
+	private BreakWallStrategy breakWallStrategy = new BreakWallStrategy();
+	private RandomStrategy randomStrategy = new RandomStrategy();
 
-	@Override
 	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
 		
 		// Priorité : il esquive les bombes
 		AgentAction esquiveAction = esquiveStrategy.chooseAction(bombermanGame, agent);
+
 		if(esquiveAction != AgentAction.STOP) {
 			return esquiveAction;
 		}
@@ -32,19 +32,23 @@ public class PutBombStrategy implements Strategy {
 		for(int i=agent.getX() - ((AgentBomberman) agent).getRangeBomb(); i<=agent.getX() + ((AgentBomberman) agent).getRangeBomb(); ++i) {
 			for(int j=agent.getY() - ((AgentBomberman) agent).getRangeBomb(); j<=agent.getY() + ((AgentBomberman) agent).getRangeBomb(); ++j) {
 				Agent agentDetecte = bombermanGame.getAgentBombermanByCoord(i, j);
+
 				if(agentDetecte != agent && agentDetecte != null) {
 					//System.out.println("L'agent " +agent.getColor() + " a detecté l'agent " +  bombermanGame.getAgentBombermanByCoord(i, j).getColor());
 					if(agent.canPutBomb()) {
 						return AgentAction.PUT_BOMB;
-					} 
+					}
+
 					break; // il ne peut pas poser de bombe donc ça ne sert à rien de parcourir le reste de la boucle
 				}
 			}
 		}
 		
 		AgentAction actionRaijonStrat = raijonStrategy.chooseAction(bombermanGame, agent);
+
 		if(!agent.isLegalMove(bombermanGame, actionRaijonStrat)) {
 			breakWallStrategy.setAction(actionRaijonStrat);
+
 			if(breakWallStrategy.chooseAction(bombermanGame, agent) != AgentAction.STOP) {
 				//System.out.println("L'agent " +agent.getColor() + " est bloqué par un mur cassable, il pose une bombe");
 				return AgentAction.PUT_BOMB;

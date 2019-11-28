@@ -1,15 +1,17 @@
 package Model;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class Bombe {
 	
 	private int _pos_x;
 	private int _pos_y;
 	private int _range;
-	StateBomb _stateBomb;
+	private StateBomb _stateBomb;
 	
-	public Bombe(int x, int y, int range, StateBomb stateBomb) {
+	@Contract(pure = true)
+	Bombe(int x, int y, int range, StateBomb stateBomb) {
 		this._pos_x = x;
 		this._pos_y = y;
 		this._range = range;
@@ -28,7 +30,7 @@ public class Bombe {
 		return this._range;
 	}
 	
-	public void setRange(int range) {
+	void setRange(int range) {
 		if(range > 1) {
 			this._range = range;
 		}
@@ -38,16 +40,23 @@ public class Bombe {
 		return this._stateBomb;
 	}
 
-	public void changeStateBomb() {
+	private void changeStateBomb() {
 		switch(this._stateBomb) {
-			case Step1:	this._stateBomb = StateBomb.Step2; break;
-			case Step2: this._stateBomb = StateBomb.Step3; break;
-			case Step3: this._stateBomb = StateBomb.Boom; break;
-			case Boom: break;
+			case Step1:
+				this._stateBomb = StateBomb.Step2;
+				break;
+			case Step2:
+				this._stateBomb = StateBomb.Step3;
+				break;
+			case Step3:
+				this._stateBomb = StateBomb.Boom;
+				break;
+			case Boom:
+				break;
 		}
 	}
 	
-	public void explosion(BombermanGame bombermanGame) {
+	void explosion(@NotNull BombermanGame bombermanGame) {
 		AgentBomberman agentBomberman = bombermanGame.getAgentBombermanByBomb(this);
 		
 		//Si agentBomberman != null, cela veut dire que la bombe appartient à un agent
@@ -78,22 +87,22 @@ public class Bombe {
 		}
 	}
 	
-	public void destroyBreakableWall(BombermanGame bombermanGame) {
+	private void destroyBreakableWall(BombermanGame bombermanGame) {
 		//Sur la ligne 
 		for(int i=this._pos_x - this._range; i<=this._pos_x + this._range; ++i) {
 			if(bombermanGame.appartientMap(i, this._pos_y)) { // On verifie que les coordonnées appartiennent à la map
 				if(bombermanGame.getListBreakableWall()[i][this._pos_y]) { // On regarde si il y a un mur au coordonnées courante
 					bombermanGame.getListBreakableWall()[i][this._pos_y] = false;
-					
+
 					//Probabilité qu'un item apparaisse (1 chance sur 10), tout les items on la meme probabilite
 					int nb = (int) (Math.random() * bombermanGame.getProbabiliteObjet());
+
 					if(nb == 1) {
 						ItemType[] tabItem = {ItemType.FIRE_UP,ItemType.FIRE_DOWN,ItemType.BOMB_UP,ItemType.BOMB_DOWN,ItemType.FIRE_SUIT,ItemType.SKULL}; 
 						int nbRandom = (int) (Math.random() * tabItem.length);
 						Item item = new Item(i, this._pos_y, tabItem[nbRandom]);
 						bombermanGame.addListItems(item);
 					}
-					
 				}
 			}
 		}
@@ -106,6 +115,7 @@ public class Bombe {
 					
 					//Probabilité qu'un item apparaisse (1 chance sur 10)
 					int nb = (int) (Math.random() * bombermanGame.getProbabiliteObjet());
+
 					if(nb == 1) {
 						ItemType[] tabItem = {ItemType.FIRE_UP,ItemType.FIRE_DOWN,ItemType.BOMB_UP,ItemType.BOMB_DOWN,ItemType.FIRE_SUIT,ItemType.SKULL}; 
 						int nbRandom = (int) (Math.random() * tabItem.length);
@@ -114,12 +124,10 @@ public class Bombe {
 					}
 				}
 			}
-	
 		}
 	}
 
-	
-	public void destroyAgent(AgentBomberman agentProprietaireBomb, BombermanGame bombermanGame) {
+	private void destroyAgent(AgentBomberman agentProprietaireBomb, BombermanGame bombermanGame) {
 
 		//Sur la ligne 
 		for(int i=this._pos_x - this._range; i<=this._pos_x + this._range; ++i) {
@@ -130,6 +138,7 @@ public class Bombe {
 					if(agentProprietaireBomb != null) { 
 						System.out.println("L'agent " + agentProprietaireBomb.getColor() + " à détruit l'agent " + agent.getColor());
 					}
+
 					bombermanGame.addListAgentDetruit(agent);
 				}
 			}
@@ -144,9 +153,11 @@ public class Bombe {
 					if(agentProprietaireBomb != null) { 
 						System.out.println("L'agent " + agentProprietaireBomb.getColor() + " à détruit l'agent " + agent.getColor());
 					}
+
 					bombermanGame.addListAgentDetruit(agent);
 				}
 			}
 		}
 	}
+
 }

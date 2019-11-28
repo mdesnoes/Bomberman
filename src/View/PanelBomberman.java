@@ -1,6 +1,5 @@
 package View;
 
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -16,6 +15,7 @@ import javax.swing.JPanel;
 import Model.AgentAction;
 import Model.ItemType;
 import Model.StateBomb;
+import org.jetbrains.annotations.NotNull;
 
 /** 
  * Classe qui permet de charger d'afficher le panneau du jeu à partir d'une carte et de listes d'agents avec leurs positions.
@@ -28,88 +28,57 @@ public class PanelBomberman extends JPanel {
 	private static final long serialVersionUID = 1L;
 	protected Color wallColor=Color.GRAY;
 	protected Color brokable_walls_Color=Color.lightGray;
-	protected Color ground_Color= new Color(50,175,50);
-
-	
-	
+	private Color ground_Color= new Color(50,175,50);
 	private int taille_x;
 	private int taille_y;
-
-	float[] contraste = { 0, 0, 0, 1.0f };
-	float[] invincible = { 200, 200, 200, 1.0f };
-	float[] skull = { 0.5f, 0.5f, 0.5f, 0.75f };
-
+	private float[] invincible = { 200, 200, 200, 1.0f };
+	private float[] skull = { 0.5f, 0.5f, 0.5f, 0.75f };
 	private Map map;
+	private ArrayList<InfoAgent> listInfoAgents;
+	private ArrayList<InfoItem> listInfoItems;
+	private ArrayList<InfoBomb> listInfoBombs;
+	private boolean[][] breakable_walls;
+	private int cpt;
 
-
-	protected ArrayList<InfoAgent> listInfoAgents;
-	protected ArrayList<InfoItem> listInfoItems;
-	protected ArrayList<InfoBomb> listInfoBombs;
-	
-	
-	private boolean breakable_walls[][];
-
-	int cpt;
-
-	public PanelBomberman(Map map) {
-
+	PanelBomberman(@NotNull Map map) {
 		this.map = map;
-		
 		this.breakable_walls = map.getStart_breakable_walls();
-		
 		listInfoAgents = map.getStart_agents();	
-		listInfoItems = new ArrayList<InfoItem>();
-		listInfoBombs = new ArrayList<InfoBomb>();
-		
+		listInfoItems = new ArrayList<>();
+		listInfoBombs = new ArrayList<>();
 	}
 
-	public void paint(Graphics g){
-
-	
+	public void paint(@NotNull Graphics g) {
 		int fen_x=getSize().width;
 		int fen_y=getSize().height;
-
 		g.setColor(ground_Color);
 		g.fillRect(0, 0,fen_x,fen_y);
-
 		double stepx=fen_x/(double)taille_x;
 		double stepy=fen_y/(double)taille_y;
 		double position_x=0;
-
 		taille_x= map.getSizeX();
 		taille_y= map.getSizeY();
-		   
 		boolean[][] walls = map.get_walls();
 		
-		for(int x=0; x<taille_x; x++)
-		{
+		for(int x=0; x<taille_x; x++) {
 			double position_y = 0 ;
-			
-			
-			for(int y=0; y<taille_y; y++)
-			{
-				if (walls[x][y]){
 
+			for(int y=0; y<taille_y; y++) {
+				if (walls[x][y]){
 					try {
 						Image img = ImageIO.read(new File("./image/wall.png"));
 						g.drawImage(img, (int)position_x, (int)position_y, (int)stepx, (int)stepy, this);
-
-	
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				}
-
-				else if (this.breakable_walls[x][y]){
-
+				} else if (this.breakable_walls[x][y]) {
 					try {
 						Image img = ImageIO.read(new File("./image/brique_2.png"));
 						g.drawImage(img, (int)position_x, (int)position_y, (int)stepx, (int)stepy, this);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-
-				}else {
+				} else {
 					try {
 						Image img = ImageIO.read(new File("./image/grass.png"));
 						g.drawImage(img, (int)position_x, (int)position_y, (int)stepx, (int)stepy, this);
@@ -117,46 +86,40 @@ public class PanelBomberman extends JPanel {
 						e.printStackTrace();
 					}
 				}
+
 				position_y+=stepy;				
 			}
+
 			position_x+=stepx;
 		}
 
-
-		for(int i = 0; i < listInfoItems.size(); i++){
-			dessine_Items(g, listInfoItems.get(i));	
+		for (InfoItem listInfoItem : listInfoItems) {
+			dessine_Items(g, listInfoItem);
 		}
 
-		for (int j = 0 ; j < listInfoBombs.size() ; j++) {
-			dessine_Bomb(g, listInfoBombs.get(j));
+		for (InfoBomb listInfoBomb : listInfoBombs) {
+			dessine_Bomb(g, listInfoBomb);
 		}
 
-		for(int i = 0; i < listInfoAgents.size(); i++){
-			dessine_Agent(g,listInfoAgents.get(i));	
+		for (InfoAgent listInfoAgent : listInfoAgents) {
+			dessine_Agent(g, listInfoAgent);
 		}
 
 		cpt++;
 	}
 
 
-	void dessine_Agent(Graphics g, InfoAgent infoAgent)
-	{
-		
+	private void dessine_Agent(Graphics g, @NotNull InfoAgent infoAgent) {
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
-
 		double stepx = fen_x/(double)taille_x;
 		double stepy = fen_y/(double)taille_y;
-
 		int px = infoAgent.getX();
 		int py = infoAgent.getY();
-
 		double pos_x=px*stepx;
 		double pos_y=py*stepy;
-
 		AgentAction agentAction = infoAgent.getAgentAction();
-
-		int direction = 0;
+		int direction;
 		
 		if(agentAction == AgentAction.MOVE_UP) {
 			direction = 0;
@@ -182,12 +145,10 @@ public class PanelBomberman extends JPanel {
 			e.printStackTrace();
 		}			
 
-		
 		float [] scales = new float[]{1 ,1, 1, 1.0f };
 
 		if(infoAgent.getColor()!= null) {
-			switch(infoAgent.getColor())
-			{
+			switch(infoAgent.getColor()) {
 			case ROUGE :
 				scales = new float[]{3 ,0.75f, 0.75f, 1.0f };
 				break;
@@ -208,39 +169,36 @@ public class PanelBomberman extends JPanel {
 				break;
 			}
 		}
-		
-		if (infoAgent.isInvincible() & cpt % 2 == 0)
+
+		float[] contraste;
+
+		if (infoAgent.isInvincible() & cpt % 2 == 0) {
 			contraste = invincible;
-		else contraste = new float[]{ 0, 0, 0, 1.0f };
+		}
+		else {
+			contraste = new float[]{ 0, 0, 0, 1.0f };
+		}
 		
-		if (infoAgent.isSick() & cpt % 2 == 0)
+		if (infoAgent.isSick() & cpt % 2 == 0) {
 			scales = skull;
-		
+		}
 		
 		RescaleOp op = new RescaleOp(scales, contraste, null);
+		assert img != null;
 		img = op.filter( img, null);
-		
 		
 		if(img != null) {
 			g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 		}
-		
-		
 	}
 
-	
-
-	void dessine_Items(Graphics g, InfoItem item){
-
+	private void dessine_Items(Graphics g, @NotNull InfoItem item){
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
-
 		double stepx = fen_x/(double)taille_x;
 		double stepy = fen_y/(double)taille_y;
-
 		int px = item.getX();
 		int py = item.getY();
-
 		double pos_x=px*stepx;
 		double pos_y=py*stepy;
 
@@ -252,6 +210,7 @@ public class PanelBomberman extends JPanel {
 				e.printStackTrace();
 			}
 		}
+
 		if (item.getType() == ItemType.FIRE_DOWN) {
 			try {
 				Image img = ImageIO.read(new File("./image/Item_FireDown.png"));
@@ -260,6 +219,7 @@ public class PanelBomberman extends JPanel {
 				e.printStackTrace();
 			}
 		}
+
 		if (item.getType() == ItemType.BOMB_UP) {
 			try {
 				Image img = ImageIO.read(new File("./image/Item_BombUp.png"));
@@ -268,6 +228,7 @@ public class PanelBomberman extends JPanel {
 				e.printStackTrace();
 			}
 		}
+
 		if (item.getType() == ItemType.BOMB_DOWN) {
 			try {
 				Image img = ImageIO.read(new File("./image/Item_BombDown.png"));
@@ -276,6 +237,7 @@ public class PanelBomberman extends JPanel {
 				e.printStackTrace();
 			}
 		}
+
 		if (item.getType() == ItemType.FIRE_SUIT) {
 			try {
 				Image img = ImageIO.read(new File("./image/Item_FireSuit.png"));
@@ -284,6 +246,7 @@ public class PanelBomberman extends JPanel {
 				e.printStackTrace();
 			}
 		}
+
 		if (item.getType() == ItemType.SKULL) {
 			try {
 				Image img = ImageIO.read(new File("./image/Item_Skull.png"));
@@ -294,51 +257,38 @@ public class PanelBomberman extends JPanel {
 		}
 	}
 
-
-
-	void dessine_Bomb(Graphics g, InfoBomb bomb)
-	{
+	private void dessine_Bomb(Graphics g, @NotNull InfoBomb bomb) {
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
-
 		double stepx = fen_x/(double)taille_x;
 		double stepy = fen_y/(double)taille_y;
-
 		int px = bomb.getX();
 		int py = bomb.getY();
-
 		double pos_x=px*stepx;
 		double pos_y=py*stepy;
 
-		if (bomb.getStateBomb() == StateBomb.Step1 ){
-
+		if (bomb.getStateBomb() == StateBomb.Step1 ) {
 			try {
 				Image img = ImageIO.read(new File("./image/Bomb_0.png"));
 				g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		else if (bomb.getStateBomb() == StateBomb.Step2){
-
+		} else if (bomb.getStateBomb() == StateBomb.Step2) {
 			try {
 				Image img = ImageIO.read(new File("./image/Bomb_1_jaune.png"));
 				g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		else if (bomb.getStateBomb() == StateBomb.Step3 ){
-
+		} else if (bomb.getStateBomb() == StateBomb.Step3 ) {
 			try {
 				Image img = ImageIO.read(new File("./image/Bomb_2_rouge.png"));
 				g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-		}else if (bomb.getStateBomb() == StateBomb.Boom){
-
+		} else if (bomb.getStateBomb() == StateBomb.Boom) {
 			try {
 				Image img = ImageIO.read(new File("./image/Range_CENTRE.png"));
 				g.drawImage(img, (int)pos_x, (int)pos_y, (int)stepx, (int)stepy, this);
@@ -349,7 +299,6 @@ public class PanelBomberman extends JPanel {
 			int range = bomb.getRange();
 
 			for (int i = 1 ; i <= range; i++){
-
 				if(py+i < map.getSizeY()) {
 					if(i == range ) {
 						try {
@@ -358,7 +307,7 @@ public class PanelBomberman extends JPanel {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-					}else {
+					} else {
 						try {
 							Image img = ImageIO.read(new File("./image/Range_SOUTH.png"));
 							g.drawImage(img, (int)pos_x, (int)(pos_y + (stepy*i)), (int)stepx, (int)stepy, this);
@@ -376,7 +325,7 @@ public class PanelBomberman extends JPanel {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-					}else {
+					} else {
 						try {
 							Image img = ImageIO.read(new File("./image/Range_NORTH.png"));
 							g.drawImage(img, (int)pos_x, (int)(pos_y - (stepy*i)), (int)stepx, (int)stepy, this);
@@ -394,7 +343,7 @@ public class PanelBomberman extends JPanel {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-					}else {
+					} else {
 						try {
 							Image img = ImageIO.read(new File("./image/Range_EAST.png"));
 							g.drawImage(img, (int)(pos_x + (stepy*i)), (int)(pos_y), (int)stepx, (int)stepy, this);
@@ -412,7 +361,7 @@ public class PanelBomberman extends JPanel {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-					}else {
+					} else {
 						try {
 							Image img = ImageIO.read(new File("./image/Range_WEST.png"));
 							g.drawImage(img, (int)(pos_x - (stepy*i)), (int)(pos_y), (int)stepx, (int)stepy, this);
@@ -421,27 +370,15 @@ public class PanelBomberman extends JPanel {
 						}
 					}
 				}
-
-
 			}
-
 		}
-
 	}
 
-
-	public void setInfoGame(boolean[][] breakable_walls, ArrayList<InfoAgent> listInfoAgents, ArrayList<InfoItem> listInfoItems, ArrayList<InfoBomb> listInfoBombs) {
-		
+	void setInfoGame(boolean[][] breakable_walls, ArrayList<InfoAgent> listInfoAgents, ArrayList<InfoItem> listInfoItems, ArrayList<InfoBomb> listInfoBombs) {
 		this.listInfoAgents = listInfoAgents;
 		this.listInfoItems = listInfoItems;
 		this.listInfoBombs = listInfoBombs;
 		this.breakable_walls = breakable_walls;
-		
 	}
-
-
-
-
-
 
 }

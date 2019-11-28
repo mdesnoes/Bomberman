@@ -3,13 +3,13 @@ package Strategy;
 import Model.Agent;
 import Model.AgentAction;
 import Model.BombermanGame;
+import org.jetbrains.annotations.NotNull;
 
 // L'agent avance tout droit et quand il rencontre un mur, il tourne a droite ou à gauche
 
 public class BasiqueStrategy implements Strategy {
 
-	@Override
-	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
+	public AgentAction chooseAction(BombermanGame bombermanGame, @NotNull Agent agent) {
 		AgentAction action = agent.getAction(); // L'agent conserve son action précedente
 
 		if(action == null) {
@@ -19,14 +19,13 @@ public class BasiqueStrategy implements Strategy {
 		//Si l'action précedente n'est pas un déplacement, il choisit un deplacement
 		if(action == AgentAction.PUT_BOMB || action == AgentAction.STOP) {
 			AgentAction[] tabAction = {AgentAction.MOVE_UP, AgentAction.MOVE_DOWN, AgentAction.MOVE_LEFT, AgentAction.MOVE_RIGHT};
-			
 			int nbRandom = (int) (Math.random() * tabAction.length);
 			action = tabAction[nbRandom];
 		}
 		
 		//Mais on verifie si le déplacement est possible, si ce n'est pas le cas, il tourne a droite/gauche ou en haut/bas
 		if(!agent.isLegalMove(bombermanGame, action)) {
-			AgentAction tabAction[] = new AgentAction[2];
+			AgentAction[] tabAction = new AgentAction[2];
 			
 			if(agent.getAction() == AgentAction.MOVE_UP || agent.getAction() == AgentAction.MOVE_DOWN) {
 				tabAction[0] = AgentAction.MOVE_LEFT;

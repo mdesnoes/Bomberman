@@ -1,11 +1,7 @@
 package Strategy;
 
-import Model.Agent;
-import Model.AgentAction;
-import Model.AgentBomberman;
-import Model.Bombe;
-import Model.BombermanGame;
-import Model.StateBomb;
+import Model.*;
+import org.jetbrains.annotations.NotNull;
 
 // Stratégie pour les Bombermans :
 // Quand un bomberman voit qu'il est aligné avec une bombe au stade 3, il se déplace sur un des cotés pour esquiver si c'est possible
@@ -13,13 +9,12 @@ import Model.StateBomb;
 
 public class EsquiveStrategy implements Strategy {
 
-	private static int RANGE_BOMBE_DEFAULT = 2;
-	
-	@Override
-	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {		
+	public AgentAction chooseAction(BombermanGame bombermanGame, @NotNull Agent agent) {
+		int RANGE_BOMBE_DEFAULT = 2;
 
 		for(int i = agent.getX() - RANGE_BOMBE_DEFAULT; i < agent.getX() + RANGE_BOMBE_DEFAULT; ++i) {
 			Bombe bombe = bombermanGame.getBombByCoord(i, agent.getY());
+
 			if(bombe != null) { // On regarde s'il y a une bombe
 				if(bombermanGame.getAgentBombermanByBomb(bombe) != agent) { // On verifie que cette bombe n'appartient pas au bomberman
 					if(bombe.getStateBomb() == StateBomb.Step3) {	// On regarde si c'est une bombe à l'etat 3
@@ -38,6 +33,7 @@ public class EsquiveStrategy implements Strategy {
 		
 		for(int i = agent.getY() - RANGE_BOMBE_DEFAULT; i < agent.getY() + RANGE_BOMBE_DEFAULT; ++i) {
 			Bombe bombe = bombermanGame.getBombByCoord(agent.getX(),i);
+
 			if(bombe != null) {
 				if(bombermanGame.getAgentBombermanByBomb(bombe) != agent) {
 					if(bombe.getStateBomb() == StateBomb.Step3) {

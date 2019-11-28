@@ -2,6 +2,7 @@ package View;
 
 import Model.AgentAction;
 import Model.ColorAgent;
+import org.jetbrains.annotations.Contract;
 
 public class InfoAgent {
 	
@@ -10,21 +11,19 @@ public class InfoAgent {
 	private AgentAction agentAction;
 	private ColorAgent color;
 	private char type;
-	
 	private boolean isInvincible;
 	private boolean isSick;
 	
+	@Contract(pure = true)
 	public InfoAgent(int x, int y, AgentAction agentAction, char type, ColorAgent color, boolean isInvincible, boolean isSick) {
 		this.x=x;
 		this.y=y;
 		this.agentAction = agentAction;
 		this.color = color;
 		this.type = type;
-		
 		this.isInvincible = isInvincible;
 		this.isSick = isSick;
 	}
-
 	
 	public int getX() {
 		return x;
@@ -41,17 +40,14 @@ public class InfoAgent {
 	public void setY(int y) {
 		this.y = y;
 	}
-
-
 	
-	public ColorAgent getColor() {
+	ColorAgent getColor() {
 		return color;
 	}
 
 	public void setColor(ColorAgent color) {
 		this.color = color;
 	}
-	
 	
 	public char getType() {
 		return type;
@@ -61,36 +57,29 @@ public class InfoAgent {
 		this.type = type;
 	}
 
-
-	public boolean isInvincible() {
+	boolean isInvincible() {
 		return isInvincible;
 	}
-
 
 	public void setInvincible(boolean isInvincible) {
 		this.isInvincible = isInvincible;
 	}
 
-
-	public boolean isSick() {
+	boolean isSick() {
 		return isSick;
 	}
-
 
 	public void setSick(boolean isSick) {
 		this.isSick = isSick;
 	}
 
-
-	public AgentAction getAgentAction() {
+	AgentAction getAgentAction() {
 		return agentAction;
 	}
-
 
 	public void setAgentAction(AgentAction agentAction) {
 		this.agentAction = agentAction;
 	}
-
 
 }
 	

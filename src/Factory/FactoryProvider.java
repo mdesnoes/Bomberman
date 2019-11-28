@@ -1,17 +1,20 @@
 package Factory;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class FactoryProvider {
 	
+	@NotNull
 	public static AgentFactory getFactory(char typeAgent) {
-		AgentFactory agentFactory = null;
-		switch(typeAgent) {
-		case 'B':
+		AgentFactory agentFactory;
+
+		if (typeAgent == 'B') {
 			agentFactory = new BombermanFactory();
-			break;
-		default:
+		} else {
 			agentFactory = new PNJFactory();
-			break;
 		}
+
 		return agentFactory;
 	}
+
 }

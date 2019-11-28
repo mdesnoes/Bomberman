@@ -6,13 +6,11 @@ public abstract class Agent {
 
 	private static int _compteur = 0;
 	private int _id;
-
 	private int _pos_x;
 	private int _pos_y;
 	private ColorAgent _color;
 	private AgentAction _action;
 	private char _type;
-	
 	private Strategy _strategy;
 	
 	public Agent(int pos_x, int pos_y, char type, ColorAgent color) {
@@ -73,4 +71,5 @@ public abstract class Agent {
 	public abstract void executer(BombermanGame bombermanGame);
 	public abstract boolean isLegalMove(BombermanGame bombGame, AgentAction action);
 	public abstract void moveAgent(AgentAction action);
+
 }
