@@ -51,9 +51,11 @@ public class BombermanGame extends Game {
 			System.out.println(agent.getX() + " - " + agent.getY() + " type : " + agent.getType());
 		}
 		
+		//En mode solo, on contrôle le premier agent
 		if(this.mode == ModeJeu.SOLO) {
 			this._listAgentsBomberman.get(0).setStrategy(new InteractifStrategyCommande1());
 		}
+		//En mode duo ou duel, on peut controler les deux premiers agents (avec des touches différentes)
 		else if(this.mode == ModeJeu.DUO || this.mode == ModeJeu.DUEL) {
 			this._listAgentsBomberman.get(0).setStrategy(new InteractifStrategyCommande1());
 			this._listAgentsBomberman.get(1).setStrategy(new InteractifStrategyCommande2());

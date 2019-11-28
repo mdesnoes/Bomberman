@@ -1,7 +1,6 @@
 package View;
 
 import Controller.ControllerBombermanGame;
-import Model.AgentAction;
 import Model.BombermanGame;
 
 import javax.swing.*;

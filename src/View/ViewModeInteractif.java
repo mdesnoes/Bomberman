@@ -6,13 +6,14 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Model.AgentAction;
 
 public class ViewModeInteractif extends JFrame implements KeyListener {
 	
@@ -66,19 +67,15 @@ public class ViewModeInteractif extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent key) {
-		
 		this.codeKeyPressed = key.getKeyCode();
-		
 	}
 
 	@Override
-	public void keyReleased(KeyEvent key) {
-		
+	public void keyReleased(KeyEvent key) {	
 	}
 
 	@Override
 	public void keyTyped(KeyEvent key) {
-		
 	}
 	
 	public int getKeyPressed() {
