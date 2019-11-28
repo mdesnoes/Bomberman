@@ -18,7 +18,7 @@ public class ViewModeInteractif extends JFrame implements KeyListener {
 	
 	private static final long serialVersionUID = 1L;
 	private static ViewModeInteractif uniqueInstance = null;
-	AgentAction action = null;
+	int codeKeyPressed;
 	
 	private ViewModeInteractif() {
 		setTitle("Action de l'agent Bomberman");
@@ -67,29 +67,7 @@ public class ViewModeInteractif extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent key) {
 		
-		int codeKey = key.getKeyCode();
-         
-        switch (codeKey)
-        {
-            case KeyEvent.VK_UP:
-                this.action = AgentAction.MOVE_UP;
-                break;
-            case KeyEvent.VK_LEFT:
-            	this.action = AgentAction.MOVE_LEFT;
-                break;
-            case KeyEvent.VK_RIGHT:
-            	this.action = AgentAction.MOVE_RIGHT;
-                break;
-            case KeyEvent.VK_DOWN:
-            	this.action = AgentAction.MOVE_DOWN;
-                break;
-            case KeyEvent.VK_NUMPAD0:
-            	this.action = AgentAction.PUT_BOMB;
-            	break;
-            case KeyEvent.VK_B:
-            	this.action = AgentAction.STOP;
-            	break;
-        }
+		this.codeKeyPressed = key.getKeyCode();
 		
 	}
 
@@ -103,7 +81,7 @@ public class ViewModeInteractif extends JFrame implements KeyListener {
 		
 	}
 	
-	public AgentAction getAction() {
-		return this.action;
+	public int getKeyPressed() {
+		return this.codeKeyPressed;
 	}
 }
