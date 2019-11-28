@@ -1,7 +1,6 @@
 package Model;
-import java.util.ArrayList;
-import java.util.Observable;
 
+import java.util.Observable;
 
 public abstract class Game extends Observable implements Runnable {
 
@@ -9,26 +8,22 @@ public abstract class Game extends Observable implements Runnable {
 	private int _turn;
 	private int _maxturn;
 	private boolean _isRunning;
-	private Thread _thread;
 	private long _time;
-	
-	
-	public Game(int maxturn) {
+
+	Game(int maxturn) {
 		this._maxturn = maxturn;
-		this._time = (long)INIT_TIME;
+		this._time = INIT_TIME;
 	}
 	
 	public void init() {
 		this._turn = 0;
 		this._isRunning = true;
-		
 		initialize_game();
 		this.setChanged();
 		this.notifyObservers();
 	}
 	
 	public void step() {
-
 		if(gameContinue() && this._turn < this._maxturn) {
 			this._turn++;
 			takeTurn();
@@ -60,15 +55,14 @@ public abstract class Game extends Observable implements Runnable {
 	
 	public void launch() {
 		this._isRunning = true;
-		this._thread = new Thread(this);
-		this._thread.start();
+		Thread _thread = new Thread(this);
+		_thread.start();
 	}
 	
 	public void setTime(long time) {
 		this._time = time;
 	}
-	
-	
+
 	public int getTurn( ) {
 		return this._turn;
 	}
@@ -76,13 +70,11 @@ public abstract class Game extends Observable implements Runnable {
 	public int getMaxTurn() {
 		return this._maxturn;
 	}
-	
-	
+
 	public long getTime() {
 		return this._time;
 	}
-	
-	
+
 	public abstract void initialize_game();
 	public abstract void takeTurn();
 	public abstract boolean gameContinue();

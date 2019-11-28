@@ -9,23 +9,21 @@ public class RaijonStrategy implements Strategy {
 		
 	private RandomStrategy randomStrategy = new RandomStrategy();
 	
-	@Override
 	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
-		
 		AgentAction action = AgentAction.STOP;
-		
 		int procheDist = 1000;
 		AgentBomberman procheBomb = null;
+
 		for (AgentBomberman i : bombermanGame.getListAgentBomberman()) {
 			if(i != agent) {
 				int dist = Math.abs(agent.getX() - i.getX()) + Math.abs(agent.getY() - i.getY());
+
 				if (dist < procheDist) {
 					procheDist = dist;
 					procheBomb = i;
 				}
 			}
 		}
-		
 		
 		if(procheBomb != null) { // condition pour verifier s'il y a bien un autre bomberman sur la map
 			if (Math.abs(agent.getX() - procheBomb.getX()) >= Math.abs(agent.getY() - procheBomb.getY())) {
@@ -47,6 +45,8 @@ public class RaijonStrategy implements Strategy {
 		if(!agent.isLegalMove(bombermanGame, action)) {
 			return randomStrategy.chooseAction(bombermanGame, agent);
 		}
+
 		return action;
 	}
+
 }

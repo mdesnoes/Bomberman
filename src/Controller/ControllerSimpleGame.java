@@ -1,20 +1,18 @@
 package Controller;
 
+import Model.Game;
 import Model.SimpleGame;
 import View.ViewCommand;
 import View.ViewSimpleGame;
 
 public class ControllerSimpleGame implements InterfaceController {
 
-	public SimpleGame _simpleGame;
+	private SimpleGame _simpleGame;
 	
 	public ControllerSimpleGame(SimpleGame game) {
 		this._simpleGame = game;
-		@SuppressWarnings("unused")
 		ViewCommand viewCommand = new ViewCommand(this, game);
-		@SuppressWarnings("unused")
 		ViewSimpleGame viewSimpleGame = new ViewSimpleGame(this, game);
-		
 	}
 	
 	public void start() {
@@ -42,7 +40,7 @@ public class ControllerSimpleGame implements InterfaceController {
 	}
 	
 	public int getInitTime() {
-		return _simpleGame.INIT_TIME;
+		return Game.INIT_TIME;
 	}
 
 }

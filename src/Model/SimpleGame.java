@@ -2,7 +2,6 @@ package Model;
 
 public class SimpleGame extends Game {
 
-	
 	public SimpleGame(int maxturn) {
 		super(maxturn);
 	}

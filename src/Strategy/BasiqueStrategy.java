@@ -8,7 +8,6 @@ import Model.BombermanGame;
 
 public class BasiqueStrategy implements Strategy {
 
-	@Override
 	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
 		AgentAction action = agent.getAction(); // L'agent conserve son action précedente
 
@@ -19,14 +18,13 @@ public class BasiqueStrategy implements Strategy {
 		//Si l'action précedente n'est pas un déplacement, il choisit un deplacement
 		if(action == AgentAction.PUT_BOMB || action == AgentAction.STOP) {
 			AgentAction[] tabAction = {AgentAction.MOVE_UP, AgentAction.MOVE_DOWN, AgentAction.MOVE_LEFT, AgentAction.MOVE_RIGHT};
-			
 			int nbRandom = (int) (Math.random() * tabAction.length);
 			action = tabAction[nbRandom];
 		}
 		
 		//Mais on verifie si le déplacement est possible, si ce n'est pas le cas, il tourne a droite/gauche ou en haut/bas
 		if(!agent.isLegalMove(bombermanGame, action)) {
-			AgentAction tabAction[] = new AgentAction[2];
+			AgentAction[] tabAction = new AgentAction[2];
 			
 			if(agent.getAction() == AgentAction.MOVE_UP || agent.getAction() == AgentAction.MOVE_DOWN) {
 				tabAction[0] = AgentAction.MOVE_LEFT;

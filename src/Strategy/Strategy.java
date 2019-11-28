@@ -6,5 +6,5 @@ import Model.BombermanGame;
 
 public interface Strategy {
 	
-	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent);
+	AgentAction chooseAction(BombermanGame bombermanGame, Agent agent);
 }
