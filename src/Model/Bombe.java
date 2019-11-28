@@ -1,16 +1,12 @@
 package Model;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
 public class Bombe {
 	
 	private int _pos_x;
 	private int _pos_y;
 	private int _range;
 	private StateBomb _stateBomb;
-	
-	@Contract(pure = true)
+
 	Bombe(int x, int y, int range, StateBomb stateBomb) {
 		this._pos_x = x;
 		this._pos_y = y;
@@ -56,7 +52,7 @@ public class Bombe {
 		}
 	}
 	
-	void explosion(@NotNull BombermanGame bombermanGame) {
+	void explosion(BombermanGame bombermanGame) {
 		AgentBomberman agentBomberman = bombermanGame.getAgentBombermanByBomb(this);
 		
 		//Si agentBomberman != null, cela veut dire que la bombe appartient à un agent

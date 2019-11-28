@@ -1,7 +1,6 @@
 package View;
 
 import Model.StateBomb;
-import org.jetbrains.annotations.Contract;
 
 public class InfoBomb {
 	
@@ -10,7 +9,6 @@ public class InfoBomb {
 	private int range;
 	private StateBomb stateBomb;
 
-	@Contract(pure = true)
 	public InfoBomb(int x, int y, int range, StateBomb stateBomb) {
 		this.x=x;
 		this.y=y;

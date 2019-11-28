@@ -2,7 +2,6 @@ package View;
 
 import Model.AgentAction;
 import Model.ColorAgent;
-import org.jetbrains.annotations.Contract;
 
 public class InfoAgent {
 	
@@ -14,7 +13,6 @@ public class InfoAgent {
 	private boolean isInvincible;
 	private boolean isSick;
 	
-	@Contract(pure = true)
 	public InfoAgent(int x, int y, AgentAction agentAction, char type, ColorAgent color, boolean isInvincible, boolean isSick) {
 		this.x=x;
 		this.y=y;

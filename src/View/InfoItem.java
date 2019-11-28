@@ -1,7 +1,6 @@
 package View;
 
 import Model.ItemType;
-import org.jetbrains.annotations.Contract;
 
 public class InfoItem {
 	
@@ -9,7 +8,6 @@ public class InfoItem {
 	private int y;
 	private ItemType type;
 
-	@Contract(pure = true)
 	public InfoItem(int x, int y, ItemType type) {
 		this.x=x;
 		this.y=y;

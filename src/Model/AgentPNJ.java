@@ -1,7 +1,5 @@
 package Model;
 
-import org.jetbrains.annotations.NotNull;
-
 public abstract class AgentPNJ extends Agent {
 
 	AgentPNJ(int pos_x, int pos_y, char type, ColorAgent color) {
@@ -25,7 +23,7 @@ public abstract class AgentPNJ extends Agent {
 		}
 	}
 
-	public void moveAgent(@NotNull AgentAction action) {
+	public void moveAgent(AgentAction action) {
 		switch(action) {
 			case MOVE_UP:
 				this.setY(this.getY() - 1);
@@ -45,7 +43,7 @@ public abstract class AgentPNJ extends Agent {
 		}
 	}
 	
-	public boolean isLegalMove(BombermanGame bombGame, @NotNull AgentAction action) {
+	public boolean isLegalMove(BombermanGame bombGame, AgentAction action) {
 		int newX = this.getX();
     	int newY = this.getY();
     	switch(action) {

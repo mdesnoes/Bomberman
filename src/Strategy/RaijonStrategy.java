@@ -4,13 +4,12 @@ import Model.Agent;
 import Model.AgentAction;
 import Model.AgentBomberman;
 import Model.BombermanGame;
-import org.jetbrains.annotations.NotNull;
 
 public class RaijonStrategy implements Strategy {
 		
 	private RandomStrategy randomStrategy = new RandomStrategy();
 	
-	public AgentAction chooseAction(@NotNull BombermanGame bombermanGame, Agent agent) {
+	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
 		AgentAction action = AgentAction.STOP;
 		int procheDist = 1000;
 		AgentBomberman procheBomb = null;

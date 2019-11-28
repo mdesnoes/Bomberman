@@ -2,7 +2,6 @@ package View;
 
 import Controller.ControllerBombermanGame;
 import Model.BombermanGame;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,7 @@ public class ViewBombermanGame extends JFrame implements Observer {
 	private PanelBomberman _panel;
 	private ControllerBombermanGame _controllerGame;
 	
-	public ViewBombermanGame(ControllerBombermanGame controllerGame, @NotNull BombermanGame bombermanGame) {
+	public ViewBombermanGame(ControllerBombermanGame controllerGame, BombermanGame bombermanGame) {
 		this._controllerGame = controllerGame;
 		bombermanGame.addObserver(this);
 		this.createView();

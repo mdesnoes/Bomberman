@@ -1,7 +1,6 @@
 package Model;
 
 import Strategy.Strategy;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -44,7 +43,7 @@ public class AgentBomberman extends Agent {
 		}
 	}
 	
-	public boolean isLegalMove(BombermanGame bombGame, @NotNull AgentAction action) {
+	public boolean isLegalMove(BombermanGame bombGame, AgentAction action) {
 		int newX = this.getX();
     	int newY = this.getY();
 
@@ -80,7 +79,7 @@ public class AgentBomberman extends Agent {
 		return bombGame.getAgentByCoord(newX, newY) == null;
 	}
 
-	public void moveAgent(@NotNull AgentAction action) {
+	public void moveAgent(AgentAction action) {
 		switch(action) {
 			case MOVE_UP:
 				this.setY(this.getY() - 1);
@@ -100,7 +99,7 @@ public class AgentBomberman extends Agent {
 	}
 	
 	
-	private void takeItem(@NotNull Item item) {
+	private void takeItem(Item item) {
 		switch(item.getType()) {
 		case FIRE_UP:
 			this._rangeBomb++;

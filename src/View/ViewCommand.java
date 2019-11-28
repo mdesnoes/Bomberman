@@ -2,8 +2,6 @@ package View;
 
 import Controller.InterfaceController;
 import Model.Game;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -25,7 +23,7 @@ public class ViewCommand extends JFrame implements Observer {
 	private InterfaceController _controllerGame;
 	private String _layoutGame;
 	
-	public ViewCommand(InterfaceController controllerGame, @NotNull Game game) {
+	public ViewCommand(InterfaceController controllerGame, Game game) {
 		this._controllerGame = controllerGame;
 		game.addObserver(this);
 		this.createView();
@@ -62,47 +60,39 @@ public class ViewCommand extends JFrame implements Observer {
 		JButton buttonStop = new JButton(icon_stop);
 		
 		//Permet d'appeler le controleur afin d'initialiser le jeu
-		buttonRestart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evenement) {
-				_controllerGame.start();
-				buttonRestart.setEnabled(false);
-				buttonRun.setEnabled(true);
-				buttonStep.setEnabled(true);
-				buttonStop.setEnabled(true);
-			}
+		buttonRestart.addActionListener(evenement -> {
+			_controllerGame.start();
+			buttonRestart.setEnabled(false);
+			buttonRun.setEnabled(true);
+			buttonStep.setEnabled(true);
+			buttonStop.setEnabled(true);
 		});
 		
 		//Permet d'appeler le controleur afin de demarrer le jeu
-		buttonRun.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evenement) {
-				_controllerGame.run();
-				buttonRestart.setEnabled(false);
-				buttonRun.setEnabled(false);
-				buttonStep.setEnabled(false);
-				buttonStop.setEnabled(true);
-			}
+		buttonRun.addActionListener(evenement -> {
+			_controllerGame.run();
+			buttonRestart.setEnabled(false);
+			buttonRun.setEnabled(false);
+			buttonStep.setEnabled(false);
+			buttonStop.setEnabled(true);
 		});
 		
 		//Permet d'appeler le controleur afin de passer au tour suivant
-		buttonStep.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evenement) {
-				_controllerGame.step();
-				buttonRestart.setEnabled(true);
-				buttonRun.setEnabled(true);
-				buttonStep.setEnabled(true);
-				buttonStop.setEnabled(false);
-			}
+		buttonStep.addActionListener(evenement -> {
+			_controllerGame.step();
+			buttonRestart.setEnabled(true);
+			buttonRun.setEnabled(true);
+			buttonStep.setEnabled(true);
+			buttonStop.setEnabled(false);
 		});
 		
 		//Permet d'appeler le controleur afin de faire une pause
-		buttonStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evenement) {
-				_controllerGame.stop();
-				buttonRestart.setEnabled(true);
-				buttonRun.setEnabled(true);
-				buttonStep.setEnabled(true);
-				buttonStop.setEnabled(false);
-			}
+		buttonStop.addActionListener(evenement -> {
+			_controllerGame.stop();
+			buttonRestart.setEnabled(true);
+			buttonRun.setEnabled(true);
+			buttonStep.setEnabled(true);
+			buttonStop.setEnabled(false);
 		});
 		
 		buttonRestart.setEnabled(true);
@@ -128,11 +118,7 @@ public class ViewCommand extends JFrame implements Observer {
 		this._slider.setValue((int)this._controllerGame.getTime()/1000);
 
 		//Permet d'appeler le constructeur afin de modifier le temps des tours
-		this._slider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				_controllerGame.setTime(_controllerGame.getInitTime()/_slider.getValue());
-			}
-		});
+		this._slider.addChangeListener(arg0 -> _controllerGame.setTime(_controllerGame.getInitTime()/_slider.getValue()));
 		
 		panelSlider.add(this._slider);
 		this._labelTurn = new JLabel("Turn : 0");
@@ -149,12 +135,7 @@ public class ViewCommand extends JFrame implements Observer {
 	public String[] getLayouts() {
 		File repertoire = new File(System.getProperty("user.dir") + "/layout");
 		
-		FilenameFilter layoutFilter = new FilenameFilter() {
-			@Contract(pure = true)
-			public boolean accept(File dir, @NotNull String name) {
-				return name.endsWith(".lay");
-			}
-		};
+		FilenameFilter layoutFilter = (dir, name) -> name.endsWith(".lay");
 		
 		File[] files = repertoire.listFiles(layoutFilter);
 		assert files != null;

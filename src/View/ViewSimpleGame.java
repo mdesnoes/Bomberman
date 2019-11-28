@@ -2,7 +2,6 @@ package View;
 
 import Controller.InterfaceController;
 import Model.SimpleGame;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +13,7 @@ public class ViewSimpleGame extends JFrame implements Observer {
 	private JLabel _labelTurn;
 	private InterfaceController _controllerGame;
 
-	public ViewSimpleGame(InterfaceController controllerGame, @NotNull SimpleGame simplegame) {
+	public ViewSimpleGame(InterfaceController controllerGame, SimpleGame simplegame) {
 		this._controllerGame = controllerGame;
 		simplegame.addObserver(this);
 		this.createView();

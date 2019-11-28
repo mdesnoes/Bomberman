@@ -6,14 +6,13 @@ import Model.Agent;
 import Model.AgentAction;
 import Model.AgentBomberman;
 import Model.BombermanGame;
-import org.jetbrains.annotations.NotNull;
 
 public class BirdStrategy implements Strategy {
 
 	private static final int rayonAction = 5;
     private ArrayList<AgentBomberman> agentRayon = new ArrayList<>();
 
-    public AgentAction chooseAction(@NotNull BombermanGame b, Agent a) {
+    public AgentAction chooseAction(BombermanGame b, Agent a) {
     	agentRayon.clear();
 
         for (AgentBomberman i : b.getListAgentBomberman()) {

@@ -1,7 +1,6 @@
 package Model;
 
 import Strategy.BirdStrategy;
-import org.jetbrains.annotations.NotNull;
 
 public class AgentBird extends AgentPNJ {
 
@@ -10,7 +9,7 @@ public class AgentBird extends AgentPNJ {
 		this.setStrategy(new BirdStrategy());
 	}
 	
-	public boolean isLegalMove(BombermanGame bombGame, @NotNull AgentAction action) {
+	public boolean isLegalMove(BombermanGame bombGame, AgentAction action) {
 		int newX = this.getX();
     	int newY = this.getY();
 

@@ -3,13 +3,12 @@ package Strategy;
 import Model.Agent;
 import Model.AgentAction;
 import Model.BombermanGame;
-import org.jetbrains.annotations.NotNull;
 
 // L'agent avance tout droit et quand il rencontre un mur, il tourne a droite ou à gauche
 
 public class BasiqueStrategy implements Strategy {
 
-	public AgentAction chooseAction(BombermanGame bombermanGame, @NotNull Agent agent) {
+	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
 		AgentAction action = agent.getAction(); // L'agent conserve son action précedente
 
 		if(action == null) {

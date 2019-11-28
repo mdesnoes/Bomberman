@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import Model.AgentAction;
 import Model.ItemType;
 import Model.StateBomb;
-import org.jetbrains.annotations.NotNull;
 
 /** 
  * Classe qui permet de charger d'afficher le panneau du jeu à partir d'une carte et de listes d'agents avec leurs positions.
@@ -40,7 +39,7 @@ public class PanelBomberman extends JPanel {
 	private boolean[][] breakable_walls;
 	private int cpt;
 
-	PanelBomberman(@NotNull Map map) {
+	PanelBomberman(Map map) {
 		this.map = map;
 		this.breakable_walls = map.getStart_breakable_walls();
 		listInfoAgents = map.getStart_agents();	
@@ -48,7 +47,7 @@ public class PanelBomberman extends JPanel {
 		listInfoBombs = new ArrayList<>();
 	}
 
-	public void paint(@NotNull Graphics g) {
+	public void paint(Graphics g) {
 		int fen_x=getSize().width;
 		int fen_y=getSize().height;
 		g.setColor(ground_Color);
@@ -109,7 +108,7 @@ public class PanelBomberman extends JPanel {
 	}
 
 
-	private void dessine_Agent(Graphics g, @NotNull InfoAgent infoAgent) {
+	private void dessine_Agent(Graphics g, InfoAgent infoAgent) {
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
 		double stepx = fen_x/(double)taille_x;
@@ -192,7 +191,7 @@ public class PanelBomberman extends JPanel {
 		}
 	}
 
-	private void dessine_Items(Graphics g, @NotNull InfoItem item){
+	private void dessine_Items(Graphics g, InfoItem item){
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
 		double stepx = fen_x/(double)taille_x;
@@ -257,7 +256,7 @@ public class PanelBomberman extends JPanel {
 		}
 	}
 
-	private void dessine_Bomb(Graphics g, @NotNull InfoBomb bomb) {
+	private void dessine_Bomb(Graphics g, InfoBomb bomb) {
 		int fen_x = getSize().width;
 		int fen_y = getSize().height;
 		double stepx = fen_x/(double)taille_x;

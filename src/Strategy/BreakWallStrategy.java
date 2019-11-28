@@ -3,7 +3,6 @@ package Strategy;
 import Model.Agent;
 import Model.AgentAction;
 import Model.BombermanGame;
-import org.jetbrains.annotations.NotNull;
 
 // Si l'agent detecte un mur cassable devant lui, il pose une bombe
 
@@ -15,7 +14,7 @@ public class BreakWallStrategy implements Strategy {
 		this.action = action;
 	}
 	
-	public AgentAction chooseAction(BombermanGame bombermanGame, @NotNull Agent agent) {
+	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
 			
 		//Coordonnée de la case dans lequelle l'agent veut avancer
 		int newX = agent.getX();
