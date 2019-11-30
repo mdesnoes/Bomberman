@@ -26,7 +26,9 @@ public abstract class Game extends Observable implements Runnable {
 	public void step() {
 		if(gameContinue() && this._turn < this._maxturn) {
 			this._turn++;
-			takeTurn();
+			if(this._turn % 4 == 0) { // Pour la fluiditer des animations
+				takeTurn();
+			}
 		}
 		else {
 			this._isRunning = false;

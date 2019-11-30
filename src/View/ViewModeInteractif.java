@@ -1,5 +1,6 @@
 package View;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -9,6 +10,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,39 +25,64 @@ public class ViewModeInteractif extends JFrame implements KeyListener {
 	int codeKeyPressed;
 	
 	private ViewModeInteractif() {
-		setTitle("Action de l'agent Bomberman");
-		setSize(new Dimension(300,300));
+		setTitle("Fenêtre de commande");
+		setSize(new Dimension(300,500));
 		Dimension windowSize = getSize();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		Point centerPoint = ge.getCenterPoint();
-		int dx = centerPoint.x - windowSize.width / 2 + 1000;
-		int dy = centerPoint.y - windowSize.height / 2 - 1000;
+		int dx = centerPoint.x - windowSize.width / 2 + 325;
+		int dy = centerPoint.y - windowSize.height / 2 - 300;
 		setLocation(dx,dy);
 	
-		JPanel panelCommande = new JPanel();
-		panelCommande.setLayout(new GridLayout(3,3));
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout(new GridLayout(8,1));
+		
+		JLabel labelJoueur1 = new JLabel("Touches Joueur 1 : ", JLabel.CENTER);
+		labelJoueur1.setForeground(Color.RED);
+		panelPrincipal.add(labelJoueur1);
+		
+		JPanel panelCommandeJ1 = new JPanel();
+		panelCommandeJ1.setLayout(new GridLayout(2,3));
 		
 		
+		panelCommandeJ1.add(new JLabel(""));
+		panelCommandeJ1.add(createLabelTouche("Haut"));
+		panelCommandeJ1.add(new JLabel(""));
+		panelCommandeJ1.add(createLabelTouche("Bas"));
+		panelCommandeJ1.add(createLabelTouche("Gauche"));
+		panelCommandeJ1.add(createLabelTouche("Droite"));
 		
-		JButton buttonUp = new JButton("Up");
-		JButton buttonDown = new JButton("Down");
-		JButton buttonLeft = new JButton("Left");
-		JButton buttonRight = new JButton("Right");
-		JButton buttonPutBomb = new JButton("Put Bomb");
-		JButton buttonStop = new JButton("Stop");
+		panelPrincipal.add(panelCommandeJ1);
 		
-		panelCommande.add(buttonPutBomb);
-		panelCommande.add(buttonUp);
-		panelCommande.add(new JLabel(""));
-		panelCommande.add(buttonLeft);
-		panelCommande.add(buttonStop);
-		panelCommande.add(buttonRight);
-		panelCommande.add(new JLabel(""));
-		panelCommande.add(buttonDown);
-		panelCommande.add(new JLabel(""));
-	
+		JLabel labelBombeJ1 = new JLabel("Poser Bombe : Touche 0");
+		panelPrincipal.add(labelBombeJ1);
+
+		JLabel labelStopJ1 = new JLabel("Ne rien faire : Touche 1");
+		panelPrincipal.add(labelStopJ1);
 		
-		setContentPane(panelCommande);
+		JLabel labelJoueur2 = new JLabel("Touches Joueur 2 : ", JLabel.CENTER);
+		labelJoueur2.setForeground(Color.BLUE);
+		panelPrincipal.add(labelJoueur2);
+		
+		JPanel panelCommandeJ2 = new JPanel();
+		panelCommandeJ2.setLayout(new GridLayout(2,3));
+		
+		panelCommandeJ2.add(new JLabel(""));
+		panelCommandeJ2.add(createLabelTouche("Z"));
+		panelCommandeJ2.add(new JLabel(""));
+		panelCommandeJ2.add(createLabelTouche("Q"));
+		panelCommandeJ2.add(createLabelTouche("S"));
+		panelCommandeJ2.add(createLabelTouche("D"));
+		
+		panelPrincipal.add(panelCommandeJ2);
+		
+		JLabel labelBombeJ2 = new JLabel("Poser Bombe : F");
+		panelPrincipal.add(labelBombeJ2);
+
+		JLabel labelStopJ2 = new JLabel("Ne rien faire : A");
+		panelPrincipal.add(labelStopJ2);
+		
+		setContentPane(panelPrincipal);
 		setVisible(true);
 	}
 	
@@ -63,6 +91,13 @@ public class ViewModeInteractif extends JFrame implements KeyListener {
 			uniqueInstance = new ViewModeInteractif();
 		}
 		return uniqueInstance;
+	}
+	
+	public JLabel createLabelTouche(String nom) {
+		JLabel label = new JLabel(nom, JLabel.CENTER);
+		label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		
+		return label;
 	}
 
 	@Override
