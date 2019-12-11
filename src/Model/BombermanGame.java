@@ -5,7 +5,9 @@ import Factory.AgentFactory;
 import Factory.FactoryProvider;
 import Strategy.*;
 import View.InfoAgent;
+import View.ViewGagnant;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class BombermanGame extends Game {
@@ -186,7 +188,7 @@ public class BombermanGame extends Game {
 	    this._listAgentsBomberman.remove(bomberman);
 	}
 
-	ControllerBombermanGame getControllerBombGame() {
+	public ControllerBombermanGame getControllerBombGame() {
 		return this._controllerBombGame;
 	}
 
@@ -246,9 +248,11 @@ public class BombermanGame extends Game {
 
 		if(this._listAgentsBomberman.size() <= 0) {
 			System.out.println("Victoire des agents PNJ !");
+			ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "Victoire des agents PNJ !");
 		}
 		else if(this._listAgentsBomberman.size() == 1) {
 			System.out.println("Victoire de l'agent '" + this._listAgentsBomberman.get(0).getColor() + "'");
+			ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "Victoire de l'agent '" + this._listAgentsBomberman.get(0).getColor() + "'");
 		}
 	}
 

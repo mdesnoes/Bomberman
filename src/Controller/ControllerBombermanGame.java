@@ -9,12 +9,14 @@ import View.InfoItem;
 import View.Map;
 import View.ViewBombermanGame;
 import View.ViewCommand;
+import View.ViewModeInteractif;
 
 public class ControllerBombermanGame implements InterfaceController {
 
 	private ViewCommand _viewCommand;
 	private ViewBombermanGame _viewBombGame;
 	private BombermanGame _bombGame;
+	private ViewModeInteractif _viewModeInteractif;
 	
 	public ControllerBombermanGame(BombermanGame bombGame) {
 		this._bombGame = bombGame;
@@ -96,5 +98,22 @@ public class ControllerBombermanGame implements InterfaceController {
 		}
 
 		return infoBombList;
+	}
+	
+	
+	public void setViewModeInteractif() {
+		this._viewModeInteractif = ViewModeInteractif.getInstance();
+	}
+
+	public ViewModeInteractif getViewModeInteractif() {
+		return this._viewModeInteractif;
+	}
+	
+	public ViewCommand getViewCommand() {
+		return this._viewCommand;
+	}
+
+	public ViewBombermanGame getViewBombGame() {
+		return this._viewBombGame;
 	}
 }

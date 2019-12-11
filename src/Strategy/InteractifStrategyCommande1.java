@@ -14,7 +14,8 @@ public class InteractifStrategyCommande1 implements Strategy {
 	@Override
 	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
 		
-		ViewModeInteractif viewModeInteractif = ViewModeInteractif.getInstance();
+		bombermanGame.getControllerBombGame().setViewModeInteractif();
+		ViewModeInteractif viewModeInteractif = bombermanGame.getControllerBombGame().getViewModeInteractif();
 		viewModeInteractif.addKeyListener(viewModeInteractif);
 
 		viewModeInteractif.requestFocus();		
