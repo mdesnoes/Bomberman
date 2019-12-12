@@ -66,6 +66,9 @@ public class ControllerBombermanGame implements InterfaceController {
 	}
 
 	public String getLayout() {
+		if(this._bombGame.getModeJeu() == ModeJeu.PERCEPTRON) {
+			return "mapPerceptron";
+		}
 		return this._viewCommand.getLayoutGame();
 	}
 	
@@ -114,8 +117,8 @@ public class ControllerBombermanGame implements InterfaceController {
 		this._viewModeInteractif = ViewModeInteractif.getInstance();
 	}
 	
-	public void setViewBombermanGame(BombermanGame bombGame) {
-		this._viewBombGame = new ViewBombermanGame(this, bombGame);
+	public void setViewBombermanGame(ViewBombermanGame vbombGame) {
+		this._viewBombGame = vbombGame;
 	}
 
 	public ViewModeInteractif getViewModeInteractif() {

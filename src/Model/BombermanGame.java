@@ -256,10 +256,6 @@ public class BombermanGame extends Game {
 			return agentPNJ;
 		}
 	}
-	
-	public ModeJeu getModeJeu() {
-		return this.mode;
-	}
 
 	// Recupere l'agent Bomberman qui possède la bombe passée en paramètre
 	public AgentBomberman getAgentBombermanByBomb(Bombe bomb) {
@@ -272,6 +268,11 @@ public class BombermanGame extends Game {
 		}
 
 		return null;
+	}
+	
+	
+	public ModeJeu getModeJeu() {
+		return this.mode;
 	}
 
 	public boolean gameContinue() {
