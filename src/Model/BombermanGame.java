@@ -7,7 +7,6 @@ import Strategy.*;
 import View.InfoAgent;
 import View.ViewGagnant;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public class BombermanGame extends Game {
 		System.out.println("Le jeu est initialisé");
 		this._listAgentsBomberman = new ArrayList<>();
 		this._listAgentsPNJ = new ArrayList<>();
-		
+
 		boolean[][] _startBreakableWalls = this._controllerBombGame.getMap().getStart_breakable_walls();
 		// Copie profonde du tableau des murs cassables pour pouvoir les faire réaparaitre quand on réinitialise le jeu
 		int x = 0;
@@ -51,8 +50,7 @@ public class BombermanGame extends Game {
 			++x;
 			y=0;
 		}
-		
-		
+
 		this._listBombs = new ArrayList<>();
 		this._listItems = new ArrayList<>();
 		ArrayList<InfoAgent> listAgentInit = this._controllerBombGame.getMap().getStart_agents();
