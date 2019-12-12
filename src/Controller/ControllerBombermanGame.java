@@ -113,6 +113,10 @@ public class ControllerBombermanGame implements InterfaceController {
 	public void setViewModeInteractif() {
 		this._viewModeInteractif = ViewModeInteractif.getInstance();
 	}
+	
+	public void setViewBombermanGame(BombermanGame bombGame) {
+		this._viewBombGame = new ViewBombermanGame(this, bombGame);
+	}
 
 	public ViewModeInteractif getViewModeInteractif() {
 		return this._viewModeInteractif;

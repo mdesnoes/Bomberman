@@ -26,11 +26,13 @@ public class BombermanGame extends Game {
 	private final static int TURN_MAX_ITEM = 5;
 	private final static int PROBABILITE_OBJET = 6;
 	private int reward = 0;
+	private Strategy agentStrategy;
 
-	public BombermanGame(ModeJeu mode, int maxturn) {
+	public BombermanGame(ModeJeu mode, Strategy agentStrategy, int maxturn) {
 		super(maxturn);
 		this.mode = mode;
 		this._controllerBombGame = new ControllerBombermanGame(this);
+		this.agentStrategy = agentStrategy;
 	}
 
 	public void initialize_game() {
@@ -61,7 +63,7 @@ public class BombermanGame extends Game {
 			AgentFactory agentFactory = FactoryProvider.getFactory(agent.getType());
 
 			if(agent.getType() == 'B') {
-			    this._listAgentsBomberman.add((AgentBomberman) agentFactory.createAgent(agent.getX(), agent.getY(), agent.getType(), new PutBombStrategy()));
+			    this._listAgentsBomberman.add((AgentBomberman) agentFactory.createAgent(agent.getX(), agent.getY(), agent.getType(), agentStrategy));
 			}
 			else {
 				Strategy strategy = null;
@@ -287,11 +289,15 @@ public class BombermanGame extends Game {
 
 		if(this._listAgentsBomberman.size() <= 0) {
 			System.out.println("Victoire des agents PNJ !");
-			ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "Victoire des agents PNJ !");
+			if(this.mode != ModeJeu.PERCEPTRON) {
+				ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "Victoire des agents PNJ !");
+			}
 		}
 		else if(this._listAgentsBomberman.size() == 1) {
 			System.out.println("Victoire de l'agent '" + this._listAgentsBomberman.get(0).getColor() + "'");
-			ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "Victoire de l'agent '" + this._listAgentsBomberman.get(0).getColor() + "'");
+			if(this.mode != ModeJeu.PERCEPTRON) {
+				ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "Victoire de l'agent '" + this._listAgentsBomberman.get(0).getColor() + "'");
+			}
 		}
 	}
 
