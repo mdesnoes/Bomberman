@@ -1,9 +1,11 @@
 package Model;
 
+import Strategy.Strategy;
+
 public abstract class AgentPNJ extends Agent {
 
-	AgentPNJ(int pos_x, int pos_y, char type, ColorAgent color) {
-		super(pos_x, pos_y, type, color);
+	AgentPNJ(int pos_x, int pos_y, char type, ColorAgent color, Strategy strategy) {
+		super(pos_x, pos_y, type, color, strategy);
 	}
 	
 	public void executer(BombermanGame bombermanGame) {

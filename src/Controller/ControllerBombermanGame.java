@@ -20,11 +20,20 @@ public class ControllerBombermanGame implements InterfaceController {
 	
 	public ControllerBombermanGame(BombermanGame bombGame) {
 		this._bombGame = bombGame;
-		this._viewCommand = new ViewCommand(this, bombGame);
-		this._viewBombGame = new ViewBombermanGame(this, bombGame);
+		if(bombGame.getModeJeu() != ModeJeu.PERCEPTRON) {
+			this._viewCommand = new ViewCommand(this, bombGame);
+			this._viewBombGame = new ViewBombermanGame(this, bombGame);
+		}
 	}
 	
 	public Map getMap() {
+		if(this._bombGame.getModeJeu() == ModeJeu.PERCEPTRON) {
+			try {
+				return new Map("layout/mapPerceptron");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return this._viewBombGame.getMap();
 	}
 	
@@ -116,4 +125,5 @@ public class ControllerBombermanGame implements InterfaceController {
 	public ViewBombermanGame getViewBombGame() {
 		return this._viewBombGame;
 	}
+
 }

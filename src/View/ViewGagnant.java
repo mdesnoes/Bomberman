@@ -34,7 +34,6 @@ public class ViewGagnant extends JFrame {
 		panelPrincipal.setLayout(new GridLayout(2,1));
 		
 		JLabel labelJoueur1 = new JLabel(stringVictoire, JLabel.CENTER);
-		//labelJoueur1.setForeground(colorGagnant);
 		panelPrincipal.add(labelJoueur1);
 		
 		JPanel panelButton = new JPanel();
@@ -69,6 +68,7 @@ public class ViewGagnant extends JFrame {
 		if(uniqueInstance == null) {
 			uniqueInstance = new ViewGagnant(contBombGame, stringVictoire);
 		}
+		uniqueInstance.setVisible(true);
 		return uniqueInstance;
 	}
 

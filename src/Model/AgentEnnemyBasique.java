@@ -1,12 +1,11 @@
 package Model;
 
-import Strategy.BasiqueStrategy;
+import Strategy.Strategy;
 
 public class AgentEnnemyBasique extends AgentPNJ {
 
-	public AgentEnnemyBasique(int pos_x, int pos_y, char type, ColorAgent color) {
-		super(pos_x, pos_y, type, color);
-		this.setStrategy(new BasiqueStrategy());
+	public AgentEnnemyBasique(int pos_x, int pos_y, char type, ColorAgent color, Strategy strategy) {
+		super(pos_x, pos_y, type, color, strategy);
 	}
 
 }

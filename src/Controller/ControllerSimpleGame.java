@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.BombermanGame;
 import Model.Game;
 import Model.SimpleGame;
 import View.ViewCommand;

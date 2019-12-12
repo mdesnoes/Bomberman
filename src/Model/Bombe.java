@@ -89,7 +89,8 @@ public class Bombe {
 			if(bombermanGame.appartientMap(i, this._pos_y)) { // On verifie que les coordonnées appartiennent à la map
 				if(bombermanGame.getListBreakableWall()[i][this._pos_y]) { // On regarde si il y a un mur au coordonnées courante
 					bombermanGame.getListBreakableWall()[i][this._pos_y] = false;
-
+					bombermanGame.setReward(bombermanGame.getReward() + 10);
+					
 					//Probabilité qu'un item apparaisse (1 chance sur 10), tout les items on la meme probabilite
 					int nb = (int) (Math.random() * bombermanGame.getProbabiliteObjet());
 
@@ -108,7 +109,8 @@ public class Bombe {
 			if(bombermanGame.appartientMap(this._pos_x, i)) {
 				if(bombermanGame.getListBreakableWall()[this._pos_x][i]) {
 					bombermanGame.getListBreakableWall()[this._pos_x][i] = false;
-					
+					bombermanGame.setReward(bombermanGame.getReward() + 10);
+
 					//Probabilité qu'un item apparaisse (1 chance sur 10)
 					int nb = (int) (Math.random() * bombermanGame.getProbabiliteObjet());
 
@@ -136,6 +138,7 @@ public class Bombe {
 					}
 
 					bombermanGame.addListAgentDetruit(agent);
+					bombermanGame.setReward(bombermanGame.getReward() + 50);
 				}
 			}
 		}
@@ -151,6 +154,7 @@ public class Bombe {
 					}
 
 					bombermanGame.addListAgentDetruit(agent);
+					bombermanGame.setReward(bombermanGame.getReward() + 50);
 				}
 			}
 		}

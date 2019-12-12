@@ -15,8 +15,7 @@ public class AgentBomberman extends Agent {
 	private int _rangeBomb = 2;
 
 	public AgentBomberman(int pos_x, int pos_y, char type, ColorAgent color, Strategy strategy) {
-		super(pos_x,pos_y, type, color);
-		this.setStrategy(strategy);
+		super(pos_x,pos_y, type, color, strategy);
 	}
 	
 	public void executer(BombermanGame bombermanGame) {
@@ -33,10 +32,12 @@ public class AgentBomberman extends Agent {
 			if(this.isLegalMove(bombermanGame, action)) {
 				this.moveAgent(action);
 				
-				for(Item item : bombermanGame.getListItem()) {
-					if(this.getX() == item.getX() && this.getY() == item.getY()) {
-						this.takeItem(item);
-						bombermanGame.addListItemUtilise(item);
+				if(bombermanGame.getModeJeu() != ModeJeu.PERCEPTRON) {
+					for(Item item : bombermanGame.getListItem()) {
+						if(this.getX() == item.getX() && this.getY() == item.getY()) {
+							this.takeItem(item);
+							bombermanGame.addListItemUtilise(item);
+						}
 					}
 				}
 			}
