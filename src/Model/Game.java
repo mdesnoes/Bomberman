@@ -9,6 +9,7 @@ public abstract class Game extends Observable implements Runnable {
 	private int _maxturn;
 	private boolean _isRunning;
 	private long _time;
+	private Thread _thread;
 
 	Game(int maxturn) {
 		this._maxturn = maxturn;
@@ -55,7 +56,7 @@ public abstract class Game extends Observable implements Runnable {
 	
 	public void launch() {
 		this._isRunning = true;
-		Thread _thread = new Thread(this);
+		this._thread = new Thread(this);
 		_thread.start();
 	}
 	
@@ -73,6 +74,10 @@ public abstract class Game extends Observable implements Runnable {
 
 	public long getTime() {
 		return this._time;
+	}
+	
+	public Thread getThread() {
+		return this._thread;
 	}
 
 	public abstract void initialize_game();
