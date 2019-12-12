@@ -37,7 +37,22 @@ public class BombermanGame extends Game {
 		System.out.println("Le jeu est initialisé");
 		this._listAgentsBomberman = new ArrayList<>();
 		this._listAgentsPNJ = new ArrayList<>();
-		this._listBreakableWalls = this._controllerBombGame.getMap().getStart_breakable_walls(); // bug quand on réinit
+		
+		boolean[][] _startBreakableWalls = this._controllerBombGame.getMap().getStart_breakable_walls();
+		// Copie profonde du tableau des murs cassables pour pouvoir les faire réaparaitre quand on réinitialise le jeu
+		int x = 0;
+		int y = 0;
+		this._listBreakableWalls = new boolean[_startBreakableWalls.length][_startBreakableWalls[x].length];
+		for (boolean[] tab : _startBreakableWalls) {
+			for (boolean b : tab) {
+				this._listBreakableWalls[x][y] = b;
+				++y;
+			}
+			++x;
+			y=0;
+		}
+		
+		
 		this._listBombs = new ArrayList<>();
 		this._listItems = new ArrayList<>();
 		ArrayList<InfoAgent> listAgentInit = this._controllerBombGame.getMap().getStart_agents();
