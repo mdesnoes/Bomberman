@@ -9,6 +9,7 @@ import View.ViewGagnant;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BombermanGame extends Game {
 
@@ -24,6 +25,7 @@ public class BombermanGame extends Game {
 	private ArrayList<Item> _listItemsUtilise = new ArrayList<>();
 	private final static int TURN_MAX_ITEM = 5;
 	private final static int PROBABILITE_OBJET = 6;
+	private int reward = 0;
 
 	public BombermanGame(ModeJeu mode, int maxturn) {
 		super(maxturn);
@@ -35,7 +37,22 @@ public class BombermanGame extends Game {
 		System.out.println("Le jeu est initialisé");
 		this._listAgentsBomberman = new ArrayList<>();
 		this._listAgentsPNJ = new ArrayList<>();
-		this._listBreakableWalls = this._controllerBombGame.getMap().getStart_breakable_walls(); // bug quand on réinit
+		
+		boolean[][] _startBreakableWalls = this._controllerBombGame.getMap().getStart_breakable_walls();
+		// Copie profonde du tableau des murs cassables pour pouvoir les faire réaparaitre quand on réinitialise le jeu
+		int x = 0;
+		int y = 0;
+		this._listBreakableWalls = new boolean[_startBreakableWalls.length][_startBreakableWalls[x].length];
+		for (boolean[] tab : _startBreakableWalls) {
+			for (boolean b : tab) {
+				this._listBreakableWalls[x][y] = b;
+				++y;
+			}
+			++x;
+			y=0;
+		}
+		
+		
 		this._listBombs = new ArrayList<>();
 		this._listItems = new ArrayList<>();
 		ArrayList<InfoAgent> listAgentInit = this._controllerBombGame.getMap().getStart_agents();
@@ -47,7 +64,11 @@ public class BombermanGame extends Game {
 			    this._listAgentsBomberman.add((AgentBomberman) agentFactory.createAgent(agent.getX(), agent.getY(), agent.getType(), new PutBombStrategy()));
 			}
 			else {
-		    	this._listAgentsPNJ.add((AgentPNJ) agentFactory.createAgent(agent.getX(), agent.getY(), agent.getType(), null));
+				Strategy strategy = null;
+				if(this.mode == ModeJeu.PERCEPTRON) {
+					strategy = new RandomStrategy();
+				}
+		    	this._listAgentsPNJ.add((AgentPNJ) agentFactory.createAgent(agent.getX(), agent.getY(), agent.getType(), strategy));
 			}
 
 			System.out.println(agent.getX() + " - " + agent.getY() + " type : " + agent.getType());
@@ -192,6 +213,14 @@ public class BombermanGame extends Game {
 		return this._controllerBombGame;
 	}
 
+	public int getReward() {
+		return this.reward;
+	}
+
+	public void setReward(int reward) {
+		this.reward = reward;
+	}
+
 	// Recupere l'agent PNJ qui possède les coordonnées passées en paramètre
 	AgentPNJ getAgentPNJByCoord(int x, int y) {
 		for(AgentPNJ agent : this._listAgentsPNJ) {
@@ -225,6 +254,10 @@ public class BombermanGame extends Game {
 			return agentPNJ;
 		}
 	}
+	
+	public ModeJeu getModeJeu() {
+		return this.mode;
+	}
 
 	// Recupere l'agent Bomberman qui possède la bombe passée en paramètre
 	public AgentBomberman getAgentBombermanByBomb(Bombe bomb) {
@@ -240,7 +273,13 @@ public class BombermanGame extends Game {
 	}
 
 	public boolean gameContinue() {
-		return this._listAgentsBomberman.size() > 1;
+		if(this._listAgentsBomberman.size() == 1) {
+			if(this._listAgentsPNJ.size() > 0) {
+				return true;
+			}
+			else return false;
+		}
+		return true;
 	}
 
 	public void gameOver() {

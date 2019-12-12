@@ -13,11 +13,12 @@ public abstract class Agent {
 	private char _type;
 	private Strategy _strategy;
 	
-	public Agent(int pos_x, int pos_y, char type, ColorAgent color) {
+	public Agent(int pos_x, int pos_y, char type, ColorAgent color, Strategy strategy) {
 		this._pos_x = pos_x;
 		this._pos_y = pos_y;
 		this._type = type;
 		this._color = color;
+		this._strategy = strategy;
 		this._id = Agent._compteur;
 		Agent._compteur++;
 	}

@@ -28,7 +28,7 @@ public class Map implements Serializable {
 	private boolean[][] start_breakable_walls;
 	private ArrayList<InfoAgent> start_agents;
 
-	Map(String filename) throws Exception {
+	public Map(String filename) throws Exception {
 		
 		this.filename = filename;
 		

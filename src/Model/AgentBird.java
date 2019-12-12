@@ -1,12 +1,11 @@
 package Model;
 
-import Strategy.BirdStrategy;
+import Strategy.Strategy;
 
 public class AgentBird extends AgentPNJ {
 
-	public AgentBird(int pos_x, int pos_y, char type, ColorAgent color) {
-		super(pos_x, pos_y, type, color);
-		this.setStrategy(new BirdStrategy());
+	public AgentBird(int pos_x, int pos_y, char type, ColorAgent color, Strategy strategy) {
+		super(pos_x, pos_y, type, color, strategy);
 	}
 	
 	public boolean isLegalMove(BombermanGame bombGame, AgentAction action) {

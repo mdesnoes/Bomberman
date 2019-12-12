@@ -2,6 +2,7 @@ package View;
 
 import Controller.InterfaceController;
 import Model.Game;
+import Model.ModeJeu;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -38,6 +39,7 @@ public class ViewCommand extends JFrame implements Observer {
 		int dx = centerPoint.x - windowSize.width / 2 - 600;
 		int dy = centerPoint.y - windowSize.height / 2 + 500;
 		this.setLocation(dx,dy);
+		
 		JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(new java.io.File(System.getProperty("user.dir") + "/layout"));
 		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
