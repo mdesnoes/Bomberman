@@ -1,6 +1,7 @@
 package Model;
 
 import Strategy.Strategy;
+import perceptron.SparseVector;
 
 import java.util.ArrayList;
 
@@ -19,9 +20,10 @@ public class AgentBomberman extends Agent {
 	}
 	
 	public void executer(BombermanGame bombermanGame) {
+
 		AgentAction action = this.getStrategy().chooseAction(bombermanGame, this);
 		this.setAction(action);
-
+		
 		if(action == AgentAction.PUT_BOMB) {
 			Bombe bombe = new Bombe(this.getX(), this.getY(), this.getRangeBomb(), StateBomb.Step1);
 			bombermanGame.addListBombs(bombe);
@@ -42,6 +44,13 @@ public class AgentBomberman extends Agent {
 				}
 			}
 		}
+	}
+	
+	
+	
+	public SparseVector encoderCoupleEtatAction(SparseVector v, AgentAction action) {
+		
+		return v;
 	}
 	
 	public boolean isLegalMove(BombermanGame bombGame, AgentAction action) {

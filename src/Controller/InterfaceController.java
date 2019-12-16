@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.BombermanGame;
 
 public interface InterfaceController {
 

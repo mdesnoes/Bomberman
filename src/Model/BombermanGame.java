@@ -41,6 +41,7 @@ public class BombermanGame extends Game {
 		this._listAgentsPNJ = new ArrayList<>();
 		
 		boolean[][] _startBreakableWalls = this._controllerBombGame.getMap().getStart_breakable_walls();
+		
 		// Copie profonde du tableau des murs cassables pour pouvoir les faire réaparaitre quand on réinitialise le jeu
 		int x = 0;
 		int y = 0;
@@ -67,6 +68,7 @@ public class BombermanGame extends Game {
 			}
 			else {
 				Strategy strategy = null;
+				//En mode PERCEPTRON, tout les ennemis sont en mode Random
 				if(this.mode == ModeJeu.PERCEPTRON) {
 					strategy = new RandomStrategy();
 				}
@@ -95,8 +97,10 @@ public class BombermanGame extends Game {
 
 		//Action des agents bomberman
 		for (AgentBomberman agentBomberman: this._listAgentsBomberman) {
+			
 			//Verification des malus/bonus des bomberman
 			if(agentBomberman.isInvincible()) {
+				//Au bout de 5 tours, l'agent n'est plus invincible
 				if(agentBomberman.getNbTurnBonusInvincible() >= TURN_MAX_ITEM) {
 					agentBomberman.setIsInvincible(false);
 					agentBomberman.setNbTurnBonusInvincible(0);
@@ -106,6 +110,7 @@ public class BombermanGame extends Game {
 			}
 
 			if(agentBomberman.getIsSick()) {
+				//Au bout de 5 tours, l'agent n'est plus malade
 				if(agentBomberman.getNbTurnMalusSick() >= TURN_MAX_ITEM) {
 					agentBomberman.setIsSick(false);
 					agentBomberman.setNbTurnMalusSick(0);
@@ -114,6 +119,7 @@ public class BombermanGame extends Game {
 				}
 			}
 
+			//On effectuer l'action du bomberman
 			agentBomberman.executer(this);
 		}
 
@@ -122,7 +128,7 @@ public class BombermanGame extends Game {
 			this._listItems.remove(item);
 		}
 
-		//Actions des PNJ survivant à l'explosion des bombes
+		//Actions des PNJ survivants
 		for(AgentPNJ agentPNJ : this._listAgentsPNJ) {
 			agentPNJ.executer(this);
 		}
@@ -142,7 +148,7 @@ public class BombermanGame extends Game {
 			}
 		}
 
-		//On supprime les bombes qui ont été explosé
+		//On supprime les bombes qui ont explosé
 		for(Bombe bomb : this._listBombesDetruite) {
 			this._listBombs.remove(bomb);
 		}
@@ -187,6 +193,70 @@ public class BombermanGame extends Game {
 		return PROBABILITE_OBJET;
 	}
 
+	public ControllerBombermanGame getControllerBombGame() {
+		return this._controllerBombGame;
+	}
+
+	public int getReward() {
+		return this.reward;
+	}
+
+	public void setReward(int reward) {
+		this.reward = reward;
+	}
+
+	// Recupere l'agent PNJ en fonction des coordonnées passées en paramètre
+	AgentPNJ getAgentPNJByCoord(int x, int y) {
+		for(AgentPNJ agent : this._listAgentsPNJ) {
+			if(agent.getX() == x && agent.getY() == y) {
+				return agent;
+			}
+		}
+
+		return null;
+	}
+
+	// Recupere l'agent Bomberman en fonction des coordonnées passées en paramètre
+	public AgentBomberman getAgentBombermanByCoord(int x, int y) {
+		for(AgentBomberman agent : this._listAgentsBomberman) {
+			if(agent.getX() == x && agent.getY() == y) {
+				return agent;
+			}
+		}
+
+		return null;
+	}
+
+	// Recupere l'agent en fonction des coordonnées passées en paramètre
+	Agent getAgentByCoord(int x, int y) {
+		AgentBomberman agentBomberman = this.getAgentBombermanByCoord(x, y);
+		AgentPNJ agentPNJ = this.getAgentPNJByCoord(x, y);
+
+		if(agentBomberman != null) {
+			return agentBomberman;
+		} else {
+			return agentPNJ;
+		}
+	}
+
+	// Recupere l'agent Bomberman en fonction de la bombe passée en paramètre
+	public AgentBomberman getAgentBombermanByBomb(Bombe bomb) {
+		for(AgentBomberman agent : this._listAgentsBomberman) {
+			for(Bombe bombAgent : agent.getListBombe()) {
+				if(bombAgent == bomb) {
+					return agent;
+				}
+			}
+		}
+
+		return null;
+	}
+	
+	public ModeJeu getModeJeu() {
+		return this.mode;
+	}
+	
+	
 	void addListBombs(Bombe bomb) {
 		this._listBombs.add(bomb);
 	}
@@ -211,75 +281,16 @@ public class BombermanGame extends Game {
 	    this._listAgentsBomberman.remove(bomberman);
 	}
 
-	public ControllerBombermanGame getControllerBombGame() {
-		return this._controllerBombGame;
-	}
-
-	public int getReward() {
-		return this.reward;
-	}
-
-	public void setReward(int reward) {
-		this.reward = reward;
-	}
-
-	// Recupere l'agent PNJ qui possède les coordonnées passées en paramètre
-	AgentPNJ getAgentPNJByCoord(int x, int y) {
-		for(AgentPNJ agent : this._listAgentsPNJ) {
-			if(agent.getX() == x && agent.getY() == y) {
-				return agent;
-			}
-		}
-
-		return null;
-	}
-
-	// Recupere l'agent Bomberman qui possède les coordonnées passées en paramètre
-	public AgentBomberman getAgentBombermanByCoord(int x, int y) {
-		for(AgentBomberman agent : this._listAgentsBomberman) {
-			if(agent.getX() == x && agent.getY() == y) {
-				return agent;
-			}
-		}
-
-		return null;
-	}
-
-	// Recupere l'agent qui possède les coordonnées passées en paramètre
-	Agent getAgentByCoord(int x, int y) {
-		AgentBomberman agentBomberman = this.getAgentBombermanByCoord(x, y);
-		AgentPNJ agentPNJ = this.getAgentPNJByCoord(x, y);
-
-		if(agentBomberman != null) {
-			return agentBomberman;
-		} else {
-			return agentPNJ;
-		}
-	}
-	
-	public ModeJeu getModeJeu() {
-		return this.mode;
-	}
-
-	// Recupere l'agent Bomberman qui possède la bombe passée en paramètre
-	public AgentBomberman getAgentBombermanByBomb(Bombe bomb) {
-		for(AgentBomberman agent : this._listAgentsBomberman) {
-			for(Bombe bombAgent : agent.getListBombe()) {
-				if(bombAgent == bomb) {
-					return agent;
-				}
-			}
-		}
-
-		return null;
-	}
-
 	public boolean gameContinue() {
 		if(this._listAgentsBomberman.size() == 1) {
 			if(this._listAgentsPNJ.size() > 0) {
 				return true;
 			}
 			else return false;
+		}
+		
+		if(this._listAgentsBomberman.isEmpty()) { // S'il n'y a plus d'agent bomberman
+			return false;
 		}
 		return true;
 	}

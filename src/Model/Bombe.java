@@ -126,7 +126,6 @@ public class Bombe {
 	}
 
 	private void destroyAgent(AgentBomberman agentProprietaireBomb, BombermanGame bombermanGame) {
-
 		//Sur la ligne 
 		for(int i=this._pos_x - this._range; i<=this._pos_x + this._range; ++i) {
 			Agent agent = bombermanGame.getAgentByCoord(i, this._pos_y);
@@ -149,7 +148,7 @@ public class Bombe {
 
 			if(agent != null && agent != agentProprietaireBomb) {
 				if(!agent.isInvincible()) {
-					if(agentProprietaireBomb != null) { 
+					if(agentProprietaireBomb != null) {
 						System.out.println("L'agent " + agentProprietaireBomb.getColor() + " à détruit l'agent " + agent.getColor());
 					}
 

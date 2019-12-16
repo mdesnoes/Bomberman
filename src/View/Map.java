@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import Model.AgentAction;
 import Model.ColorAgent;
+import Model.RadioTower;
 
 /** 
  * Classe qui permet de charger une carte de Bomberman à partir d'un fichier de layout d'extension .lay
@@ -27,6 +28,7 @@ public class Map implements Serializable {
 	private boolean[][] walls;
 	private boolean[][] start_breakable_walls;
 	private ArrayList<InfoAgent> start_agents;
+	private ArrayList<RadioTower> listRadioTower = new ArrayList<RadioTower>();
 
 	public Map(String filename) throws Exception {
 		
@@ -84,6 +86,10 @@ public class Map implements Serializable {
 						start_agents.add(new InfoAgent(x,y,AgentAction.STOP, ligne.charAt(x),col,false,false));
 						cpt_col++;
 					}
+					
+					if(ligne.charAt(x) == 'T') {
+						listRadioTower.add(new RadioTower(x,y));
+					}
 				}
 
 				y++;
@@ -139,5 +145,9 @@ public class Map implements Serializable {
 
 	public ArrayList<InfoAgent> getStart_agents() {
 		return start_agents;
+	}
+	
+	public ArrayList<RadioTower> getListRadioTower() {
+		return this.listRadioTower;
 	}
 }
