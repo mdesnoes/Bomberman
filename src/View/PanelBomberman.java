@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import Model.AgentAction;
 import Model.ItemType;
+import Model.RadioTower;
 import Model.StateBomb;
 
 /** 
@@ -36,6 +37,7 @@ public class PanelBomberman extends JPanel {
 	private ArrayList<InfoAgent> listInfoAgents;
 	private ArrayList<InfoItem> listInfoItems;
 	private ArrayList<InfoBomb> listInfoBombs;
+	private ArrayList<RadioTower> listRadioTower;
 	private boolean[][] breakable_walls;
 	private int cpt;
 
@@ -45,6 +47,7 @@ public class PanelBomberman extends JPanel {
 		listInfoAgents = map.getStart_agents();	
 		listInfoItems = new ArrayList<>();
 		listInfoBombs = new ArrayList<>();
+		listRadioTower = map.getListRadioTower();
 	}
 
 	public void paint(Graphics g) {
@@ -92,6 +95,25 @@ public class PanelBomberman extends JPanel {
 			position_x+=stepx;
 		}
 
+		position_x=0;
+		for(int x=0; x<taille_x; x++) {
+			double position_y = 0 ;
+
+			for(int y=0; y<taille_y; y++) {
+				
+				if(this.getRadioTower(x,y) != null) {
+					try {
+						Image img = ImageIO.read(new File("./image/RadioTower.png"));
+						g.drawImage(img, (int)position_x, (int)position_y, (int)stepx, (int)stepy, this);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				position_y+=stepy;				
+			}
+			position_x+=stepx;
+		}
+
 		for (InfoItem listInfoItem : listInfoItems) {
 			dessine_Items(g, listInfoItem);
 		}
@@ -105,6 +127,15 @@ public class PanelBomberman extends JPanel {
 		}
 
 		cpt++;
+	}
+	
+	public RadioTower getRadioTower(int x, int y) {
+		for(RadioTower rd : this.listRadioTower) {
+			if(rd.getX() == x && rd.getY() == y) {
+				return rd;
+			}
+		}
+		return null;
 	}
 
 

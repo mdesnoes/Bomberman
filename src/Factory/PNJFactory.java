@@ -8,7 +8,6 @@ import Model.ColorAgent;
 import Strategy.BasiqueStrategy;
 import Strategy.BirdStrategy;
 import Strategy.RaijonStrategy;
-import Strategy.RandomStrategy;
 import Strategy.Strategy;
 
 public class PNJFactory implements AgentFactory {
@@ -17,17 +16,17 @@ public class PNJFactory implements AgentFactory {
 		switch(type) {
 			case 'R':
 				if(strategy != null) { //On est dans le cas du mode de jeu avec le perceptron
-					return new AgentRajion(pos_x, pos_y, type, ColorAgent.ROUGE, new RandomStrategy());
+					return new AgentRajion(pos_x, pos_y, type, ColorAgent.ROUGE, strategy);
 				}
 				return new AgentRajion(pos_x, pos_y, type, ColorAgent.ROUGE, new RaijonStrategy());
 			case 'V':
 				if(strategy != null) { //On est dans le cas du mode de jeu avec le perceptron
-					return new AgentRajion(pos_x, pos_y, type, ColorAgent.JAUNE, new RandomStrategy());
+					return new AgentRajion(pos_x, pos_y, type, ColorAgent.JAUNE, strategy);
 				}
 				return new AgentBird(pos_x, pos_y, type, ColorAgent.JAUNE, new BirdStrategy());
 			case 'E':
 				if(strategy != null) { //On est dans le cas du mode de jeu avec le perceptron
-					return new AgentRajion(pos_x, pos_y, type, ColorAgent.BLANC, new RandomStrategy());
+					return new AgentRajion(pos_x, pos_y, type, ColorAgent.BLANC, strategy);
 				}
 				return new AgentEnnemyBasique(pos_x, pos_y, type, ColorAgent.BLANC, new BasiqueStrategy());
 			default:

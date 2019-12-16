@@ -13,13 +13,14 @@ import View.ViewModeInteractif;
 
 public class ControllerBombermanGame implements InterfaceController {
 
+	private BombermanGame _bombGame;
 	private ViewCommand _viewCommand;
 	private ViewBombermanGame _viewBombGame;
-	private BombermanGame _bombGame;
 	private ViewModeInteractif _viewModeInteractif;
 	
 	public ControllerBombermanGame(BombermanGame bombGame) {
 		this._bombGame = bombGame;
+		// En mode PERCEPTRON, on n'affiche pas les views (pour faire les simulations)
 		if(bombGame.getModeJeu() != ModeJeu.PERCEPTRON) {
 			this._viewCommand = new ViewCommand(this, bombGame);
 			this._viewBombGame = new ViewBombermanGame(this, bombGame);
@@ -27,6 +28,7 @@ public class ControllerBombermanGame implements InterfaceController {
 	}
 	
 	public Map getMap() {
+		//En mode PERCEPTRON, la map est 'mapPerceptron'
 		if(this._bombGame.getModeJeu() == ModeJeu.PERCEPTRON) {
 			try {
 				return new Map("layout/mapPerceptron");
@@ -87,11 +89,8 @@ public class ControllerBombermanGame implements InterfaceController {
 
 		return infoListAgent;
 	}
-
-	public boolean[][] getListBreakableWall() {
-		return this._bombGame.getListBreakableWall();
-	}
 	
+	//Permet de renseigner les nouvelles coordonnées des items à la liste d'InfoItem et retourner cette liste
 	public ArrayList<InfoItem> getListInfoItems() {
 		ArrayList<InfoItem> infoItemList = new ArrayList<>();
 
@@ -102,6 +101,7 @@ public class ControllerBombermanGame implements InterfaceController {
 		return infoItemList;
 	}
 	
+	//Permet de renseigner les nouvelles coordonnées des bombes à la liste d'InfoBombs et retourner cette liste
 	public ArrayList<InfoBomb> getListInfoBombs() {
 		ArrayList<InfoBomb> infoBombList = new ArrayList<>();
 
@@ -110,6 +110,10 @@ public class ControllerBombermanGame implements InterfaceController {
 		}
 
 		return infoBombList;
+	}
+	
+	public boolean[][] getListBreakableWall() {
+		return this._bombGame.getListBreakableWall();
 	}
 	
 	

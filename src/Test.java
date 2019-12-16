@@ -12,13 +12,17 @@ public class Test {
 	public static void main(String[] args) {
 	
 		BombermanGame bombGame = new BombermanGame(ModeJeu.NORMAL, new PutBombStrategy(),1000);
-		
-		System.out.println("Début de la simulation");
-		//System.out.println("Reward Average : " + getAverageReward(100, 100, new RandomStrategy()));
-		System.out.println("Fin de la simulation");
-		
+				
+		//launchSimulation(100,100,new RandomStrategy());
 		
 		//visualize(100, new PutBombStrategy(), 100);
+	}
+	
+	//Permet de lancer une simulation
+	public static void launchSimulation(int nbTour, int nbSimu, Strategy strategy) {
+		System.out.println("Début de la simulation");
+		System.out.println("Reward Average : " + getAverageReward(nbTour, nbSimu, strategy));
+		System.out.println("Fin de la simulation");
 	}
 
 	

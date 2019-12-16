@@ -20,14 +20,10 @@ public class AgentBomberman extends Agent {
 	}
 	
 	public void executer(BombermanGame bombermanGame) {
-		SparseVector v = this.encodeEtat(bombermanGame);
-		System.out.println(v);
+
 		AgentAction action = this.getStrategy().chooseAction(bombermanGame, this);
 		this.setAction(action);
 		
-		
-		System.out.println(this.encoderCoupleEtatAction(v, action));
-
 		if(action == AgentAction.PUT_BOMB) {
 			Bombe bombe = new Bombe(this.getX(), this.getY(), this.getRangeBomb(), StateBomb.Step1);
 			bombermanGame.addListBombs(bombe);
@@ -50,39 +46,7 @@ public class AgentBomberman extends Agent {
 		}
 	}
 	
-	public SparseVector encodeEtat(BombermanGame bombGame) {
-		int champsVision = 2;
-		SparseVector etatEnnemy = new SparseVector(25);
-		SparseVector etatBombe = new SparseVector(25);
-		SparseVector etatMur = new SparseVector(25);
-		
-		int cpt = 1;
-		for(int i=this.getX() - champsVision; i<=this.getX() + champsVision; ++i) {
-			for(int j=this.getY() - champsVision; j<=this.getY() + champsVision; ++j) {
-
-				if(bombGame.appartientMap(i, j)) {
-					if(bombGame.getAgentByCoord(i, j) != null && bombGame.getAgentByCoord(i, j) != this) {
-						etatEnnemy.setValue(cpt, 1);
-					}
-					else if(bombGame.getBombByCoord(i, j) != null) {
-						etatBombe.setValue(cpt, 1);
-					}
-					else if(bombGame.getListBreakableWall()[i][j]) {
-						etatMur.setValue(cpt, 1);
-					}
-				}
-				
-				++cpt;
-			}
-		}
-		
-		SparseVector etat = new SparseVector(75);
-		etat.addVector(etatEnnemy, 25);
-		etat.addVector(etatBombe, 50);
-		etat.addVector(etatMur, 75);
-		
-		return etat;
-	}
+	
 	
 	public SparseVector encoderCoupleEtatAction(SparseVector v, AgentAction action) {
 		

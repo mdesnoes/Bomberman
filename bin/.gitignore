@@ -1,4 +1,6 @@
 /Model/
 /Controller/
-/View/
+/Factory/
+/Strategy/
 /perceptron/
+/View/

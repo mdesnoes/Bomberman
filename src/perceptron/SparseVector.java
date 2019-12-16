@@ -49,6 +49,7 @@ public class SparseVector implements Iterable<Integer>, Serializable
 		return(0.0);
 	}
 
+
 	public double computeDOT(SparseVector v)
 	{
 		double score=0;
