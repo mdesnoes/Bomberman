@@ -339,14 +339,26 @@ public class BombermanGame extends Game {
 		if(this._listAgentsBomberman.size() <= 0) {
 			System.out.println("Victoire des agents PNJ !");
 			if(this.mode != ModeJeu.PERCEPTRON) {
-				ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "Victoire des agents PNJ !");
+				ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "PNJ", "");
 			}
 		}
 		else if(this._listAgentsBomberman.size() == 1) {
 			System.out.println("Victoire de l'agent '" + this._listAgentsBomberman.get(0).getColor() + "'");
 			if(this.mode != ModeJeu.PERCEPTRON) {
-				ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, "Victoire de l'agent '" + this._listAgentsBomberman.get(0).getColor() + "'");
+				String color = colorAgentToColor(this._listAgentsBomberman.get(0).getColor());
+				ViewGagnant viewGagnant = ViewGagnant.getInstance(this._controllerBombGame, this._listAgentsBomberman.get(0).getColor().toString(), color);
 			}
+		}
+	}
+	
+	public String colorAgentToColor(ColorAgent colorAgent) {
+		switch(colorAgent) {
+			case BLEU: return "blue";
+			case ROUGE: return "red";
+			case VERT: return "green";
+			case JAUNE: return "yellow";
+			case BLANC: return "white";
+			default: return "";
 		}
 	}
 

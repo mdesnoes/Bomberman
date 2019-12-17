@@ -1,5 +1,6 @@
 package View;
 
+import Controller.ControllerBombermanGame;
 import Controller.InterfaceController;
 import Model.Game;
 import Model.ModeJeu;
@@ -21,11 +22,11 @@ public class ViewCommand extends JFrame implements Observer {
 	private final static int SPEEDMAX = 10;		// Vitesse maximum des tours
 	private JLabel _labelTurn;					// Le label qui affiche le tour courant
 	private JSlider _slider;					// Le slider qui affiche la vitesse des tours en seconde
-	private InterfaceController _controllerGame;
+	private ControllerBombermanGame _controllerGame;
 	private String _layoutGame;
 	
 	public ViewCommand(InterfaceController controllerGame, Game game) {
-		this._controllerGame = controllerGame;
+		this._controllerGame = (ControllerBombermanGame) controllerGame;
 		game.addObserver(this);
 		this.createView();
 	}
@@ -123,13 +124,31 @@ public class ViewCommand extends JFrame implements Observer {
 		this._slider.addChangeListener(arg0 -> _controllerGame.setTime(_controllerGame.getInitTime()/_slider.getValue()));
 		
 		panelSlider.add(this._slider);
+		
+		JPanel panelLabel = new JPanel();
+		panelLabel.setLayout(new GridLayout(2,1));
+		
 		this._labelTurn = new JLabel("Turn : 0");
 		this._labelTurn.setHorizontalAlignment(JLabel.CENTER);
 		this._labelTurn.setVerticalAlignment(JLabel.CENTER);
+		
+		JButton buttonClose = new JButton("Quitter le jeu");
+		buttonClose.addActionListener(evenement -> {
+			setVisible(false);
+			_controllerGame.getViewBombGame().setVisible(false);
+			if(_controllerGame.getViewModeInteractif() != null) {
+				_controllerGame.getViewModeInteractif().setVisible(false);
+			}
+		});
+		
+		panelLabel.add(this._labelTurn);
+		panelLabel.add(buttonClose);
+		
 		panelSliderLabel.add(panelSlider);
-		panelSliderLabel.add(this._labelTurn);
+		panelSliderLabel.add(panelLabel);
 		panelPrincipal.add(panelButton);
 		panelPrincipal.add(panelSliderLabel);
+		
 		this.setContentPane(panelPrincipal);
 		this.setVisible(true);
 	}
