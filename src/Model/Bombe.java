@@ -135,6 +135,12 @@ public class Bombe {
 					if(agentProprietaireBomb != null) { 
 						System.out.println("L'agent " + agentProprietaireBomb.getColor() + " à détruit l'agent " + agent.getColor());
 					}
+					
+					for(RadioTower rd : bombermanGame.getListRadioTower()) {
+						if(rd.getListRaijon().contains(agent)) {
+							rd.removeRajion((AgentRajion) agent);
+						}
+					}
 
 					bombermanGame.addListAgentDetruit(agent);
 					bombermanGame.setReward(bombermanGame.getReward() + 50);
@@ -150,6 +156,12 @@ public class Bombe {
 				if(!agent.isInvincible()) {
 					if(agentProprietaireBomb != null) {
 						System.out.println("L'agent " + agentProprietaireBomb.getColor() + " à détruit l'agent " + agent.getColor());
+					}
+					
+					for(RadioTower rd : bombermanGame.getListRadioTower()) {
+						if(rd.getListRaijon().contains(agent)) {
+							rd.removeRajion((AgentRajion) agent);
+						}
 					}
 
 					bombermanGame.addListAgentDetruit(agent);

@@ -1,5 +1,6 @@
 package View;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -18,9 +19,22 @@ public class ViewGagnant extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private static ViewGagnant uniqueInstance = null;
+	
+	private String strLabelGagnant;
 
 
-	private ViewGagnant(ControllerBombermanGame contBombGame, String stringVictoire) {
+	
+	public String getStrLabelGagnant() {
+		return strLabelGagnant;
+	}
+
+	public void setStrLabelGagnant(String strLabelGagnant) {
+		this.strLabelGagnant = strLabelGagnant;
+	}
+
+	private ViewGagnant(ControllerBombermanGame contBombGame, String str) {
+		this.strLabelGagnant = str;
+
 		setTitle("Fin du jeu");
 		setSize(new Dimension(400,150));
 		Dimension windowSize = getSize();
@@ -33,8 +47,8 @@ public class ViewGagnant extends JFrame {
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new GridLayout(2,1));
 		
-		JLabel labelJoueur1 = new JLabel(stringVictoire, JLabel.CENTER);
-		panelPrincipal.add(labelJoueur1);
+		JLabel labelGagnant = new JLabel(str, JLabel.CENTER);
+		panelPrincipal.add(labelGagnant);
 		
 		JPanel panelButton = new JPanel();
 		panelButton.setLayout(new GridLayout(1,2));
@@ -64,10 +78,18 @@ public class ViewGagnant extends JFrame {
 		setVisible(true);
 	}
 	
-	public static ViewGagnant getInstance(ControllerBombermanGame contBombGame, String stringVictoire) {
+	public static ViewGagnant getInstance(ControllerBombermanGame contBombGame, String victoire, String color) {
+
+		String str = "<html><body>Victoire de l'agent <font color='"+color+"'>" + victoire + "</font> !</body></html>";
 		if(uniqueInstance == null) {
-			uniqueInstance = new ViewGagnant(contBombGame, stringVictoire);
+			uniqueInstance = new ViewGagnant(contBombGame, str);
 		}
+		
+		//Si le phrase de victoire est différente, on  créer une nouvelle instance
+		if(!uniqueInstance.getStrLabelGagnant().equals(str)) {
+			uniqueInstance = new ViewGagnant(contBombGame, str);
+		}
+		
 		uniqueInstance.setVisible(true);
 		return uniqueInstance;
 	}

@@ -15,7 +15,7 @@ import Model.BombermanGame;
 public class PutBombStrategy implements Strategy {
 	
 	private EsquiveStrategy esquiveStrategy = new EsquiveStrategy();
-	private RaijonStrategy raijonStrategy = new RaijonStrategy();
+	private TeteChercheuseStrategy raijonStrategy = new TeteChercheuseStrategy();
 	private BreakWallStrategy breakWallStrategy = new BreakWallStrategy();
 	private RandomStrategy randomStrategy = new RandomStrategy();
 
@@ -31,7 +31,7 @@ public class PutBombStrategy implements Strategy {
 		// Il pose une bombe si il detecte un agent ennemie
 		for(int i=agent.getX() - ((AgentBomberman) agent).getRangeBomb(); i<=agent.getX() + ((AgentBomberman) agent).getRangeBomb(); ++i) {
 			for(int j=agent.getY() - ((AgentBomberman) agent).getRangeBomb(); j<=agent.getY() + ((AgentBomberman) agent).getRangeBomb(); ++j) {
-				Agent agentDetecte = bombermanGame.getAgentBombermanByCoord(i, j);
+				Agent agentDetecte = bombermanGame.getAgentByCoord(i, j);
 
 				if(agentDetecte != agent && agentDetecte != null) {
 					//System.out.println("L'agent " +agent.getColor() + " a detecté l'agent " +  bombermanGame.getAgentBombermanByCoord(i, j).getColor());

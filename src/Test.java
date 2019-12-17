@@ -11,8 +11,17 @@ public class Test {
 
 	public static void main(String[] args) {
 	
+		//Test mode Normal
 		BombermanGame bombGame = new BombermanGame(ModeJeu.NORMAL, new PutBombStrategy(),1000);
-				
+		
+		//Test mode Interactif
+		/*
+		BombermanGame bombGame = new BombermanGame(ModeJeu.SOLO, new PutBombStrategy(),1000);
+		BombermanGame bombGame = new BombermanGame(ModeJeu.DUO, new PutBombStrategy(),1000);
+		BombermanGame bombGame = new BombermanGame(ModeJeu.DUEL, new PutBombStrategy(),1000);
+		*/
+		
+		//Test simulation Perceptron
 		//launchSimulation(100,100,new RandomStrategy());
 		
 		//visualize(100, new PutBombStrategy(), 100);

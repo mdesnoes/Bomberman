@@ -7,7 +7,7 @@ import Model.AgentAction;
 import Model.AgentBomberman;
 import Model.BombermanGame;
 
-public class BirdStrategy implements Strategy {
+public class ReveilStrategy implements Strategy {
 
 	private static final int rayonAction = 5;
     private ArrayList<AgentBomberman> agentRayon = new ArrayList<>();

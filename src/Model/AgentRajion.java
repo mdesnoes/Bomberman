@@ -1,6 +1,6 @@
 package Model;
 
-import Strategy.RaijonStrategy;
+import Strategy.TeteChercheuseStrategy;
 import Strategy.Strategy;
 
 public class AgentRajion extends AgentPNJ {
