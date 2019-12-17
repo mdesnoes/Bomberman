@@ -3,16 +3,17 @@ package Strategy;
 import Model.Agent;
 import Model.AgentAction;
 import Model.AgentBomberman;
+import Model.AgentPNJ;
 import Model.BombermanGame;
 
-public class RaijonStrategy implements Strategy {
+public class TeteChercheuseStrategy implements Strategy {
 		
 	private RandomStrategy randomStrategy = new RandomStrategy();
 	
 	public AgentAction chooseAction(BombermanGame bombermanGame, Agent agent) {
 		AgentAction action = AgentAction.STOP;
 		int procheDist = 1000;
-		AgentBomberman procheBomb = null;
+		Agent procheBomb = null;
 
 		for (AgentBomberman i : bombermanGame.getListAgentBomberman()) {
 			if(i != agent) {
@@ -23,6 +24,19 @@ public class RaijonStrategy implements Strategy {
 					procheBomb = i;
 				}
 			}
+		}
+		
+		//S'il n'y a plus de bomberman sur la carte, l'agent va en direction d'un PNJ
+		if(procheBomb == null) {
+			for (AgentPNJ i : bombermanGame.getListAgentPNJ()) {
+				if(i != agent) {
+					int dist = Math.abs(agent.getX() - i.getX()) + Math.abs(agent.getY() - i.getY());
+					if (dist < procheDist) {
+						procheDist = dist;
+						procheBomb = i;
+					}
+				}
+			}		
 		}
 		
 		if(procheBomb != null) { // condition pour verifier s'il y a bien un autre bomberman sur la map

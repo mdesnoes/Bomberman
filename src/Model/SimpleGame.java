@@ -11,7 +11,7 @@ public class SimpleGame extends Game {
 	}
 
 	public void takeTurn() {
-		System.out.println("Tour " + this.getTurn() + " du jeu en cours");
+		System.out.println("Tour " + this._turn + " du jeu en cours");
 	}
 
 	public boolean gameContinue() {

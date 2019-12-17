@@ -18,6 +18,7 @@ public class BombermanGame extends Game {
     private ArrayList<AgentBomberman> _listAgentsBomberman;
     private ArrayList<AgentPNJ> _listAgentsPNJ;
 	private boolean[][] _listBreakableWalls;
+	private ArrayList<RadioTower> _listRadioTower;
 	private ArrayList<Bombe> _listBombs;
 	private ArrayList<Item> _listItems;
 	private ArrayList<Agent> _listAgentsDetruit = new ArrayList<>();
@@ -25,6 +26,7 @@ public class BombermanGame extends Game {
 	private ArrayList<Item> _listItemsUtilise = new ArrayList<>();
 	private final static int TURN_MAX_ITEM = 5;
 	private final static int PROBABILITE_OBJET = 6;
+	private static final int MAX_RAJION_RADIO_TOWER = 10;
 	private int reward = 0;
 	private Strategy agentStrategy;
 
@@ -88,6 +90,12 @@ public class BombermanGame extends Game {
 			this._listAgentsBomberman.get(1).setStrategy(new InteractifStrategyCommande2());
 		}
 		
+		
+		//Création des radio tower
+		this._listRadioTower = this._controllerBombGame.getMap().getListRadioTower();
+		for(RadioTower rd : this._listRadioTower) {
+			rd.clearListRajion();
+		}
 	}
 
 	public void takeTurn() {
@@ -152,6 +160,24 @@ public class BombermanGame extends Game {
 		for(Bombe bomb : this._listBombesDetruite) {
 			this._listBombs.remove(bomb);
 		}
+		
+		
+		//Action des radio tower, si elle existe
+		for(RadioTower rd : this._listRadioTower) {
+			//Un rajion apparait tout les 4 tours.
+			if(this._turn % 4 == 0) {
+				//Il peut y avoir que 10 rajions maximum
+				if(rd.getListRaijon().size() < MAX_RAJION_RADIO_TOWER) {
+					AgentFactory agentFactory = FactoryProvider.getFactory('R');
+					
+					Agent rajion = agentFactory.createAgent(rd.getX(), rd.getY(), 'R', null);
+					this._listAgentsPNJ.add((AgentPNJ) rajion);
+					
+					rd.addListRajion((AgentRajion) rajion);
+				}
+			}
+		}
+		
    	}
 
 	public Bombe getBombByCoord(int x, int y) {
@@ -189,6 +215,10 @@ public class BombermanGame extends Game {
 		return this._listBombs;
 	}
 
+	public ArrayList<RadioTower> getListRadioTower() {
+		return this._listRadioTower;
+	}
+	
 	int getProbabiliteObjet() {
 		return PROBABILITE_OBJET;
 	}
@@ -206,7 +236,7 @@ public class BombermanGame extends Game {
 	}
 
 	// Recupere l'agent PNJ en fonction des coordonnées passées en paramètre
-	AgentPNJ getAgentPNJByCoord(int x, int y) {
+	public AgentPNJ getAgentPNJByCoord(int x, int y) {
 		for(AgentPNJ agent : this._listAgentsPNJ) {
 			if(agent.getX() == x && agent.getY() == y) {
 				return agent;
@@ -228,7 +258,7 @@ public class BombermanGame extends Game {
 	}
 
 	// Recupere l'agent en fonction des coordonnées passées en paramètre
-	Agent getAgentByCoord(int x, int y) {
+	public Agent getAgentByCoord(int x, int y) {
 		AgentBomberman agentBomberman = this.getAgentBombermanByCoord(x, y);
 		AgentPNJ agentPNJ = this.getAgentPNJByCoord(x, y);
 
@@ -282,6 +312,14 @@ public class BombermanGame extends Game {
 	}
 
 	public boolean gameContinue() {
+		//S'il y a au moins une radio tower, le jeu s'arrete seulement si le bomberman est détruit, le but du bomberman est de survivre jusqu'à la fin
+		if(!this._listRadioTower.isEmpty()) {
+			if(this._listAgentsBomberman.isEmpty()) { 
+				return false;
+			}
+			return true;
+		}
+		
 		if(this._listAgentsBomberman.size() == 1) {
 			if(this._listAgentsPNJ.size() > 0) {
 				return true;
