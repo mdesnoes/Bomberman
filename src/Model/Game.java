@@ -1,34 +1,41 @@
 package Model;
 
-public abstract class Game implements Runnable, Observable {
+import java.util.Observable;
 
-	private int _turn;
+public abstract class Game extends Observable implements Runnable {
+
+	public static final int INIT_TIME = 1000;
+	protected int _turn;
 	private int _maxturn;
 	private boolean _isRunning;
+	private long _time;
 	private Thread _thread;
-	private long _time = 5000;
-	
-	public Game(int maxturn) {
+
+	Game(int maxturn) {
 		this._maxturn = maxturn;
+		this._time = INIT_TIME;
 	}
 	
 	public void init() {
 		this._turn = 0;
 		this._isRunning = true;
-		
 		initialize_game();
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
 	public void step() {
-		this._turn++;
-
-		if(gameContinue() && this._turn <= this._maxturn) {
+		if(gameContinue() && this._turn < this._maxturn) {
+			this._turn++;
 			takeTurn();
 		}
 		else {
 			this._isRunning = false;
 			gameOver();
 		}
+		
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
 	public void run() {
@@ -50,14 +57,13 @@ public abstract class Game implements Runnable, Observable {
 	public void launch() {
 		this._isRunning = true;
 		this._thread = new Thread(this);
-		this._thread.start();
+		_thread.start();
 	}
 	
 	public void setTime(long time) {
 		this._time = time;
 	}
-	
-	
+
 	public int getTurn( ) {
 		return this._turn;
 	}
@@ -65,11 +71,15 @@ public abstract class Game implements Runnable, Observable {
 	public int getMaxTurn() {
 		return this._maxturn;
 	}
-	
+
 	public long getTime() {
 		return this._time;
 	}
 	
+	public Thread getThread() {
+		return this._thread;
+	}
+
 	public abstract void initialize_game();
 	public abstract void takeTurn();
 	public abstract boolean gameContinue();

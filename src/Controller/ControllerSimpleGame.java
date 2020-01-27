@@ -1,43 +1,46 @@
 package Controller;
 
 import Model.Game;
+import Model.SimpleGame;
 import View.ViewCommand;
 import View.ViewSimpleGame;
 
 public class ControllerSimpleGame implements InterfaceController {
 
-	public Game _game;
+	private SimpleGame _simpleGame;
 	
-	public ControllerSimpleGame(Game game) {
-		this._game = game;
-		@SuppressWarnings("unused")
+	public ControllerSimpleGame(SimpleGame game) {
+		this._simpleGame = game;
 		ViewCommand viewCommand = new ViewCommand(this, game);
-		@SuppressWarnings("unused")
 		ViewSimpleGame viewSimpleGame = new ViewSimpleGame(this, game);
-		
 	}
 	
 	public void start() {
-		this._game.init();
+		this._simpleGame.init();
 	}
 
 	public void step() {
-		this._game.step();
+		this._simpleGame.step();
 	}
 
 	public void run() {
-		this._game.launch();		
+		this._simpleGame.launch();		
 	}
 
 	public void stop() {
-		this._game.stop();
+		this._simpleGame.stop();
 	}
 
 	public void setTime(long time) {
-		this._game.setTime(time);
+		this._simpleGame.setTime(time);
 	}
 	
 	public long getTime() {
-		return _game.getTime();
+		return _simpleGame.getTime();
 	}
+	
+	public int getInitTime() {
+		return Game.INIT_TIME;
+	}
+
 }

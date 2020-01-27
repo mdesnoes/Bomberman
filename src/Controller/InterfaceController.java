@@ -1,12 +1,14 @@
 package Controller;
 
+
 public interface InterfaceController {
 
-	public void start();
-	public void step();
-	public void run();
-	public void stop();
-	public void setTime(long time);
-	public long getTime();
-	
+	void start();
+	void step();
+	void run();
+	void stop();
+	void setTime(long time);
+	long getTime();
+	int getInitTime();
+
 }
